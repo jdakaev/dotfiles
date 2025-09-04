@@ -1,0 +1,48 @@
+set $mod Mod4
+set $altmod Mod1
+
+# FAST ACCESS!!
+bindsym $mod+Return exec alacritty
+bindsym $mod+z exec firefox
+
+set $menu j4-dmenu-desktop -i --dmenu bemenu
+bindsym $mod+d exec $menu
+
+bindsym $mod+p exec grim -g "$(slurp)" - | wl-copy
+
+
+bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_SINK@ 1%+
+bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_SINK@ 1%-
+bindsym XF86Launch1 exec bemenu-run
+
+#bindsym XF86MonBrightnessUp
+#bindsym XF86MonBrightnessDown
+bindsym Home exec ddcutil setvcp 10 + 10
+bindsym End exec ddcutil setvcp 10 - 10
+
+
+# UTILITIES
+bindsym $mod+Ctrl+p exec passmenu1
+bindsym $mod+Ctrl+asterisk exec ~/.config/sway/archive.sh
+bindsym $mod+Ctrl+e exec emacsclient --alternate-editor="" --create-frame 
+bindsym $mod+Ctrl+a exec pavucontrol
+bindsym $mod+Ctrl+u exec pcmanfm-qt
+bindsym $mod+Ctrl+slash bar mode toggle
+#bindsym $mod+Ctrl+c exec emacsclient -c -e '(full-calc)'
+bindsym $mod+Ctrl+v exec cliphist list | bemenu -p paste: | cliphist decode | wl-copy
+bindsym $mod+Ctrl+exclam exec alacritty msg config "$(cat ~/.config/alacritty-theme/themes/alabaster.toml )"
+#bindsym $mod+Ctrl+Return exec alacritty; floating enable
+
+bindsym Ctrl+XF86AudioRaiseVolume opacity plus 0.1
+bindsym Ctrl+XF86AudioLowerVolume opacity minus 0.1
+
+# SPOOKY !!!
+bindsym $mod+Shift+q kill
+bindsym $mod+Control+Shift+j move workspace to output down
+bindsym $mod+Control+Shift+k move workspace to output up
+bindsym $mod+Shift+m output "LVDS-1" toggle
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+e exec swaynag -t warning -m 'really exit?' -B 'Yes, exit sway' 'swaymsg exit'
+#bindsym $mod+Shift+p exec "~/.config/sway-screenshot -m region -o ~/screenshots"
+bindsym $mod+Shift+s sticky toggle

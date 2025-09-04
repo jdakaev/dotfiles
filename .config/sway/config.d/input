@@ -1,0 +1,12 @@
+input type:keyboard {
+    xkb_layout real-prog-dvorak,ru
+    xkb_options caps:swapescape,grp:rctrl_toggle
+    repeat_delay 500
+    repeat_rate 50
+}
+input type:pointer { 
+  pointer_accel 0
+}
+#input type:tablet_tool {
+  #map_to_output LVDS-1
+#}

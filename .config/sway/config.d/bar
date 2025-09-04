@@ -1,0 +1,27 @@
+set {
+  $black #000000
+  $light_gray #E5E5E5
+}
+
+bar {
+  height 20
+  #mode dock
+  mode hide
+  font Hack 12
+  position bottom
+  strip_workspace_name yes
+  #workspace_buttons no
+
+  status_command i3status-rs
+
+  colors {
+#	separator #ffffff
+#	focused_workspace #ffffff #ffffff #ffffff 
+#	active_workspace #ffffff #ffffff #ffffff 
+#	inactive_workspace #ffffff #ffffff #ffffff 
+#	urgent_workspace #ffffff #ffffff #ffffff 
+#        inactive_workspace #32323200 #32323200 #5c5c5c
+    statusline $light_gray
+    background $black
+  }
+}

@@ -1,0 +1,4 @@
+for_window [app_id="org.pulseaudio.pavucontrol"] floating enable
+for_window [title="Calculator"] floating enable
+for_window [app_id="pcmanfm-qt"] floating enable
+for_window [title="Settings"] floating enable

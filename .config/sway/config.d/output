@@ -1,0 +1,4 @@
+#output HDMI-A-1 pos 1920 0 transform 90 res 1920x1080
+#output DP-3 pos 0 0
+output DSI-1 transform 90
+output DSI-1 scale 1.45

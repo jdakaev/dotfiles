@@ -1,0 +1,21 @@
+# Read `man 5 sway` for a complete reference.
+### Variables
+#
+# Logo key. Use Mod1 for Alt.
+### Output configuration
+
+### Input configuration
+
+### Idle configuration
+
+
+include /etc/sway/config.d/*
+include ~/.config/sway/config.d/*
+#border pixel 5
+
+font Hack 10
+
+#exec mako
+exec wl-paste --type text --watch cliphist store 
+#exec gentoo-pipewire-launcher restart &
+#output * max_render_time 10
