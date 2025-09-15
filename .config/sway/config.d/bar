@@ -12,7 +12,7 @@ bar {
   strip_workspace_name yes
   #workspace_buttons no
 
-  status_command i3status-rs
+  status_command ~/.config/sway/status.sh
 
   colors {
 #	separator #ffffff

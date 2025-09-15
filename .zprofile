@@ -27,6 +27,5 @@ export BEMENU_OPTS='bemenu-run \
     #--prompt "run:" \
 if [[ -z $DISPLAY && $TTY = /dev/tty1 ]]; then
   XDG_CURRENT_DESKTOP=sway
-  #exec dbus-run-session sway
-  exec sway
+  exec dbus-run-session sway
 fi

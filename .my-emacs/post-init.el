@@ -196,12 +196,28 @@
    ;; :preview-key "M-."
    :preview-key '(:debounce 0.4 any))
   (setq consult-narrow-key "<"))
+
 (use-package org
   :config
   (setq org-special-ctrl-a/e t)
-       (setq org-todo-keywords '((type "TODO" "NEXT" "|" "DONE"))))
+  (setq org-todo-keywords '((type "TODO" "|" "CANC" "DONE")))
+  (setq org-agenda-files (list "~/notes/todo.org"))
+  (setq org-agenda-prefix-format '(
+                                   (todo . " ")))
+  :hook (org-mode . org-indent-mode))
+
 (use-package markdown-mode
   :hook (markdown-mode . visual-line-mode)
   :defer t)
 (use-package telega
+  :config
+  (setq telega-server-libs-prefix "/usr")
+  (setq telega-emoji-use-images nil)
+  :bind-keymap
+  ("C-c t" . telega-prefix-map)
+  :hook
+  (telega-root-mode . visual-line-mode)
+  (telega-chat-mode . company-mode)
+  (telega-chat-mode . telega-squash-message-mode)
   :defer t)
+(use-package company)
