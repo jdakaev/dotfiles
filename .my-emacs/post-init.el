@@ -200,11 +200,16 @@
 (use-package org
   :config
   (setq org-special-ctrl-a/e t)
-  (setq org-todo-keywords '((type "TODO" "|" "CANC" "DONE")))
+  (setq org-todo-keywords '((type "TODO" "|" "DONE")))
   (setq org-agenda-files (list "~/notes/todo.org"))
   (setq org-agenda-prefix-format '(
                                    (todo . " ")))
-  :hook (org-mode . org-indent-mode))
+  :hook
+  (org-mode . org-indent-mode)
+  (org-mode . visual-line-mode)
+;;   (org-mode . #(setq-local tab-width 8))
+  :bind ("C-c a" . org-agenda))
+
 
 (use-package markdown-mode
   :hook (markdown-mode . visual-line-mode)
@@ -221,3 +226,7 @@
   (telega-chat-mode . telega-squash-message-mode)
   :defer t)
 (use-package company)
+
+;; from karthinks on window management
+(repeat-mode)
+(keymap-global-set "M-o" 'other-window)
