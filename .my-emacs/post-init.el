@@ -227,6 +227,8 @@
   :defer t)
 (use-package company)
 
+
+(use-package gptel)
 ;; from karthinks on window management
 (repeat-mode)
 (keymap-global-set "M-o" 'other-window)

@@ -6,10 +6,10 @@ return
 	dependencies = { 'nvim-lua/plenary.nvim' },
 
 	keys = {
-		{ "<leader>ff", require('telescope.builtin').find_files},
-		{ "<leader>fh", require('telescope.builtin').help_tags},
-		{ "<leader>fg", require('telescope.builtin').live_grep},
-		{ "<leader>fb", require('telescope.builtin').buffers},
+		{ "<leader>ff", function() require('telescope.builtin').find_files() end},
+		{ "<leader>fh", function() require('telescope.builtin').help_tags() end},
+		{ "<leader>fg", function() require('telescope.builtin').live_grep() end},
+		{ "<leader>fb", function() require('telescope.builtin').buffers() end},
 	}
 }
 
