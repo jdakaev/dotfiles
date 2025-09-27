@@ -204,6 +204,7 @@
   (setq org-agenda-files (list "~/notes/todo.org"))
   (setq org-agenda-prefix-format '(
                                    (todo . " ")))
+  (setq org-preview-latex-default-process 'dvisvgm)
   :hook
   (org-mode . org-indent-mode)
   (org-mode . visual-line-mode)
@@ -214,6 +215,13 @@
 (use-package markdown-mode
   :hook (markdown-mode . visual-line-mode)
   :defer t)
+(defun my-open-file (file)
+  (interactive)
+  (
+   (message "foo")
+   (message "bar")
+  ))
+
 (use-package telega
   :config
   (setq telega-server-libs-prefix "/usr")

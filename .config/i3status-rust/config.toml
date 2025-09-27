@@ -1,0 +1,39 @@
+[[block]]
+block = "net"
+format = "{$signal_strength $ssid $ip|$ip|Connecting...}"
+inactive_format = "down"
+
+[[block]]
+block = "battery"
+format = "{bat $percentage|bat}"
+device = "BAT0"
+driver = "sysfs"
+
+[[block]]
+block = "memory"
+#format = " MEM $mem_used_percents.eng(w:1) "
+format = "mem $mem_used.eng(w:3,u:B)"
+#format_alt = " $icon_swap $swap_free.eng(w:3,u:B,p:Mi)/$swap_total.eng(w:3,u:B,p:Mi)($swap_used_percents.eng(w:2)) "
+interval = 5
+warning_mem = 70
+critical_mem = 90
+
+
+[[block]]
+block = "temperature"
+format = "cpu $max"
+#format_alt = " $icon $min min, $max max, $average avg "
+interval = 5
+chip = "*-isa-*"
+
+[[block]]
+block = "time"
+interval = 60
+[block.format]
+full = "$timestamp.datetime(f:'%a %m-%d %R') "
+#short = " $icon $timestamp.datetime(f:%R) "
+
+[theme]
+#theme = "srcery"
+[theme.overrides]
+separator = " "
