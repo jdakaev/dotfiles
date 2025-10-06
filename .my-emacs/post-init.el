@@ -201,10 +201,41 @@
   :config
   (setq org-special-ctrl-a/e t)
   (setq org-todo-keywords '((type "TODO" "|" "DONE")))
-  (setq org-agenda-files (list "~/notes/todo.org"))
+  (setq org-agenda-files (list "~/notes/todo.org" "~/notes/daily.org" "~/notes/school.org"))
   (setq org-agenda-prefix-format '(
-                                   (todo . " ")))
+                                   (todo . " ")
+                                   (agenda . " %i %-12:c%?-12t% s")))
   (setq org-preview-latex-default-process 'dvisvgm)
+  (setq org-agenda-show-future-repeats nil)
+  ;; https://github.com/rougier/emacs-gtd
+  (setq org-agenda-custom-commands
+      '(("g" "GTD"
+         ((agenda ""
+                  ((org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'deadline))
+                   (org-deadline-warning-days 0)))
+          (tags-todo "CATEGORY=\"school\""
+                ((org-agenda-skip-function
+                  '(org-agenda-skip-entry-if 'deadline))
+                 (org-agenda-prefix-format "[%e] ")
+                 (org-agenda-overriding-header "\nSchool\n")
+                 (org-agenda-max-todos 10)))
+          (todo "TODO"
+                ((org-agenda-skip-function
+                  '(org-agenda-skip-entry-if 'deadline))
+                 (org-agenda-prefix-format "  %i %-12:c [%e] ")
+                 (org-agenda-overriding-header "\nTasks\n")
+                 (org-agenda-max-todos 10)))
+          (agenda nil
+                  ((org-agenda-entry-types '(:deadline))
+                   (org-agenda-format-date "")
+                   (org-deadline-warning-days 7)
+                   (org-agenda-overriding-header "\nDeadlines")))
+          (tags-todo "inbox"
+                     ((org-agenda-prefix-format "  %?-12t% s")
+                      (org-agenda-overriding-header "\nInbox\n")))
+          (tags "CLOSED>=\"<today>\""
+                ((org-agenda-overriding-header "\nCompleted today\n")))))))
   :hook
   (org-mode . org-indent-mode)
   (org-mode . visual-line-mode)

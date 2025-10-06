@@ -18,6 +18,10 @@ set $mod Mod4
     bindsym $mod+Shift+$up move up
     bindsym $mod+Shift+$right move right
 
+    bindsym $mod+Shift+Right move workspace to output right
+    bindsym $mod+Shift+Left move workspace to output left
+    #bindsym $mod+Shift+Down move workspace to output down
+
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
     # Despite the name, also works for non-floating windows.
@@ -27,14 +31,14 @@ set $mod Mod4
 # Workspaces:
 # TODO !
     # Workspace names:
-    set $one 1:Emacs
-    set $two 2:Term
-    set $three 3:Three
-    set $four 4:Web
-    set $five 5:Music
-    set $six 6:Comms
-    set $seven 7:Free
-    set $eight 8:Free
+    set $one 1
+    set $two 2
+    set $three 3
+    set $four 4
+    set $five 5
+    set $six 6
+    set $seven 7
+    set $eight 8
     # Switch to workspace
     bindsym $mod+plus workspace $one
     bindsym $mod+bracketleft workspace $two
@@ -87,10 +91,10 @@ mode "resize" {
     # right will grow the containers width
     # up will shrink the containers height
     # down will grow the containers height
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
+    bindsym $left resize shrink width 25px
+    bindsym $down resize grow height 25px
+    bindsym $up resize shrink height 25px
+    bindsym $right resize grow width 25px
 
     # Return to default mode
     bindsym Return mode "default"
