@@ -236,12 +236,28 @@
                       (org-agenda-overriding-header "\nInbox\n")))
           (tags "CLOSED>=\"<today>\""
                 ((org-agenda-overriding-header "\nCompleted today\n")))))))
+      (setq org-capture-templates
+           '(("t" "Todo" entry (file+headline "~/notes/inbox.org" "Tasks")
+              "* TODO %?\n  %i\n ")
+             ("j" "Journal" entry (file+datetree "~/notes/journal.org")
+              "* %?\nEntered on %U\n  %i\n  %a")
+             ("c" "Current clocking task notes" entry (clock)
+              "* %i")))
   :hook
   (org-mode . org-indent-mode)
   (org-mode . visual-line-mode)
+  (org-mode . (lambda ()
+                (setq-local tab-width 8)))
 ;;   (org-mode . #(setq-local tab-width 8))
-  :bind ("C-c a" . org-agenda))
+  :bind ("C-c a" . org-agenda)
+  ("C-c 1" . org-cycle-list-bullet)
+  ("C-c p" . org-capture))
 
+(use-package org-krita
+  :ensure t
+  :vc (:url "https://github.com/lepisma/org-krita")
+  :hook
+  (org-mode . org-krita-mode))
 
 (use-package markdown-mode
   :hook (markdown-mode . visual-line-mode)
@@ -267,7 +283,20 @@
 (use-package company)
 
 
-(use-package gptel)
+(use-package gptel
+  :bind ("C-c g m" . gptel-menu)
+  ("C-c g r" . gptel-rewrite )
+  ("C-c g s" . gptel-send ))
+
 ;; from karthinks on window management
 (repeat-mode)
 (keymap-global-set "M-o" 'other-window)
+
+;; recentf stuff
+(require 'recentf)
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+
+(require 'zone)
+(zone-when-idle 30)
