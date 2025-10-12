@@ -1,7 +1,7 @@
 ;;; post-init.el --- DESCRIPTION -*- no-byte-compile: t; lexical-binding: t; -*-
 
 (mapc #'disable-theme custom-enabled-themes)  ; Disable all active themes
-(load-theme 'modus-operandi t)  ; Load the built-in theme
+(load-theme 'modus-operandi-tinted t)  ; Load the built-in theme
 
 ;; Set the default font to DejaVu Sans Mono with specific size and weight
 (set-face-attribute 'default nil
@@ -14,6 +14,7 @@
 ;; Ensure adding the following compile-angel code at the very beginning
 ;; of your `~/.emacs.d/post-init.el` file, before all other packages.
 (use-package compile-angel
+  :diminish compile-angel-on-load-mode
   :ensure t
   :custom
   ;; Set `compile-angel-verbose` to nil to suppress output from compile-angel.
@@ -196,48 +197,52 @@
    ;; :preview-key "M-."
    :preview-key '(:debounce 0.4 any))
   (setq consult-narrow-key "<"))
-
+(defun my/org-jump-skipping-drawer ()
+               (interactive)
+               (org-fold-show-entry)
+               (org-end-of-meta-data t)
+               (if (org-at-heading-p)
+                   (progn (insert "\n") (move-point-visually -1)))
+               )
 (use-package org
   :config
   (setq org-special-ctrl-a/e t)
   (setq org-todo-keywords '((type "TODO" "|" "DONE")))
-  (setq org-agenda-files (list "~/notes/todo.org" "~/notes/daily.org" "~/notes/school.org"))
+  (setq org-agenda-files (list "~/notes/todo.org" "~/notes/daily.org" "~/notes/school.org" "~/notes/inbox.org"))
   (setq org-agenda-prefix-format '(
                                    (todo . " ")
                                    (agenda . " %i %-12:c%?-12t% s")))
+  (setq org-agenda-show-all-dates nil)
   (setq org-preview-latex-default-process 'dvisvgm)
   (setq org-agenda-show-future-repeats nil)
   ;; https://github.com/rougier/emacs-gtd
   (setq org-agenda-custom-commands
-      '(("g" "GTD"
-         ((agenda ""
-                  ((org-agenda-skip-function
-                    '(org-agenda-skip-entry-if 'deadline))
-                   (org-deadline-warning-days 0)))
-          (tags-todo "CATEGORY=\"school\""
-                ((org-agenda-skip-function
-                  '(org-agenda-skip-entry-if 'deadline))
-                 (org-agenda-prefix-format "[%e] ")
-                 (org-agenda-overriding-header "\nSchool\n")
-                 (org-agenda-max-todos 10)))
-          (todo "TODO"
-                ((org-agenda-skip-function
-                  '(org-agenda-skip-entry-if 'deadline))
-                 (org-agenda-prefix-format "  %i %-12:c [%e] ")
-                 (org-agenda-overriding-header "\nTasks\n")
-                 (org-agenda-max-todos 10)))
-          (agenda nil
-                  ((org-agenda-entry-types '(:deadline))
-                   (org-agenda-format-date "")
-                   (org-deadline-warning-days 7)
-                   (org-agenda-overriding-header "\nDeadlines")))
-          (tags-todo "inbox"
-                     ((org-agenda-prefix-format "  %?-12t% s")
-                      (org-agenda-overriding-header "\nInbox\n")))
+        '(("g" "GTD"
+           ((todo "TODO"
+                 ((org-agenda-skip-function
+                   '(org-agenda-skip-entry-if 'deadline))
+                  (org-agenda-prefix-format "[%e] ")
+                  (org-agenda-overriding-header "Tasks")
+                  (org-agenda-max-todos 10)))
+           (agenda ""
+                    ((org-agenda-skip-function
+                      '(org-agenda-skip-entry-if 'deadline))
+                     (org-deadline-warning-days 0)))
+            (tags-todo "CATEGORY=\"school\""
+                       ((org-agenda-skip-function
+                         '(org-agenda-skip-entry-if 'deadline))
+                        (org-agenda-prefix-format "[%e] ")
+                        (org-agenda-overriding-header "School")
+                        (org-agenda-max-todos 10)))
+
+            ;; Deadline display?
+            (tags-todo "CATEGORY=\"inbox\""
+                       ((org-agenda-prefix-format "  %?-12t% s")
+                      (org-agenda-overriding-header "Inbox")))
           (tags "CLOSED>=\"<today>\""
-                ((org-agenda-overriding-header "\nCompleted today\n")))))))
+                ((org-agenda-overriding-header "Completed today")))))))
       (setq org-capture-templates
-           '(("t" "Todo" entry (file+headline "~/notes/inbox.org" "Tasks")
+           '(("t" "Todo" entry (file "~/notes/inbox.org")
               "* TODO %?\n  %i\n ")
              ("j" "Journal" entry (file+datetree "~/notes/journal.org")
               "* %?\nEntered on %U\n  %i\n  %a")
@@ -251,7 +256,9 @@
 ;;   (org-mode . #(setq-local tab-width 8))
   :bind ("C-c a" . org-agenda)
   ("C-c 1" . org-cycle-list-bullet)
-  ("C-c p" . org-capture))
+  ("C-c p" . org-capture)
+  ("C-c c" . org-clock-goto)
+  ("C-c n" . my/org-jump-skipping-drawer))
 
 (use-package org-krita
   :ensure t
@@ -259,9 +266,34 @@
   :hook
   (org-mode . org-krita-mode))
 
+(use-package org-mem
+  :defer
+  :config
+  ;; At least one of these two is needed
+  (setq org-mem-do-sync-with-org-id t)
+  (setq org-mem-watch-dirs
+        (list "~/notes")) ;; Configure me
+  (org-mem-updater-mode))
+
+(use-package org-node
+  :init
+  ;; Optional key bindings
+  ;; Tip: Try changing these to just "M-o"!
+  (keymap-global-set "M-p" org-node-global-prefix-map)
+  (with-eval-after-load 'org
+    (keymap-set org-mode-map "M-p" org-node-org-prefix-map))
+  :config
+  (org-node-cache-mode))
+
+(use-package olivetti
+  :defer t
+  :hook org-mode)
+
 (use-package markdown-mode
   :hook (markdown-mode . visual-line-mode)
   :defer t)
+
+;; trying to figure out how to change default file open options
 (defun my-open-file (file)
   (interactive)
   (
@@ -280,7 +312,8 @@
   (telega-chat-mode . company-mode)
   (telega-chat-mode . telega-squash-message-mode)
   :defer t)
-(use-package company)
+(use-package company
+  :defer t)
 
 
 (use-package gptel
@@ -299,4 +332,4 @@
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 (require 'zone)
-(zone-when-idle 30)
+(zone-when-idle 120)
