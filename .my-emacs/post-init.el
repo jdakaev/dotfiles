@@ -204,8 +204,18 @@
                (if (org-at-heading-p)
                    (progn (insert "\n") (move-point-visually -1)))
                )
+(defun my/refile-to-tasks ()
+  (interactive)
+  (if
+      (org-at-heading-p)
+      nil
+    (display-warning :warning "Not at org heading"
+    ())))
+
 (use-package org
   :config
+  (setq org-cycle-hide-drawer-startup nil)
+  (setq org-refile-targets '((my/org-refile-helper . (:maxlevel . 1))))
   (setq org-special-ctrl-a/e t)
   (setq org-todo-keywords '((type "TODO" "|" "DONE")))
   (setq org-agenda-files (list "~/notes/todo.org" "~/notes/daily.org" "~/notes/school.org" "~/notes/inbox.org"))
@@ -234,13 +244,26 @@
                         (org-agenda-prefix-format "[%e] ")
                         (org-agenda-overriding-header "School")
                         (org-agenda-max-todos 10)))
-
             ;; Deadline display?
             (tags-todo "CATEGORY=\"inbox\""
                        ((org-agenda-prefix-format "  %?-12t% s")
-                      (org-agenda-overriding-header "Inbox")))
-          (tags "CLOSED>=\"<today>\""
-                ((org-agenda-overriding-header "Completed today")))))))
+                        (org-agenda-overriding-header "Inbox")))
+            (tags "CLOSED>=\"<today>\""
+                  ((org-agenda-overriding-header "Completed today"))
+                  )))
+          ("n" "Not Home"
+           ((agenda "")
+            (tags-todo "@home")
+            (tags "garden")))
+
+          ("h" "Not Home"
+           (todo "TODO"))
+
+          ("s" "School"
+           ((agenda "")
+            (tags-todo "@home")
+            (tags "garden")))
+          ))
       (setq org-capture-templates
            '(("t" "Todo" entry (file "~/notes/inbox.org")
               "* TODO %?\n  %i\n ")
@@ -258,7 +281,10 @@
   ("C-c 1" . org-cycle-list-bullet)
   ("C-c p" . org-capture)
   ("C-c c" . org-clock-goto)
-  ("C-c n" . my/org-jump-skipping-drawer))
+  ("C-c s" . org-store-link)
+  ("C-c l" . org-insert-last-stored-link)
+  ("C-c n" . my/org-jump-skipping-drawer)
+  )
 
 (use-package org-krita
   :ensure t
@@ -305,6 +331,8 @@
   :config
   (setq telega-server-libs-prefix "/usr")
   (setq telega-emoji-use-images nil)
+  (setq telega-file-open-function 'org-open-file)
+  (setq org-id-link-to-org-use-id t)
   :bind-keymap
   ("C-c t" . telega-prefix-map)
   :hook
@@ -330,6 +358,3 @@
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
-
-(require 'zone)
-(zone-when-idle 120)
