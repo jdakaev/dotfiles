@@ -1,9 +1,9 @@
 ;;; post-init.el --- DESCRIPTION -*- no-byte-compile: t; lexical-binding: t; -*-
-
+;; Theme
 (mapc #'disable-theme custom-enabled-themes)  ; Disable all active themes
 (load-theme 'modus-operandi-tinted t)  ; Load the built-in theme
 
-;; Set the default font to DejaVu Sans Mono with specific size and weight
+;; Font
 (set-face-attribute 'default nil
                     :height 130 :weight 'normal :family "Hack")
 
@@ -43,6 +43,8 @@
   ;; `require'. Additionally, it compiles all packages that were loaded before
   ;; the mode `compile-angel-on-load-mode' was activated.
   (compile-angel-on-load-mode 1))
+
+
 ;; Vertico provides a vertical completion interface, making it easier to
 ;; navigate and select from completion candidates (e.g., when `M-x` is pressed).
 (use-package vertico
@@ -197,87 +199,157 @@
    ;; :preview-key "M-."
    :preview-key '(:debounce 0.4 any))
   (setq consult-narrow-key "<"))
+
+
+;; My org mode helpers
 (defun my/org-jump-skipping-drawer ()
-               (interactive)
-               (org-fold-show-entry)
-               (org-end-of-meta-data t)
-               (if (org-at-heading-p)
-                   (progn (insert "\n") (move-point-visually -1)))
-               )
+  (interactive)
+  (org-fold-show-entry)
+  (org-end-of-meta-data t)
+  (if (org-at-heading-p)
+      (progn (insert "\n") (move-point-visually -1)))
+  )
 (defun my/refile-to-tasks ()
   (interactive)
   (if
       (org-at-heading-p)
       nil
     (display-warning :warning "Not at org heading"
-    ())))
+                     ())))
+;; Install oneonone
+;; (use-package oneonone
+;;   :load-path "https://raw.githubusercontent.com/emacsmirror/emacswiki.org/refs/heads/master/oneonone.el")
+
+;; (use-package oneonone
+;;   :ensure t
+;;   :load-path "elpa/oneonone/"
+;;   :vc (:url "https://github.com/emacsmirror/oneonone"))
+
 
 (use-package org
+  :load-path "~/.emacs.d/var/elpa/org-mode/lisp/"
+  :vc (:url "https://code.tecosaur.net/tec/org-mode" :branch "dev")
   :config
+  ;; Appearance
+  ;; (set-face-attribute 'org-todo nil :height 0.8)
+  (set-face-attribute 'org-level-1 nil :height 1.1)
+  (setq org-image-align 'right)
+  (setq org-startup-with-inline-images t)
+  ;; Latex
+  (plist-put org-latex-preview-appearance-options
+             :page-width 0.8)
+  (setq org-latex-preview-mode-display-live t)
+  (setq org-preview-latex-image-directory (expand-file-name "ltximg/" user-emacs-directory))
+  (setq org-format-latex-options (plist-put org-format-latex-options :zoom 1.5))
+  ;; (setq org-preview-latex-default-process 'dvisvgm)
+  ;; (setq org-latex-preview-mode-generate 'live)
+
+  ;; Set footnotes to current heading
+  (setq org-footnote-section nil)
+  ;; Hide drawers by default
   (setq org-cycle-hide-drawer-startup nil)
+  ;; Refile targets, not ready yet
   (setq org-refile-targets '((my/org-refile-helper . (:maxlevel . 1))))
+  ;; Make moving around in org-mode easier
   (setq org-special-ctrl-a/e t)
+  (defun my/org-latex-preview-uncenter (ov)
+    (overlay-put ov 'before-string nil))
+  (defun my/org-latex-preview-recenter (ov)
+    (overlay-put ov 'before-string (overlay-get ov 'justify)))
+  (defun my/org-latex-preview-center (ov)
+    (save-excursion
+      (goto-char (overlay-start ov))
+      (when-let* ((elem (org-element-context))
+                  ((or (eq (org-element-type elem) 'latex-environment)
+                       (string-match-p "^\\\\\\[" (org-element-property :value elem))))
+                  (img (overlay-get ov 'display))
+                  (prop `(space :align-to (- center (0.55 . ,img))))
+                  (justify (propertize " " 'display prop 'face 'default)))
+        (overlay-put ov 'justify justify)
+        (overlay-put ov 'before-string (overlay-get ov 'justify)))))
+  (define-minor-mode org-latex-preview-center-mode
+    "Center equations previewed with `org-latex-preview'."
+    :global nil
+    (if org-latex-preview-center-mode
+        (progn
+          (add-hook 'org-latex-preview-overlay-open-functions
+                    #'my/org-latex-preview-uncenter nil :local)
+          (add-hook 'org-latex-preview-overlay-close-functions
+                    #'my/org-latex-preview-recenter nil :local)
+          (add-hook 'org-latex-preview-overlay-update-functions
+                    #'my/org-latex-preview-center nil :local))
+      (remove-hook 'org-latex-preview-overlay-close-functions
+                   #'my/org-latex-preview-recenter)
+      (remove-hook 'org-latex-preview-overlay-update-functions
+                   #'my/org-latex-preview-center)
+      (remove-hook 'org-latex-preview-overlay-open-functions
+                   #'my/org-latex-preview-uncenter)))
+  ;; Fix remote images
+  ;; https://emacs.stackexchange.com/posts/42283/revisions
+  ;; https://blog.tecosaur.com/tmio/2021-04-26-Welcome.html#inline-display-remote
+  ;; on 2022-09-04 this only works for tramp remote links and not for http / https
+  (setq org-display-remote-inline-images 'download)
+
+  ;; we look to doom emacs for an example how to get remote images also working
+  ;; for normal http / https links
+  ;; 1. image data handler
+  (defun org-http-image-data-fn (protocol link _description)
+    "Interpret LINK as an URL to an image file."
+    (when (and (image-type-from-file-name link)
+               (not (eq org-display-remote-inline-images 'skip)))
+      (if-let (buf (url-retrieve-synchronously (concat protocol ":" link)))
+          (with-current-buffer buf
+            (goto-char (point-min))
+            (re-search-forward "\r?\n\r?\n" nil t)
+            (buffer-substring-no-properties (point) (point-max)))
+        (message "Download of image \"%s\" failed" link)
+        nil)))
+
+  ;; 2. add this as link parameter for http and https
+  (org-link-set-parameters "http"  :image-data-fun #'org-http-image-data-fn)
+  (org-link-set-parameters "https" :image-data-fun #'org-http-image-data-fn)
+  ;; Agenda
   (setq org-todo-keywords '((type "TODO" "|" "DONE")))
-  (setq org-agenda-files (list "~/notes/todo.org" "~/notes/daily.org" "~/notes/school.org" "~/notes/inbox.org"))
+  (setq org-agenda-files (list "~/notes/todo.org" "~/notes/daily.org" "~/notes/inbox.org"))
   (setq org-agenda-prefix-format '(
                                    (todo . " ")
                                    (agenda . " %i %-12:c%?-12t% s")))
   (setq org-agenda-show-all-dates nil)
-  (setq org-preview-latex-default-process 'dvisvgm)
   (setq org-agenda-show-future-repeats nil)
   ;; https://github.com/rougier/emacs-gtd
+  ;; (setq org-agenda-custom-commands
+  ;;       '(("s" "School tasks" tags-tree
+  ;;          (org-agenda-files '("~/notes/school.org"))
+  ;;          (org-show-context-detail 'minimal)
+  ;;          )))
   (setq org-agenda-custom-commands
-        '(("g" "GTD"
-           ((todo "TODO"
-                 ((org-agenda-skip-function
-                   '(org-agenda-skip-entry-if 'deadline))
-                  (org-agenda-prefix-format "[%e] ")
-                  (org-agenda-overriding-header "Tasks")
-                  (org-agenda-max-todos 10)))
-           (agenda ""
-                    ((org-agenda-skip-function
-                      '(org-agenda-skip-entry-if 'deadline))
-                     (org-deadline-warning-days 0)))
-            (tags-todo "CATEGORY=\"school\""
-                       ((org-agenda-skip-function
-                         '(org-agenda-skip-entry-if 'deadline))
-                        (org-agenda-prefix-format "[%e] ")
-                        (org-agenda-overriding-header "School")
-                        (org-agenda-max-todos 10)))
-            ;; Deadline display?
-            (tags-todo "CATEGORY=\"inbox\""
-                       ((org-agenda-prefix-format "  %?-12t% s")
-                        (org-agenda-overriding-header "Inbox")))
-            (tags "CLOSED>=\"<today>\""
-                  ((org-agenda-overriding-header "Completed today"))
-                  )))
-          ("n" "Not Home"
-           ((agenda "")
-            (tags-todo "@home")
-            (tags "garden")))
+        '(
+          ("p" "Personal Work" ((agenda)))
+          ("s" "School" ((agenda "") (todo ""))
+           ((org-agenda-files '("~/notes/school.org"))
+            (org-agenda-todo-ignore-scheduled 'all)
+            (org-agenda-todo-ignore-deadlines 'all))
+           )))
 
-          ("h" "Not Home"
-           (todo "TODO"))
-
-          ("s" "School"
-           ((agenda "")
-            (tags-todo "@home")
-            (tags "garden")))
-          ))
-      (setq org-capture-templates
-           '(("t" "Todo" entry (file "~/notes/inbox.org")
-              "* TODO %?\n  %i\n ")
-             ("j" "Journal" entry (file+datetree "~/notes/journal.org")
-              "* %?\nEntered on %U\n  %i\n  %a")
-             ("c" "Current clocking task notes" entry (clock)
-              "* %i")))
+  ;; Capture
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file "~/notes/inbox.org")
+           "* TODO %?\n  %i\n ")
+          ("s" "School" entry (file "~/notes/school.org")
+           "* TODO %?\n  %i\n ")
+          ("j" "Journal" entry (file+datetree "~/notes/journal.org")
+           "* %?\nEntered on %U\n  %i\n  %a")
+          ("c" "Current clocking task notes" entry (clock)
+           "* %i")))
   :hook
   (org-mode . org-indent-mode)
   (org-mode . visual-line-mode)
+  (org-mode . org-latex-preview-mode)
   (org-mode . (lambda ()
                 (setq-local tab-width 8)))
-;;   (org-mode . #(setq-local tab-width 8))
-  :bind ("C-c a" . org-agenda)
+  ;;   (org-mode . #(setq-local tab-width 8))
+  :bind
+  ("C-c a" . org-agenda)
   ("C-c 1" . org-cycle-list-bullet)
   ("C-c p" . org-capture)
   ("C-c c" . org-clock-goto)
@@ -285,8 +357,11 @@
   ("C-c l" . org-insert-last-stored-link)
   ("C-c n" . my/org-jump-skipping-drawer)
   )
-
+(use-package org-yt
+  ;; :defer
+  :vc (:url "https://github.com/TobiasZawada/org-yt"))
 (use-package org-krita
+  ;; :defer
   :ensure t
   :vc (:url "https://github.com/lepisma/org-krita")
   :hook
@@ -325,7 +400,7 @@
   (
    (message "foo")
    (message "bar")
-  ))
+   ))
 
 (use-package telega
   :config
@@ -343,6 +418,8 @@
 (use-package company
   :defer t)
 
+(use-package cdlatex)
+(use-package auctex)
 
 (use-package gptel
   :bind ("C-c g m" . gptel-menu)
@@ -352,6 +429,13 @@
 ;; from karthinks on window management
 (repeat-mode)
 (keymap-global-set "M-o" 'other-window)
+
+;; https://abode.karthinks.com/org-latex-preview/#org1799152
+
+
+;; code for centering LaTeX previews -- a terrible idea
+
+
 
 ;; recentf stuff
 (require 'recentf)
