@@ -1,0 +1,4 @@
+# key: (
+# name: latex inline math
+# --
+\\($1\\)

@@ -1,0 +1,4 @@
+output eDP-1 position 0,0
+
+input type:tablet_tool map_to_output DP-5
+output DP-5 position 0,0

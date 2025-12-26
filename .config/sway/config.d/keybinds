@@ -13,8 +13,8 @@ bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_SINK@ 1%+
 bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_SINK@ 1%-
 
-#bindsym XF86MonBrightnessUp
-#bindsym XF86MonBrightnessDown
+bindsym XF86MonBrightnessUp brightnessctl s 10+%
+bindsym XF86MonBrightnessDown brightnessctl s 10-%
 bindsym Home exec ddcutil setvcp 10 + 10
 bindsym End exec ddcutil setvcp 10 - 10
 
@@ -23,7 +23,7 @@ bindsym End exec ddcutil setvcp 10 - 10
 bindsym $mod+Ctrl+p exec passmenu1
 bindsym $mod+Ctrl+e exec emacsclient --alternate-editor="" --create-frame 
 bindsym $mod+Ctrl+a exec pavucontrol
-bindsym $mod+Ctrl+u exec pcmanfm-qt
+bindsym $mod+Ctrl+u exec pcmanfm
 bindsym $mod+Ctrl+slash bar mode toggle
 bindsym $mod+Ctrl+v exec cliphist list | bemenu -p paste: | cliphist decode | wl-copy
 
@@ -38,3 +38,5 @@ bindsym $mod+m output * power on
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec swaynag -t warning -m 'really exit?' -B 'Yes, exit sway' 'swaymsg exit'
 bindsym $mod+Shift+s sticky toggle
+
+bindsym $mod+ampersand exec emacsclient --eval '(org-capture nil \"j\")' -c -F '((name . "org-protocol-capture"))'

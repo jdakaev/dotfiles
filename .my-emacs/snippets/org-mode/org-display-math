@@ -1,0 +1,6 @@
+# key: [
+# name: org-display-math
+# --
+\[
+$1
+\]

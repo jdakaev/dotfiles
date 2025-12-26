@@ -5,7 +5,7 @@ input type:keyboard {
     repeat_rate 50
 }
 input type:pointer { 
-  pointer_accel 0
+  pointer_accel -0.75
 }
 #input type:tablet_tool {
   #map_to_output LVDS-1

@@ -1,7 +1,6 @@
 [font]
-normal = { family = "Hack" }
-size = 14
+normal = { family = "IosevkaTerm NerdFont Mono" }
+size = 15
 
 [general]
 import = [ "alacritty-theme/themes/kimbie_dark.toml" ]
-

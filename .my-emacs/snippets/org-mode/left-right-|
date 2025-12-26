@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: left-right-|
+# key: lr|
+# --
+\lvert $1 \rvert

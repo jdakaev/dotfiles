@@ -1,11 +1,10 @@
 ;;; post-init.el --- DESCRIPTION -*- no-byte-compile: t; lexical-binding: t; -*-
 ;; Theme
-(mapc #'disable-theme custom-enabled-themes)  ; Disable all active themes
-(load-theme 'modus-operandi-tinted t)  ; Load the built-in theme
+(mapc #'disable-theme custom-enabled-themes) ; Disable all active themes
+(load-theme 'modus-operandi-tinted t) ; Load the built-in theme
 
 ;; Font
-(set-face-attribute 'default nil
-                    :height 130 :weight 'normal :family "Hack")
+(set-face-attribute 'default nil :height 150 :weight 'normal :family "IosevkaTerm NerdFont")
 
 ;; Native compilation enhances Emacs performance by converting Elisp code into
 ;; native machine code, resulting in faster execution and improved
@@ -13,192 +12,211 @@
 ;;
 ;; Ensure adding the following compile-angel code at the very beginning
 ;; of your `~/.emacs.d/post-init.el` file, before all other packages.
-(use-package compile-angel
-  :diminish compile-angel-on-load-mode
-  :ensure t
-  :custom
-  ;; Set `compile-angel-verbose` to nil to suppress output from compile-angel.
-  ;; Drawback: The minibuffer will not display compile-angel's actions.
-  (compile-angel-verbose t)
+(use-package
+ compile-angel
+ :diminish compile-angel-on-load-mode
+ :ensure t
+ :custom
+ ;; Set `compile-angel-verbose` to nil to suppress output from compile-angel.
+ ;; Drawback: The minibuffer will not display compile-angel's actions.
+ (compile-angel-verbose t)
 
-  :config
-  ;; The following directive prevents compile-angel from compiling your init
-  ;; files. If you choose to remove this push to `compile-angel-excluded-files'
-  ;; and compile your pre/post-init files, ensure you understand the
-  ;; implications and thoroughly test your code. For example, if you're using
-  ;; the `use-package' macro, you'll need to explicitly add:
-  ;; (eval-when-compile (require 'use-package))
-  ;; at the top of your init file.
-  (push "/init.el" compile-angel-excluded-files)
-  (push "/early-init.el" compile-angel-excluded-files)
-  (push "/pre-init.el" compile-angel-excluded-files)
-  (push "/post-init.el" compile-angel-excluded-files)
-  (push "/pre-early-init.el" compile-angel-excluded-files)
-  (push "/post-early-init.el" compile-angel-excluded-files)
+ :config
+ ;; The following directive prevents compile-angel from compiling your init
+ ;; files. If you choose to remove this push to `compile-angel-excluded-files'
+ ;; and compile your pre/post-init files, ensure you understand the
+ ;; implications and thoroughly test your code. For example, if you're using
+ ;; the `use-package' macro, you'll need to explicitly add:
+ ;; (eval-when-compile (require 'use-package))
+ ;; at the top of your init file.
+ (push "/init.el" compile-angel-excluded-files)
+ (push "/early-init.el" compile-angel-excluded-files)
+ (push "/pre-init.el" compile-angel-excluded-files)
+ (push "/post-init.el" compile-angel-excluded-files)
+ (push "/pre-early-init.el" compile-angel-excluded-files)
+ (push "/post-early-init.el" compile-angel-excluded-files)
 
-  ;; A local mode that compiles .el files whenever the user saves them.
-  ;; (add-hook 'emacs-lisp-mode-hook #'compile-angel-on-save-local-mode)
+ ;; A local mode that compiles .el files whenever the user saves them.
+ ;; (add-hook 'emacs-lisp-mode-hook #'compile-angel-on-save-local-mode)
 
-  ;; A global mode that compiles .el files prior to loading them via `load' or
-  ;; `require'. Additionally, it compiles all packages that were loaded before
-  ;; the mode `compile-angel-on-load-mode' was activated.
-  (compile-angel-on-load-mode 1))
+ ;; A global mode that compiles .el files prior to loading them via `load' or
+ ;; `require'. Additionally, it compiles all packages that were loaded before
+ ;; the mode `compile-angel-on-load-mode' was activated.
+ (compile-angel-on-load-mode 1))
 
 
 ;; Vertico provides a vertical completion interface, making it easier to
 ;; navigate and select from completion candidates (e.g., when `M-x` is pressed).
-(use-package vertico
-  ;; (Note: It is recommended to also enable the savehist package.)
-  :ensure t
-  :config
-  (vertico-mode))
+(use-package
+ vertico
+ ;; (Note: It is recommended to also enable the savehist package.)
+ :ensure t
+ :config (vertico-mode))
 
 ;; Vertico leverages Orderless' flexible matching capabilities, allowing users
 ;; to input multiple patterns separated by spaces, which Orderless then
 ;; matches in any order against the candidates.
-(use-package orderless
-  :ensure t
-  :custom
-  (completion-styles '(orderless basic))
-  (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles partial-completion)))))
+(use-package
+ orderless
+ :ensure t
+ :custom
+ (completion-styles '(orderless basic))
+ (completion-category-defaults nil)
+ (completion-category-overrides '((file (styles partial-completion)))))
 
 ;; Marginalia allows Embark to offer you preconfigured actions in more contexts.
 ;; In addition to that, Marginalia also enhances Vertico by adding rich
 ;; annotations to the completion candidates displayed in Vertico's interface.
-(use-package marginalia
-  :ensure t
-  :commands (marginalia-mode marginalia-cycle)
-  :hook (after-init . marginalia-mode))
+(use-package
+ marginalia
+ :ensure t
+ :commands (marginalia-mode marginalia-cycle)
+ :hook (after-init . marginalia-mode))
 
 ;; Embark integrates with Consult and Vertico to provide context-sensitive
 ;; actions and quick access to commands based on the current selection, further
 ;; improving user efficiency and workflow within Emacs. Together, they create a
 ;; cohesive and powerful environment for managing completions and interactions.
-(use-package embark
-  ;; Embark is an Emacs package that acts like a context menu, allowing
-  ;; users to perform context-sensitive actions on selected items
-  ;; directly from the completion interface.
-  :ensure t
-  :commands (embark-act
-             embark-dwim
-             embark-export
-             embark-collect
-             embark-bindings
-             embark-prefix-help-command)
-  :bind
-  (("C-." . embark-act)         ;; pick some comfortable binding
-   ("C-;" . embark-dwim)        ;; good alternative: M-.
-   ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+(use-package
+ embark
+ ;; Embark is an Emacs package that acts like a context menu, allowing
+ ;; users to perform context-sensitive actions on selected items
+ ;; directly from the completion interface.
+ :ensure t
+ :commands
+ (embark-act
+  embark-dwim
+  embark-export
+  embark-collect
+  embark-bindings
+  embark-prefix-help-command)
+ :bind
+ (("C-." . embark-act) ;; pick some comfortable binding
+  ("C-;" . embark-dwim) ;; good alternative: M-.
+  ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
 
-  :init
-  (setq prefix-help-command #'embark-prefix-help-command)
+ :init (setq prefix-help-command #'embark-prefix-help-command)
 
-  :config
-  ;; Hide the mode line of the Embark live/completions buffers
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
+ :config
+ ;; Hide the mode line of the Embark live/completions buffers
+ (add-to-list
+  'display-buffer-alist
+  '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+    nil
+    (window-parameters (mode-line-format . none)))))
 
-(use-package embark-consult
-  :ensure t
-  :hook
-  (embark-collect-mode . consult-preview-at-point-mode))
+(use-package
+ embark-consult
+ :ensure t
+ :hook (embark-collect-mode . consult-preview-at-point-mode))
 
 ;; Consult offers a suite of commands for efficient searching, previewing, and
 ;; interacting with buffers, file contents, and more, improving various tasks.
-(use-package consult
-  :ensure t
-  :bind (;; C-c bindings in `mode-specific-map'
-         ("C-c M-x" . consult-mode-command)
-         ("C-c h" . consult-history)
-         ("C-c k" . consult-kmacro)
-         ("C-c m" . consult-man)
-         ("C-c i" . consult-info)
-         ([remap Info-search] . consult-info)
-         ;; C-x bindings in `ctl-x-map'
-         ("C-x M-:" . consult-complex-command)
-         ("C-x b" . consult-buffer)
-         ("C-x 4 b" . consult-buffer-other-window)
-         ("C-x 5 b" . consult-buffer-other-frame)
-         ("C-x t b" . consult-buffer-other-tab)
-         ("C-x r b" . consult-bookmark)
-         ("C-x p b" . consult-project-buffer)
-         ;; Custom M-# bindings for fast register access
-         ("M-#" . consult-register-load)
-         ("M-'" . consult-register-store)
-         ("C-M-#" . consult-register)
-         ;; Other custom bindings
-         ("M-y" . consult-yank-pop)
-         ;; M-g bindings in `goto-map'
-         ("M-g e" . consult-compile-error)
-         ("M-g f" . consult-flymake)
-         ("M-g g" . consult-goto-line)
-         ("M-g M-g" . consult-goto-line)
-         ("M-g o" . consult-outline)
-         ("M-g m" . consult-mark)
-         ("M-g k" . consult-global-mark)
-         ("M-g i" . consult-imenu)
-         ("M-g I" . consult-imenu-multi)
-         ;; M-s bindings in `search-map'
-         ("M-s d" . consult-find)
-         ("M-s c" . consult-locate)
-         ("M-s g" . consult-grep)
-         ("M-s G" . consult-git-grep)
-         ("M-s r" . consult-ripgrep)
-         ("M-s l" . consult-line)
-         ("M-s L" . consult-line-multi)
-         ("M-s k" . consult-keep-lines)
-         ("M-s u" . consult-focus-lines)
-         ;; Isearch integration
-         ("M-s e" . consult-isearch-history)
-         :map isearch-mode-map
-         ("M-e" . consult-isearch-history)
-         ("M-s e" . consult-isearch-history)
-         ("M-s l" . consult-line)
-         ("M-s L" . consult-line-multi)
-         ;; Minibuffer history
-         :map minibuffer-local-map
-         ("M-s" . consult-history)
-         ("M-r" . consult-history))
+(use-package
+ consult
+ :ensure t
+ :bind
+ ( ;; C-c bindings in `mode-specific-map'
+  ("C-c M-x" . consult-mode-command)
+  ("C-c h" . consult-history)
+  ("C-c k" . consult-kmacro)
+  ("C-c m" . consult-man)
+  ("C-c i" . consult-info)
+  ([remap Info-search] . consult-info)
+  ;; C-x bindings in `ctl-x-map'
+  ("C-x M-:" . consult-complex-command)
+  ("C-x b" . consult-buffer)
+  ("C-x 4 b" . consult-buffer-other-window)
+  ("C-x 5 b" . consult-buffer-other-frame)
+  ("C-x t b" . consult-buffer-other-tab)
+  ("C-x r b" . consult-bookmark)
+  ("C-x p b" . consult-project-buffer)
+  ;; Custom M-# bindings for fast register access
+  ("M-#" . consult-register-load)
+  ("M-'" . consult-register-store)
+  ("C-M-#" . consult-register)
+  ;; Other custom bindings
+  ("M-y" . consult-yank-pop)
+  ;; M-g bindings in `goto-map'
+  ("M-g e" . consult-compile-error)
+  ("M-g f" . consult-flymake)
+  ("M-g g" . consult-goto-line)
+  ("M-g M-g" . consult-goto-line)
+  ("M-g o" . consult-outline)
+  ("M-g m" . consult-mark)
+  ("M-g k" . consult-global-mark)
+  ("M-g i" . consult-imenu)
+  ("M-g I" . consult-imenu-multi)
+  ;; M-s bindings in `search-map'
+  ("M-s d" . consult-find)
+  ("M-s c" . consult-locate)
+  ("M-s g" . consult-grep)
+  ("M-s G" . consult-git-grep)
+  ("M-s r" . consult-ripgrep)
+  ("M-s l" . consult-line)
+  ("M-s L" . consult-line-multi)
+  ("M-s k" . consult-keep-lines)
+  ("M-s u" . consult-focus-lines)
+  ;; Isearch integration
+  ("M-s e" . consult-isearch-history)
+  :map
+  isearch-mode-map
+  ("M-e" . consult-isearch-history)
+  ("M-s e" . consult-isearch-history)
+  ("M-s l" . consult-line)
+  ("M-s L" . consult-line-multi)
+  ;; Minibuffer history
+  :map
+  minibuffer-local-map
+  ("M-s" . consult-history)
+  ("M-r" . consult-history))
 
-  ;; Enable automatic preview at point in the *Completions* buffer.
-  :hook (completion-list-mode . consult-preview-at-point-mode)
+ ;; Enable automatic preview at point in the *Completions* buffer.
+ :hook (completion-list-mode . consult-preview-at-point-mode)
 
-  :init
-  ;; Optionally configure the register formatting. This improves the register
-  (setq register-preview-delay 0.5
-        register-preview-function #'consult-register-format)
+ :init
+ ;; Optionally configure the register formatting. This improves the register
+ (setq
+  register-preview-delay 0.5
+  register-preview-function #'consult-register-format)
 
-  ;; Optionally tweak the register preview window.
-  (advice-add #'register-preview :override #'consult-register-window)
+ ;; Optionally tweak the register preview window.
+ (advice-add #'register-preview :override #'consult-register-window)
 
-  ;; Use Consult to select xref locations with preview
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
+ ;; Use Consult to select xref locations with preview
+ (setq
+  xref-show-xrefs-function #'consult-xref
+  xref-show-definitions-function #'consult-xref)
 
-  ;; Aggressive asynchronous that yield instantaneous results. (suitable for
-  ;; high-performance systems.) Note: Minad, the author of Consult, does not
-  ;; recommend aggressive values.
-  ;; Read: https://github.com/minad/consult/discussions/951
-  ;;
-  ;; However, the author of minimal-emacs.d uses these parameters to achieve
-  ;; immediate feedback from Consult.
-  ;; (setq consult-async-input-debounce 0.02
-  ;;       consult-async-input-throttle 0.05
-  ;;       consult-async-refresh-delay 0.02)
+ ;; Aggressive asynchronous that yield instantaneous results. (suitable for
+ ;; high-performance systems.) Note: Minad, the author of Consult, does not
+ ;; recommend aggressive values.
+ ;; Read: https://github.com/minad/consult/discussions/951
+ ;;
+ ;; However, the author of minimal-emacs.d uses these parameters to achieve
+ ;; immediate feedback from Consult.
+ ;; (setq consult-async-input-debounce 0.02
+ ;;       consult-async-input-throttle 0.05
+ ;;       consult-async-refresh-delay 0.02)
 
-  :config
-  (consult-customize
-   consult-theme :preview-key '(:debounce 0.2 any)
-   consult-ripgrep consult-git-grep consult-grep
-   consult-bookmark consult-recent-file consult-xref
-   consult--source-bookmark consult--source-file-register
-   consult--source-recent-file consult--source-project-recent-file
-   ;; :preview-key "M-."
-   :preview-key '(:debounce 0.4 any))
-  (setq consult-narrow-key "<"))
+ :config
+ (consult-customize
+  consult-theme
+  :preview-key
+  '(:debounce 0.2 any)
+  consult-ripgrep
+  consult-git-grep
+  consult-grep
+  consult-bookmark
+  consult-recent-file
+  consult-xref
+  consult--source-bookmark
+  consult--source-file-register
+  consult--source-recent-file
+  consult--source-project-recent-file
+  ;; :preview-key "M-."
+  :preview-key '(:debounce 0.4 any))
+ (setq consult-narrow-key "<"))
 
 
 ;; My org mode helpers
@@ -207,15 +225,15 @@
   (org-fold-show-entry)
   (org-end-of-meta-data t)
   (if (org-at-heading-p)
-      (progn (insert "\n") (move-point-visually -1)))
-  )
-(defun my/refile-to-tasks ()
-  (interactive)
-  (if
-      (org-at-heading-p)
-      nil
-    (display-warning :warning "Not at org heading"
-                     ())))
+      (progn
+        (insert "\n")
+        (move-point-visually -1))))
+;; (defun my/refile-to-tasks ()
+;;   (interactive)
+;;   (if (org-at-heading-p)
+;;       nil
+;;     (display-warning :warning "Not at org heading" ())))
+
 ;; Install oneonone
 ;; (use-package oneonone
 ;;   :load-path "https://raw.githubusercontent.com/emacsmirror/emacswiki.org/refs/heads/master/oneonone.el")
@@ -226,205 +244,296 @@
 ;;   :vc (:url "https://github.com/emacsmirror/oneonone"))
 
 
-(use-package org
-  :load-path "~/.emacs.d/var/elpa/org-mode/lisp/"
-  :vc (:url "https://code.tecosaur.net/tec/org-mode" :branch "dev")
-  :config
-  ;; Appearance
-  ;; (set-face-attribute 'org-todo nil :height 0.8)
-  (set-face-attribute 'org-level-1 nil :height 1.1)
-  (setq org-image-align 'right)
-  (setq org-startup-with-inline-images t)
-  ;; Latex
-  (plist-put org-latex-preview-appearance-options
-             :page-width 0.8)
+(use-package
+ org
+ :load-path "~/.emacs.d/var/elpa/org-mode/lisp/"
+ ;; :vc (:url "https://code.tecosaur.net/tec/org-mode" :branch "dev")
+ :config
+
+ ;; Telegram links
+ ;; (load "ol-telega.el")
+ ;; Appearance
+ (set-face-attribute 'org-level-1 nil :height 1.1)
+ (set-face-attribute 'org-document-title nil :height 1.1)
+ (set-face-attribute 'org-todo nil :family "Hack" :weight 'bold)
+ (set-face-attribute 'org-agenda-structure nil :family "Hack" :weight 'bold :height 1.3)
+
+ (setq org-indent-indentation-per-level 1)
+ (setq org-pretty-entities t)
+ 
+;; https://old.reddit.com/r/emacs/comments/55zk2d/adjust_the_size_of_pictures_to_be_shown_inside/d8geca2/
+ (setq org-image-actual-width 'nil) ;; (/ (display-pixel-width) 10))
+ ;; (setq org-image-align 'left)
+ (setq org-startup-with-inline-images t)
+
+ ;; org babel
+ (org-babel-do-load-languages
+  'org-babel-load-languages
+  (append org-babel-load-languages '((shell . t) (shell . t))))
+
+ ;; Latex
+  (setq org-startup-with-latex-preview t)
+ ;; ;; (plist-put org-latex-preview-appearance-options :page-width 0.4)
   (setq org-latex-preview-mode-display-live t)
-  (setq org-preview-latex-image-directory (expand-file-name "ltximg/" user-emacs-directory))
+  (setq org-preview-latex-image-directory
+        (expand-file-name "ltximg/" user-emacs-directory))
   (setq org-format-latex-options (plist-put org-format-latex-options :zoom 1.5))
-  ;; (setq org-preview-latex-default-process 'dvisvgm)
-  ;; (setq org-latex-preview-mode-generate 'live)
+  (setq org-preview-latex-default-process 'dvisvgm)
+  (setq org-latex-preview-mode-generate 'live)
 
-  ;; Set footnotes to current heading
-  (setq org-footnote-section nil)
-  ;; Hide drawers by default
-  (setq org-cycle-hide-drawer-startup nil)
-  ;; Refile targets, not ready yet
-  (setq org-refile-targets '((my/org-refile-helper . (:maxlevel . 1))))
-  ;; Make moving around in org-mode easier
-  (setq org-special-ctrl-a/e t)
-  (defun my/org-latex-preview-uncenter (ov)
-    (overlay-put ov 'before-string nil))
-  (defun my/org-latex-preview-recenter (ov)
-    (overlay-put ov 'before-string (overlay-get ov 'justify)))
-  (defun my/org-latex-preview-center (ov)
-    (save-excursion
-      (goto-char (overlay-start ov))
-      (when-let* ((elem (org-element-context))
-                  ((or (eq (org-element-type elem) 'latex-environment)
-                       (string-match-p "^\\\\\\[" (org-element-property :value elem))))
-                  (img (overlay-get ov 'display))
-                  (prop `(space :align-to (- center (0.55 . ,img))))
-                  (justify (propertize " " 'display prop 'face 'default)))
-        (overlay-put ov 'justify justify)
-        (overlay-put ov 'before-string (overlay-get ov 'justify)))))
-  (define-minor-mode org-latex-preview-center-mode
-    "Center equations previewed with `org-latex-preview'."
-    :global nil
-    (if org-latex-preview-center-mode
-        (progn
-          (add-hook 'org-latex-preview-overlay-open-functions
-                    #'my/org-latex-preview-uncenter nil :local)
-          (add-hook 'org-latex-preview-overlay-close-functions
-                    #'my/org-latex-preview-recenter nil :local)
-          (add-hook 'org-latex-preview-overlay-update-functions
-                    #'my/org-latex-preview-center nil :local))
-      (remove-hook 'org-latex-preview-overlay-close-functions
-                   #'my/org-latex-preview-recenter)
-      (remove-hook 'org-latex-preview-overlay-update-functions
-                   #'my/org-latex-preview-center)
-      (remove-hook 'org-latex-preview-overlay-open-functions
-                   #'my/org-latex-preview-uncenter)))
-  ;; Fix remote images
-  ;; https://emacs.stackexchange.com/posts/42283/revisions
-  ;; https://blog.tecosaur.com/tmio/2021-04-26-Welcome.html#inline-display-remote
-  ;; on 2022-09-04 this only works for tramp remote links and not for http / https
-  (setq org-display-remote-inline-images 'download)
+ ;; Set footnotes to current heading
+ (setq org-footnote-section nil)
+ ;; Hide drawers by default
+ (setq org-cycle-hide-drawer-startup nil)
+ ;; Refile targets, not ready yet
+ ;; (setq org-refile-targets '((my/org-refile-helper . (:maxlevel . 1))))
+ ;; Make moving around in org-mode easier
+ (setq org-special-ctrl-a/e t)
+ ;; Fix remote images
+ ;; https://emacs.stackexchange.com/posts/42283/revisions
+ ;; https://blog.tecosaur.com/tmio/2021-04-26-Welcome.html#inline-display-remote
+ ;; on 2022-09-04 this only works for tramp remote links and not for http / https
+ (setq org-display-remote-inline-images 'download)
 
-  ;; we look to doom emacs for an example how to get remote images also working
-  ;; for normal http / https links
-  ;; 1. image data handler
-  (defun org-http-image-data-fn (protocol link _description)
-    "Interpret LINK as an URL to an image file."
-    (when (and (image-type-from-file-name link)
-               (not (eq org-display-remote-inline-images 'skip)))
-      (if-let (buf (url-retrieve-synchronously (concat protocol ":" link)))
-          (with-current-buffer buf
-            (goto-char (point-min))
-            (re-search-forward "\r?\n\r?\n" nil t)
-            (buffer-substring-no-properties (point) (point-max)))
-        (message "Download of image \"%s\" failed" link)
-        nil)))
+ ;; we look to doom emacs for an example how to get remote images also working
+ ;; for normal http / https links
+ ;; 1. image data handler
+ (defun org-http-image-data-fn (protocol link _description)
+   "Interpret LINK as an URL to an image file."
+   (when (and (image-type-from-file-name link)
+              (not (eq org-display-remote-inline-images 'skip)))
+     (if-let (buf
+              (url-retrieve-synchronously (concat protocol ":" link)))
+       (with-current-buffer buf
+         (goto-char (point-min))
+         (re-search-forward "\r?\n\r?\n" nil t)
+         (buffer-substring-no-properties (point) (point-max)))
+       (message "Download of image \"%s\" failed" link)
+       nil)))
 
-  ;; 2. add this as link parameter for http and https
-  (org-link-set-parameters "http"  :image-data-fun #'org-http-image-data-fn)
-  (org-link-set-parameters "https" :image-data-fun #'org-http-image-data-fn)
-  ;; Agenda
-  (setq org-todo-keywords '((type "TODO" "|" "DONE")))
-  (setq org-agenda-files (list "~/notes/todo.org" "~/notes/daily.org" "~/notes/inbox.org"))
-  (setq org-agenda-prefix-format '(
-                                   (todo . " ")
-                                   (agenda . " %i %-12:c%?-12t% s")))
-  (setq org-agenda-show-all-dates nil)
-  (setq org-agenda-show-future-repeats nil)
-  ;; https://github.com/rougier/emacs-gtd
-  ;; (setq org-agenda-custom-commands
-  ;;       '(("s" "School tasks" tags-tree
-  ;;          (org-agenda-files '("~/notes/school.org"))
-  ;;          (org-show-context-detail 'minimal)
-  ;;          )))
+ ;; 2. add this as link parameter for http and https
+ (org-link-set-parameters "http" :image-data-fun #'org-http-image-data-fn)
+ (org-link-set-parameters "https" :image-data-fun #'org-http-image-data-fn)
+ 
+ ;; Agenda
+ (setq org-todo-keywords '((type "PROJ(p)" "TODO(t)" "NEXT(n)" "|" "DONE(d!)")))
+ (setq org-agenda-files
+       (list "~/notes/todo.org" "~/notes/daily.org" "~/notes/schodo.org"
+             )) 
+ 
+  (setq org-agenda-prefix-format
+        '((todo . " %-6e ") (agenda . " %i %?-12t% s")))
+ (setq org-agenda-todo-keyword-format "")
+ (setq org-agenda-block-separator nil)
+ (setq org-agenda-span 14)
+ (setq org-log-done 'time)
+ (setq org-log-into-drawer t)
+ (setq org-agenda-show-all-dates nil)
+ (setq org-agenda-show-future-repeats nil)
+
+ (use-package
+  org-super-agenda
+  :config
+  (org-super-agenda-mode 1)
+  (setq org-stuck-projects '("TODO=\"PROJ\"" ("NEXT") ("stalled" "someday") ""))
+  (setq org-agenda-overriding-header "")
+  ;; (setq org-agenda-log-mode-items '(closed clock))
+  (setq org-agenda-start-with-log-mode '(closed clock))
+
+  (setq org-agenda-show-inherited-deadlines t
+      org-agenda-show-inherited-scheduled t)
+
   (setq org-agenda-custom-commands
         '(
-          ("p" "Personal Work" ((agenda)))
-          ("s" "School" ((agenda "") (todo ""))
-           ((org-agenda-files '("~/notes/school.org"))
-            (org-agenda-todo-ignore-scheduled 'all)
-            (org-agenda-todo-ignore-deadlines 'all))
-           )))
+         ("w" "Todo"
+          ((todo
+            "NEXT"
+            ((org-super-agenda-groups
+              '(
+                (:name "Important" :date t :scheduled t :deadline t :order 1)
+                (:name "Low" :property ("energy" "low") :order 2)
+                (:name "High" :property ("energy" "high") :order 4)
+                (:name "Medium" :todo "NEXT" :order 3 )
+                ))))
+           (agenda "" ())
+           (stuck "" ((org-agenda-overriding-header " Stuck projects"))
+           ) ;; ((org-show-context-detail 'ancestors))
+        )
+  ))))
 
-  ;; Capture
-  (setq org-capture-templates
-        '(("t" "Todo" entry (file "~/notes/inbox.org")
-           "* TODO %?\n  %i\n ")
-          ("s" "School" entry (file "~/notes/school.org")
-           "* TODO %?\n  %i\n ")
-          ("j" "Journal" entry (file+datetree "~/notes/journal.org")
-           "* %?\nEntered on %U\n  %i\n  %a")
-          ("c" "Current clocking task notes" entry (clock)
-           "* %i")))
-  :hook
-  (org-mode . org-indent-mode)
-  (org-mode . visual-line-mode)
-  (org-mode . org-latex-preview-mode)
-  (org-mode . (lambda ()
-                (setq-local tab-width 8)))
-  ;;   (org-mode . #(setq-local tab-width 8))
-  :bind
-  ("C-c a" . org-agenda)
-  ("C-c 1" . org-cycle-list-bullet)
-  ("C-c p" . org-capture)
-  ("C-c c" . org-clock-goto)
-  ("C-c s" . org-store-link)
-  ("C-c l" . org-insert-last-stored-link)
-  ("C-c n" . my/org-jump-skipping-drawer)
-  )
-(use-package org-yt
-  ;; :defer
-  :vc (:url "https://github.com/TobiasZawada/org-yt"))
-(use-package org-krita
-  ;; :defer
-  :ensure t
-  :vc (:url "https://github.com/lepisma/org-krita")
-  :hook
-  (org-mode . org-krita-mode))
+ (setq org-archive-location "~/notes/archive.org::")
+ ;; Capture
+ (setq org-id-link-to-org-use-id 'create-if-interactive) ; Stop org-capture from creating IDs when doing a capture
+ (setq org-datetree-add-timestamp t)
+(setq org-capture-bookmark nil)
+ (defun my/org-choose-heading (&optional prompt)
+  "Prompt for a location in an org file and jump to it.
 
-(use-package org-mem
-  :defer
-  :config
-  ;; At least one of these two is needed
-  (setq org-mem-do-sync-with-org-id t)
-  (setq org-mem-watch-dirs
-        (list "~/notes")) ;; Configure me
-  (org-mem-updater-mode))
+This is for promping for refile targets when doing captures."
+    (let (;; (org-refile-targets (or targets org-refile-targets))
+        ;; (prompt (or prompt "Capture Location" ) ;; (or prompt "Capture Location") 
+        ;;         )
+        )
+    (org-refile t nil nil prompt)))
 
-(use-package org-node
-  :init
-  ;; Optional key bindings
-  ;; Tip: Try changing these to just "M-o"!
-  (keymap-global-set "M-p" org-node-global-prefix-map)
-  (with-eval-after-load 'org
-    (keymap-set org-mode-map "M-p" org-node-org-prefix-map))
-  :config
-  (org-node-cache-mode))
 
-(use-package olivetti
-  :defer t
-  :hook org-mode)
 
-(use-package markdown-mode
-  :hook (markdown-mode . visual-line-mode)
-  :defer t)
+ (setq org-capture-templates
+       '(("t" "Todo" entry (file "~/notes/todo.org") "* TODO %?\n  \n ")
+         ("s" "School todo" entry
+          (file+function "~/notes/schodo.org"
+                         my/org-choose-heading
+                         ;; (function my/org-get-target-headline)
+                         )
+          "* TODO %?\n  %i\n ")
+         ("j" "Journal" entry (file+datetree "~/notes/journal.org")
+          ;; "* %?\nEntered on %U\n  %i\n  %a"
+          "* %?"
+          :tree-type week)
+         ("c" "Current clocking task notes" entry (clock) "* %i")))
+ :hook
+ (org-mode . org-indent-mode)
+ (org-mode . yas-minor-mode)
+ (org-mode . auto-revert-mode)
+ (org-mode . visual-line-mode)
+ (org-mode . org-latex-preview-mode)
+ (org-mode . org-cdlatex-mode)
+ (org-mode . (lambda () (setq-local tab-width 8)))
+ ;;   (org-mode . #(setq-local tab-width 8))
+ :bind
+ ("C-c a" . org-agenda)
+ ("C-c 1" . org-cycle-list-bullet)
+ ("C-c p" . org-capture)
+ ("C-c c" . org-clock-goto)
+ ("C-c s" . org-store-link)
+ ("C-c l" . org-insert-last-stored-link)
+ ("C-c n" . my/org-jump-skipping-drawer)
+ ;; ("C-c C-x s" . org-cut-subtree)
+ )
+(use-package
+ org-mem
+ :defer
+ :config
+ ;; At least one of these two is needed
+ (setq org-mem-do-sync-with-org-id t)
+ (setq org-mem-watch-dirs
+       (list "~/notes")) ;; Configure me
+ (org-mem-updater-mode))
+
+(use-package
+ org-node
+ :init
+ ;; Optional key bindings
+ ;; Tip: Try changing these to just "M-o"!
+ (keymap-global-set "M-p" org-node-global-prefix-map)
+ (with-eval-after-load 'org
+   (keymap-set org-mode-map "M-p" org-node-org-prefix-map))
+ :config (org-node-cache-mode))
+(use-package
+ org-yt
+ ;; :defer
+ :vc (:url "https://github.com/TobiasZawada/org-yt"))
+(use-package
+ org-krita
+ ;; :defer
+ :ensure t
+ :vc (:url "https://github.com/lepisma/org-krita")
+ :hook (org-mode . org-krita-mode))
+(use-package
+ ink
+ :vc (:url "https://github.com/jdakaev/ink.git")
+ ;; :load-path "~/.emacs.d/var/elpa/ink/"
+ )
+
+;; inspiration:
+;; https://orgmode.org/worg/org-contrib/org-depend.html
+(defun my/org-get-parent-todo-state ()
+  "Check if the parent is a project"
+  (save-excursion
+    (let (position
+          (position))
+
+      (unless (< (org-outline-level) 2)
+        (org-up-heading-all 1)
+        (org-get-todo-state)))))
+
+
+(defun my/org-bump-task ()
+  "Automatically activate next task "
+  (interactive)
+  ;; This is for completing NEXT actions in a subproject
+
+  ;; Setting task to DONE inside a PRoject
+  (cond
+   ((and (equal org-state "DONE") (equal (my/org-get-parent-todo-state) "PROJ"))
+    ;; Check if next task exists
+
+    (while (and (equal (org-get-todo-state) "DONE") (org-goto-sibling)))
+    (if (equal (org-get-todo-state) "DONE")
+        ;; break here
+        (let ((read-answer-short t)
+              (org-indirect-buffer-display 'current-window)
+              (answer
+               (read-answer
+                "Project doesn't have any more tasks. Mark it as completed? "
+                '(("yes" ?y "mark as completed")
+                  ("no" ?n "project not completed; stall")
+                  ("review" ?r "add the next task")))))
+          (cond
+           ((equal answer "yes")
+            (set-minibuffer-message "Project completed")
+            (org-up-heading-all 1)
+            (org-todo "DONE"))
+           ((equal answer "review")
+            (org-tree-to-indirect-buffer -1))
+           ;; (progn (org-todo "DONE") ;;Mark heading as completed
+           ;;       ;; (set-minibuffer-message "HI2")
+           ;;       )
+           ))
+
+      (org-todo "NEXT")))))
+
+(add-hook 'org-after-todo-state-change-hook 'my/org-bump-task)
+
+;; (use-package org-edna
+;;   :hook
+;;   (org-mode . org-edna-mode))
+
+;; (use-package olivetti :defer t :hook org-mode)
+
+(use-package markdown-mode :hook (markdown-mode . visual-line-mode) :defer t)
 
 ;; trying to figure out how to change default file open options
 (defun my-open-file (file)
   (interactive)
-  (
-   (message "foo")
-   (message "bar")
-   ))
+  ((message "foo") (message "bar")))
 
-(use-package telega
-  :config
-  (setq telega-server-libs-prefix "/usr")
-  (setq telega-emoji-use-images nil)
-  (setq telega-file-open-function 'org-open-file)
-  (setq org-id-link-to-org-use-id t)
-  :bind-keymap
-  ("C-c t" . telega-prefix-map)
-  :hook
-  (telega-root-mode . visual-line-mode)
-  (telega-chat-mode . company-mode)
-  (telega-chat-mode . telega-squash-message-mode)
-  :defer t)
-(use-package company
-  :defer t)
+(use-package
+ telega
+ :config
+ (setq telega-server-libs-prefix "/usr")
+ (setq telega-emoji-use-images nil)
+ (setq telega-file-open-function 'org-open-file)
+ ;; (setq org-id-link-to-org-use-id t)
+ (setq telega-chat-show-deleted-messages-for '(return t))
+ :bind-keymap ("C-c t" . telega-prefix-map)
+ :hook
+ (telega-root-mode . visual-line-mode)
+ (telega-chat-mode . company-mode)
+ ;; (telega-chat-mode . telega-squash-message-mode)
+ :defer t)
+(use-package company :defer t)
 
 (use-package cdlatex)
 (use-package auctex)
 
-(use-package gptel
-  :bind ("C-c g m" . gptel-menu)
-  ("C-c g r" . gptel-rewrite )
-  ("C-c g s" . gptel-send ))
+(use-package
+  gptel
+  :hook (gptel-post-stream-hook . gptel-auto-scroll)
+  :bind
+ ("C-c g m" . gptel-menu)
+ ("C-c g r" . gptel-rewrite)
+ ("C-c g s" . gptel-send))
 
 ;; from karthinks on window management
 (repeat-mode)
@@ -436,9 +545,35 @@
 ;; code for centering LaTeX previews -- a terrible idea
 
 
-
 ;; recentf stuff
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
+
+
+(use-package yasnippet
+:config
+(setq yas/root-directory (list "~/.my-emacs/snippets/"))
+  :defer t)
+
+;; https://fuco1.github.io/2017-09-02-Maximize-the-org-capture-buffer.html
+(defvar my-org-capture-before-config nil
+  "Window configuration before `org-capture'.")
+
+(defadvice org-capture (before save-config activate)
+  "Save the window configuration before `org-capture'."
+  (setq my-org-capture-before-config (current-window-configuration)))
+
+(add-hook 'org-capture-mode-hook 'delete-other-windows)
+(defun my-org-capture-cleanup ()
+  "Clean up the frame created while capturing via org-protocol."
+  ;; In case we run capture from emacs itself and not an external app,
+  ;; we want to restore the old window config
+  (when my-org-capture-before-config
+    (set-window-configuration my-org-capture-before-config))
+  (-when-let ((&alist 'name name) (frame-parameters))
+    (when (equal name "org-protocol-capture")
+      (delete-frame))))
+
+(add-hook 'org-capture-after-finalize-hook 'my-org-capture-cleanup)

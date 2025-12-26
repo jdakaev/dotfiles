@@ -13,9 +13,9 @@ include /etc/sway/config.d/*
 include ~/.config/sway/config.d/*
 #border pixel 5
 
-font Hack 10
+font IosevkaTerm Nerd Font 14
 
 #exec mako
-exec wl-paste --type text --watch cliphist store 
+exec wl-paste
 #exec gentoo-pipewire-launcher restart &
 #output * max_render_time 10

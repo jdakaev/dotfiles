@@ -17,7 +17,7 @@ export BEMENU_OPTS='bemenu-run \
     --af "#917a53" \
     --list 10 \
     --fixed-height \
-    --margin 400 \
+    --margin 200 \
     -B 2 \
     --bdr "#c99c4d" \
     -c'

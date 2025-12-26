@@ -1,0 +1,5 @@
+#for_window [title="Emacs"]  floating enable
+for_window [title="Enter LaTeX Formula - TexText"]  floating enable
+for_window [title="Enter LaTeX Formula - TexText"]  move position 1200 300
+for_window [title="org-protocol-capture"]  floating enable
+for_window [title="org-protocol-capture"]  resize set 500 700
