@@ -53,4 +53,4 @@ zle -N run-tmux-sessionizer
 bindkey '^f' run-tmux-sessionizer
 
 export NIX_PATH="nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos:nixos-config=/home/mking/.nix/configuration.nix:/nix/var/nix/profiles/per-user/root/channels"
-
+[ -z "$TMUX"  ] && { tmux attach || exec tmux new-session && exit;}

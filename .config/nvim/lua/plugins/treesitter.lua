@@ -4,7 +4,7 @@ return {
   build = ':TSUpdate',
   config = function()
     local ensure_installed = {
-      "go"
+      "go", "cpp"
     }
     -- https://github.com/SylvanFranklin/.config/commit/5684cf6dd5d39dc6aa07c45daa77590bfc93c2d3
     require("nvim-treesitter").install(ensure_installed)

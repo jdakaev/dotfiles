@@ -13,6 +13,19 @@ return {
 
     config = function()
       require('telescope').setup {
+        defaults = { path_display = { "shorten" },
+          layout_strategy = "horizontal",
+          layout_config = {
+            horizontal = {
+              height = 0.95,
+              preview_cutoff = 120,
+              prompt_position = "bottom",
+              width = 0.99,
+              preview_width = 0.65
+            },
+          },
+        },
+
         extensions = {
           ["ui-select"] = {
             --require("telescope.themes").get_dropdown {
@@ -36,6 +49,7 @@ return {
       { "<leader>ff", function() require('telescope.builtin').find_files() end },
       { "<leader>fh", function() require('telescope.builtin').help_tags() end },
       { "<leader>fg", function() require('telescope.builtin').live_grep() end },
+      { "<leader>fs", function() require('telescope.builtin').grep_string() end },
       { "<leader>fb", function() require('telescope.builtin').buffers() end },
     }
   }

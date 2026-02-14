@@ -3,4 +3,4 @@ normal = { family = "IosevkaTerm NerdFont Mono" }
 size = 15
 
 [general]
-import = [ "alacritty-theme/themes/kimbie_dark.toml" ]
+import = [ "alacritty-themes/themes/modus-vivendi-tritanopia.toml" ]

@@ -1,10 +1,12 @@
 set $mod Mod4
 set $altmod Mod1
 
-bindsym $mod+Return exec alacritty
-bindsym $mod+z exec firefox
+bindsym $mod+Return workspace term 
 
-set $menu j4-dmenu-desktop -i --dmenu bemenu
+bindsym $mod+Shift+Return exec alacritty
+bindsym $mod+z exec firefox, for_window [app_id="firefox"] focus
+
+set $menu fuzzel
 bindsym $mod+d exec $menu
 
 bindsym $mod+p exec grim -g "$(slurp)" - | wl-copy

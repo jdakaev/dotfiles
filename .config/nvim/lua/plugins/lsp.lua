@@ -10,7 +10,7 @@ return {
       -- vim.o.autocomplete = true
       vim.o.pumheight = 5
 
-      vim.lsp.enable("lua_ls")
+      vim.lsp.enable({ "lua_ls", "clangd", "gopls" })
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('my.lsp', {}),
         callback = function(args)

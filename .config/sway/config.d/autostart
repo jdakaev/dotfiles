@@ -1,1 +1,3 @@
 #exec wluma
+exec alacritty --app-id term
+exec emacsclient
