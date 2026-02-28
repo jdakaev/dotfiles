@@ -1,3 +1,4 @@
 #exec wluma
-exec alacritty --app-id term
-exec emacsclient
+exec alacritty --class term
+exec emacsclient --alternate-editor="" --create-frame 
+exec ~/.local/bin/bg.sh

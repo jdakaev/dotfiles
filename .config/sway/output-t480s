@@ -1,0 +1,8 @@
+output DP-5 pos 0 0
+output DP-4 pos 0 1080
+workspace 1 output DP-4
+workspace 2 output DP-4 
+workspace 3 output DP-4
+workspace 4 output DP-4
+workspace term output DP-4
+output eDP-1 disable

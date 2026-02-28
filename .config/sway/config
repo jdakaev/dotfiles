@@ -11,6 +11,7 @@
 
 include /etc/sway/config.d/*
 include ~/.config/sway/config.d/*
+include ./output
 #border pixel 5
 
 font IosevkaTerm Nerd Font 14

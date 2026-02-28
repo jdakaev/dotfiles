@@ -24,8 +24,8 @@ bindsym End exec ddcutil setvcp 10 - 10
 # UTILITIES
 bindsym $mod+Ctrl+p exec passmenu1
 bindsym $mod+Ctrl+e exec emacsclient --alternate-editor="" --create-frame 
-bindsym $mod+Ctrl+a exec pavucontrol
-bindsym $mod+Ctrl+u exec pcmanfm
+bindsym $mod+Ctrl+a exec pwvucontrol
+bindsym $mod+Ctrl+u exec Thunar
 bindsym $mod+Ctrl+slash bar mode toggle
 bindsym $mod+Ctrl+v exec cliphist list | bemenu -p paste: | cliphist decode | wl-copy
 

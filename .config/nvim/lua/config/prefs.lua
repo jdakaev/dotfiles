@@ -10,6 +10,8 @@ vim.o.expandtab = true
 vim.o.rnu = true
 vim.o.nu = true
 
+vim.o.swapfile = false
+
 
 vim.o.undofile = true
 vim.o.wrap = true
