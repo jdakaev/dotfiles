@@ -4,8 +4,8 @@
 (mapc #'disable-theme custom-enabled-themes) ; Disable all active themes
 ;; (setq olivetti-style 'smart)
 ;;;; Faces
-(set-face-attribute 'default nil :height 150 :weight 'normal :family "IosevkaTerm NerdFont")
-(set-face-attribute 'variable-pitch nil :height 170 :weight 'normal :family "Input Sans Compressed")
+(set-face-attribute 'default nil :height 120 :weight 'normal :family "Input Mono Narrow")
+(set-face-attribute 'variable-pitch nil :height 120 :weight 'normal :family "Input Sans Compressed")
 ;;; theme
 (load-theme 'modus-vivendi-tritanopia t) ; Load the built-in theme
 (setq modus-themes-variable-pitch-ui t)
@@ -27,36 +27,36 @@ Version 2016-07-21"
 ;; Ensure adding the following compile-angel code at the very beginning
 ;; of your `~/.emacs.d/post-init.el` file, before all other packages.
 (use-package
- compile-angel
- :diminish compile-angel-on-load-mode
- :ensure t
- :custom
- ;; Set `compile-angel-verbose` to nil to suppress output from compile-angel.
- ;; Drawback: The minibuffer will not display compile-angel's actions.
- (compile-angel-verbose t)
+  compile-angel
+  :diminish compile-angel-on-load-mode
+  :ensure t
+  :custom
+  ;; Set `compile-angel-verbose` to nil to suppress output from compile-angel.
+  ;; Drawback: The minibuffer will not display compile-angel's actions.
+  (compile-angel-verbose t)
 
- :config
- ;; The following directive prevents compile-angel from compiling your init
- ;; files. If you choose to remove this push to `compile-angel-excluded-files'
- ;; and compile your pre/post-init files, ensure you understand the
- ;; implications and thoroughly test your code. For example, if you're using
- ;; the `use-package' macro, you'll need to explicitly add:
- ;; (eval-when-compile (require 'use-package))
- ;; at the top of your init file.
- (push "/init.el" compile-angel-excluded-files)
- (push "/early-init.el" compile-angel-excluded-files)
- (push "/pre-init.el" compile-angel-excluded-files)
- (push "/post-init.el" compile-angel-excluded-files)
- (push "/pre-early-init.el" compile-angel-excluded-files)
- (push "/post-early-init.el" compile-angel-excluded-files)
+  :config
+  ;; The following directive prevents compile-angel from compiling your init
+  ;; files. If you choose to remove this push to `compile-angel-excluded-files'
+  ;; and compile your pre/post-init files, ensure you understand the
+  ;; implications and thoroughly test your code. For example, if you're using
+  ;; the `use-package' macro, you'll need to explicitly add:
+  ;; (eval-when-compile (require 'use-package))
+  ;; at the top of your init file.
+  (push "/init.el" compile-angel-excluded-files)
+  (push "/early-init.el" compile-angel-excluded-files)
+  (push "/pre-init.el" compile-angel-excluded-files)
+  (push "/post-init.el" compile-angel-excluded-files)
+  (push "/pre-early-init.el" compile-angel-excluded-files)
+  (push "/post-early-init.el" compile-angel-excluded-files)
 
- ;; A local mode that compiles .el files whenever the user saves them.
- ;; (add-hook 'emacs-lisp-mode-hook #'compile-angel-on-save-local-mode)
+  ;; A local mode that compiles .el files whenever the user saves them.
+  ;; (add-hook 'emacs-lisp-mode-hook #'compile-angel-on-save-local-mode)
 
- ;; A global mode that compiles .el files prior to loading them via `load' or
- ;; `require'. Additionally, it compiles all packages that were loaded before
- ;; the mode `compile-angel-on-load-mode' was activated.
- (compile-angel-on-load-mode 1))
+  ;; A global mode that compiles .el files prior to loading them via `load' or
+  ;; `require'. Additionally, it compiles all packages that were loaded before
+  ;; the mode `compile-angel-on-load-mode' was activated.
+  (compile-angel-on-load-mode 1))
 
 
 ;;; Consult
@@ -219,62 +219,62 @@ Version 2016-07-21"
 
 ;;;; Org
 (use-package
- org
- :load-path "~/.emacs.d/var/elpa/org-mode/lisp/"
- ;; :vc (:url "https://code.tecosaur.net/tec/org-mode" :branch "dev")
- :config
+  org
+  :load-path "~/.emacs.d/var/elpa/org-mode/lisp/"
+  ;; :vc (:url "https://code.tecosaur.net/tec/org-mode" :branch "dev")
+  :config
 
- ;; Telegram links
- ;; (load "ol-telega.el")
+  ;; Telegram links
+  ;; (load "ol-telega.el")
 ;;;; Filetypes
- (setq org-file-apps
-      '((auto-mode . emacs)
-        ;; ("\\.x?html?\\'" . "firefox %s")
-        ("\\.pdf\\'" . "zathura \"%s\"")))
+  (setq org-file-apps
+        '((auto-mode . emacs)
+          ;; ("\\.x?html?\\'" . "firefox %s")
+          ("\\.pdf\\'" . "zathura \"%s\"")))
 ;;;; Skip drawer with C-n
 
-(defun my/org-jump-skipping-drawer ()
-  (interactive)
-  (org-fold-show-entry)
-  (org-end-of-meta-data t)
-  (if (org-at-heading-p)
-      (progn
-        (insert "\n")
-        (move-point-visually -1))))
- (keymap-set org-mode-map "C-c n" 'my/org-jump-skipping-drawer)
+  (defun my/org-jump-skipping-drawer ()
+    (interactive)
+    (org-fold-show-entry)
+    (org-end-of-meta-data t)
+    (if (org-at-heading-p)
+        (progn
+          (insert "\n")
+          (move-point-visually -1))))
+  (keymap-set org-mode-map "C-c n" 'my/org-jump-skipping-drawer)
 ;;;; clean up whitespace
- (defun my/org-cleanup-whitespace ()
-   (interactive)
-   (if (equal major-mode 'org-mode)
-       (whitespace-cleanup)
-     ))
- (add-hook 'before-save-hook 'my/org-cleanup-whitespace)
+  (defun my/org-cleanup-whitespace ()
+    (interactive)
+    (if (equal major-mode 'org-mode)
+        (whitespace-cleanup)
+      ))
+  (add-hook 'before-save-hook 'my/org-cleanup-whitespace)
 ;;;; Org Appearance
-; Source - https://stackoverflow.com/a/22320638
-; Posted by Lindydancer
-; Retrieved 2026-02-04, License - CC BY-SA 3.0
+                                        ; Source - https://stackoverflow.com/a/22320638
+                                        ; Posted by Lindydancer
+                                        ; Retrieved 2026-02-04, License - CC BY-SA 3.0
+  
+  (add-hook 'org-mode-hook (lambda () (set-fringe-style 0)))
+  (set-face-attribute 'org-level-1 nil :height 1.1)
+  (set-face-attribute 'org-document-title nil :height 1.1)
+  (set-face-attribute 'org-todo nil :family "Input Mono" :weight 'bold)
+  (set-face-attribute 'org-scheduled-today nil :family "Input Mono" :weight 'bold :height 1.2)
+  (set-face-attribute 'org-agenda-structure nil :family "Input Mono" :weight 'bold :height 1.3)
 
-(add-hook 'org-mode-hook (lambda () (set-fringe-style 0)))
- (set-face-attribute 'org-level-1 nil :height 1.1)
- (set-face-attribute 'org-document-title nil :height 1.1)
- (set-face-attribute 'org-todo nil :family "Hack" :weight 'bold)
- (set-face-attribute 'org-scheduled-today nil :family "Hack" :weight 'bold :height 1.2)
- (set-face-attribute 'org-agenda-structure nil :family "Hack" :weight 'bold :height 1.3)
-
- (setq org-indent-indentation-per-level 1)
- (setq org-pretty-entities t)
-(setq org-hide-emphasis-markers t) 
- (setq org-image-actual-width 'nil) ;; (/ (display-pixel-width) 10))
- (setq org-startup-with-inline-images t)
-(add-hook 'org-mode-hook 'variable-pitch-mode) 
+  (setq org-indent-indentation-per-level 1)
+  (setq org-pretty-entities t)
+  (setq org-hide-emphasis-markers t) 
+  (setq org-image-actual-width 'nil) ;; (/ (display-pixel-width) 10))
+  (setq org-startup-with-inline-images t)
+  (add-hook 'org-mode-hook 'variable-pitch-mode) 
 ;;;;; Org Modern
- (use-package org-modern
-   :hook (org-mode . global-org-modern-mode))
+  (use-package org-modern
+    :hook (org-mode . global-org-modern-mode))
 
 ;;;; org babel
- (org-babel-do-load-languages
-  'org-babel-load-languages
-  (append org-babel-load-languages '((shell . t) (shell . t))))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   (append org-babel-load-languages '((shell . t) (shell . t))))
 
 ;;;; Latex
   (setq org-startup-with-latex-preview t)
@@ -286,9 +286,9 @@ Version 2016-07-21"
   (setq org-latex-preview-mode-generate 'live)
 ;;;;; Latex Headers
   (setq org-latex-default-packages-alist '((#1="" "amsmath" t ("lualatex" "xetex"))
- (#1# "fontspec" nil ("lualatex" "xetex")) ("AUTO" "inputenc" t ("pdflatex"))
- ("T1" "fontenc" nil ("pdflatex")) (#1# "amsmath" t ("pdflatex"))
- (#1# "amssymb" t ("pdflatex")) (#1# "capt-of" nil) (#1# "hyperref" nil)))
+                                           (#1# "fontspec" nil ("lualatex" "xetex")) ("AUTO" "inputenc" t ("pdflatex"))
+                                           ("T1" "fontenc" nil ("pdflatex")) (#1# "amsmath" t ("pdflatex"))
+                                           (#1# "amssymb" t ("pdflatex")) (#1# "capt-of" nil) (#1# "hyperref" nil)))
   (setq org-latex-classes
         '(("article" "
 \\documentclass[11pt]{article}
@@ -300,66 +300,66 @@ Version 2016-07-21"
 [EXTRA]
 ")))
 ;;;; Set footnotes to current heading
- (setq org-footnote-section nil)
+  (setq org-footnote-section nil)
 ;;;; Hide drawers by default
- 
- (setq org-cycle-hide-drawer-startup nil)
+  
+  (setq org-cycle-hide-drawer-startup nil)
 ;;;; Org navigation
- (setq org-special-ctrl-a/e t)
+  (setq org-special-ctrl-a/e t)
 ;;;; Org Archive
- (setq org-archive-location "~/notes/archive.org::")
+  (setq org-archive-location "~/notes/archive.org::")
 ;;;; Capture
- (setq org-id-link-to-org-use-id 'create-if-interactive) ; Stop org-capture from creating IDs when doing a capture
- (setq org-datetree-add-timestamp t)
- (setq org-capture-bookmark nil)
- ;; Function that allows you to choose a heading
- (defun my/org-choose-heading (&optional prompt)
-  "Prompt for a location in an org file and jump to it.
+  (setq org-id-link-to-org-use-id 'create-if-interactive) ; Stop org-capture from creating IDs when doing a capture
+  (setq org-datetree-add-timestamp t)
+  (setq org-capture-bookmark nil)
+  ;; Function that allows you to choose a heading
+  (defun my/org-choose-heading (&optional prompt)
+    "Prompt for a location in an org file and jump to it.
 This is for promping for refile targets when doing captures."
     (let (;; (org-refile-targets (or targets org-refile-targets))
-        ;; (prompt (or prompt "Capture Location" ) ;; (or prompt "Capture Location") 
-        ;;         )
-        )
-    (org-refile t nil nil prompt)))
+          ;; (prompt (or prompt "Capture Location" ) ;; (or prompt "Capture Location") 
+          ;;         )
+          )
+      (org-refile t nil nil prompt)))
 
- (setq org-capture-templates
-       '(("t" "Todo" entry (file "~/notes/inbox.org") "* TODO %?\n  \n ")
-         ("s" "School todo" entry
-          (file+function "~/notes/schodo.org"
-                         my/org-choose-heading
-                         )
-          "* TODO %?\n  %i\n ")
-         ("j" "Journal" entry (file+datetree "~/notes/journal.org")
-          "* %?"
-          :tree-type week)
-         ("c" "Current clocking task notes" entry (clock) "* %i")))
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file "~/notes/inbox.org") "* TODO %?\n  \n ")
+          ("s" "School todo" entry
+           (file+function "~/notes/schodo.org"
+                          my/org-choose-heading
+                          )
+           "* TODO %?\n  %i\n ")
+          ("j" "Journal" entry (file+datetree "~/notes/journal.org")
+           "* %?"
+           :tree-type week)
+          ("c" "Current clocking task notes" entry (clock) "* %i")))
 ;;;; Org hooks
- :hook
- (org-mode . org-indent-mode)
- (org-mode . yas-minor-mode)
- (org-mode . auto-revert-mode)
- (org-mode . visual-line-mode)
- (org-mode . org-latex-preview-mode)
- (org-mode . org-cdlatex-mode)
- (org-mode . (lambda () (setq-local tab-width 8)))
+  :hook
+  (org-mode . org-indent-mode)
+  (org-mode . yas-minor-mode)
+  (org-mode . auto-revert-mode)
+  (org-mode . visual-line-mode)
+  (org-mode . org-latex-preview-mode)
+  (org-mode . org-cdlatex-mode)
+  (org-mode . (lambda () (setq-local tab-width 8)))
 
 ;;;; Org keybinds
- :bind
- ("C-c a" . org-agenda)
- ("C-c 1" . org-cycle-list-bullet)
- ("C-c p" . org-capture)
- ("C-c c" . org-clock-goto)
- ("C-c s" . org-store-link)
- ("C-c l" . org-insert-last-stored-link)
+  :bind
+  ("C-c a" . org-agenda)
+  ("C-c 1" . org-cycle-list-bullet)
+  ("C-c p" . org-capture)
+  ("C-c c" . org-clock-goto)
+  ("C-c s" . org-store-link)
+  ("C-c l" . org-insert-last-stored-link)
 
- ;; ("C-c C-x s" . org-cut-subtree)
- )
+  ;; ("C-c C-x s" . org-cut-subtree)
+  )
 
 ;;;; Agenda
- (setq org-todo-keywords '((type "PROJ(p)" "TODO(t)" "NEXT(n)" "|" "DONE(d!)" "CANC(c%)")))
- (setq org-agenda-files
-       (list "~/notes/todo.org" "~/notes/daily.org" "~/notes/schodo.org" "~/notes/journal.org"
-             ))
+(setq org-todo-keywords '((type "PROJ(p)" "TODO(t)" "NEXT(n)" "|" "DONE(d!)" "CANC(c%)")))
+(setq org-agenda-files
+      (list "~/notes/todo.org" "~/notes/daily.org" "~/notes/schodo.org" "~/notes/journal.org"
+            ))
 (setq org-stuck-projects '("TODO=\"PROJ\"" ("NEXT") ("stalled" "someday") ""))
 (setq org-agenda-sorting-strategy '((todo priority-down effort-up)))
 
@@ -376,16 +376,16 @@ This is for promping for refile targets when doing captures."
 
 
 ;;;; Agenda format (appearance)
-  (setq org-agenda-overriding-header "")
-  (setq org-agenda-prefix-format
-        '((todo . "  %-6e ") (agenda . " %i %?-12t% s")))
- (setq org-agenda-todo-keyword-format "")
- (setq org-agenda-block-separator nil)
+(setq org-agenda-overriding-header "")
+(setq org-agenda-prefix-format
+      '((todo . "  %-6e ") (agenda . " %i %?-12t% s")))
+(setq org-agenda-todo-keyword-format "")
+(setq org-agenda-block-separator nil)
 (setq org-agenda-span 'day)
 (setq org-agenda-window-setup 'current-window)
 ;;;;; Org log
- (setq org-log-done 'time)
- (setq org-log-into-drawer t)
+(setq org-log-done 'time)
+(setq org-log-into-drawer t)
 (setq org-agenda-show-all-dates nil)
 ;;;;; Hide duplicate items
 (setq org-agenda-show-future-repeats nil)
@@ -406,6 +406,23 @@ This is for promping for refile targets when doing captures."
                      (org-agenda-start-with-log-mode nil)
                      (org-agenda-include-deadlines t)
                      ))
+            (todo
+             "NEXT"
+             ((org-super-agenda-groups
+               '(
+                 (:name "SCHEDULED(DISCARCD)" :scheduled t :order 48)
+                 (:name "Pinned" :tag "today" :order 1)
+                 (:name "" :discard t :tag "stalled")
+                 (:name "Waiting" :tag "waiting" :order 10)
+                 (:name "Do" :auto-tags t :order 3)
+                 (:name "Untagged" :anything t :order 2)
+
+                 ;; (:name "School (High consequence)" :file-path "schodo.org" :order 1)
+                 ))
+              ;; (org-agenda-todo-ignore-scheduled 'all)
+              ;; (org-agenda-todo-ignore-deadlines 'all)
+              )
+             )            
             ))
           ("w" "Day view"
            (
@@ -414,26 +431,28 @@ This is for promping for refile targets when doing captures."
                         ;; (org-agenda-tags-todo-honor-ignore-options t)
                         ;; (org-agenda-include-deadlines nil)
                         ))
+
             (todo
+             ;; "today/NEXT"
              "NEXT"
-             ((org-super-agenda-groups
+             (
+              (org-agenda-todo-ignore-scheduled 'future)
+              (org-agenda-todo-ignore-deadlines 'future)
+              (org-super-agenda-groups
                '(
-                 (:name "Pinned" :tag "today" :order 1)
-                 (:name "" :discard t :tag "stalled")
-                 (:name "Waiting" :tag "waiting" :order 10)
-                 (:name "Do" :auto-tags t :order 3)
-                 (:name "Untagged" :anything t :order 2)
-                 ;; (:name "School (High consequence)" :file-path "schodo.org" :order 1)
-                 ))
-              (org-agenda-todo-ignore-scheduled 'all)
-              (org-agenda-todo-ignore-deadlines 'all))
+                 (:name "Waiting:" :tag "waiting" :order 3)
+                 (:name "Focus on" :tag "urgent" :order 1)
+                 (:name "Other:" :tag "important" :order 2)
+                             ;; (:name "School (High consequence)" :file-path "schodo.org" :order 1)
+                 )
+              )
              )
 
             )
 
            )
-          ))
-  )
+          ))))
+  
 ;;;; Org-Node
 (use-package
  org-mem
