@@ -1,8 +1,0 @@
-set {
-  $black #000000
-  $light_gray #E5E5E5
-}
-
-bar {
-  swaybar_command waybar
-}

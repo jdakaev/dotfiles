@@ -1,6 +1,6 @@
 [font]
-normal = { family = "Input Mono" }
-size = 15
+normal = { family = "Input Mono Narrow" }
+size = 11
 
 [general]
 import = [ "alacritty-themes/themes/modus-vivendi-tritanopia.toml" ]

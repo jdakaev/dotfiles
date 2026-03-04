@@ -1,5 +1,0 @@
-gaps inner 5
-gaps outer 3
-default_border pixel 3
-# TODO hide window titles
-exec swaybg -i "/home/mking/notes/epstein.png" -m stretch

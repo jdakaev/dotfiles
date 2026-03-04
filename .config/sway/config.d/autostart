@@ -1,4 +1,0 @@
-#exec wluma
-exec alacritty --class term
-exec emacsclient --alternate-editor="" --create-frame 
-exec ~/.local/bin/bg.sh

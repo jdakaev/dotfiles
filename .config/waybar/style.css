@@ -19,27 +19,25 @@
 @define-color content_inactive rgba(255, 255, 255, 0.25);
 
 * {
-	text-shadow: none;
-	box-shadow: none;
+  text-shadow: none;
+  box-shadow: none;
   border: none;
   border-radius: 0;
-	/*font-family: "Segoe UI", "Ubuntu";*/
-  font-family: "Ubuntu";
-  font-weight: 600;
-  font-size: 14.7px;
-	
-	
+  /*font-family: "Segoe UI", "Ubuntu";*/
+  font-family: "Hack";
+  font-weight: 500;
+  font-size: 10.7px;
 }
 
 window#waybar {
   background:  @bg_main;
-  border-top: 1px solid @border_main;
+  /* border-bottom: 2px solid @border_main; */
   color: @content_main;
 }
 
 tooltip {
   background: @bg_main_tooltip;
-  border-radius: 5px;
+  border-radius: 2px;
   border-width: 1px;
   border-style: solid;
   border-color: @border_main;
@@ -49,29 +47,33 @@ tooltip label{
 }
 
 #workspaces {
+  padding-right: 5px;
   color: transparent;
-	margin-right: 1.5px;
-	margin-left: 1.5px;
 }
 #workspaces button {
-  padding: 3px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  /* padding: 3px;*/
   color: @content_inactive;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  margin-right: 0.5px;
+  margin-left: 0.5px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 #workspaces button.active {
   color: @content_main;
 }
 #workspaces button.focused {
-	border-bottom: 3px solid white;
+  border-bottom: 2px solid white;
   color: @content_main;
 }
 #workspaces button.urgent {
-	background:  rgba(255, 200, 0, 0.35);
-	border-bottom: 3px dashed @warning_color;
-	color: @warning_color;
+  background:  rgba(255, 200, 0, 0.35);
+  border-bottom: 2px dashed @warning_color;
+  color: @warning_color;
 }
 #workspaces button:hover {
-	border-bottom: 3px solid white;
+  border-bottom: 2px solid white;
   background: @bg_hover;
   color: @content_main;
 }
@@ -80,47 +82,43 @@ tooltip label{
 }
 
 #taskbar button {
-	min-width: 50px;
-	border-bottom: 3px solid rgba(255, 255, 255, 0.3);
-	margin-left: 2px;
-	margin-right: 2px;
-  padding-left: 8px;
-  padding-right: 8px;
+  min-width: 30px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  margin-left: 1px;
+  margin-right: 1px;
+  padding-left: 4px;
+  padding-right: 4px;
   color: white;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 #taskbar button.active {
-	border-bottom: 3px solid white;
+  border-bottom: 2px solid white;
   background: @bg_active;
 }
 
 #taskbar button:hover {
-	border-bottom: 3px solid white;
+  border-bottom: 2px solid white;
   background: @bg_hover;
-	color: @content_main;
-}
-
-#cpu, #disk, #memory {
-	padding:6px;
+  color: @content_main;
 }
 
 #temperature {
-	color: transparent;
-	font-size: 0px;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  color: transparent;
+  font-size: 0px;
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 #temperature.critical {
-	padding-right: 3px;
-	color: @warning_color;
-	font-size: initial;
-	border-bottom: 3px dashed @warning_color;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  padding-right: 2px;
+  color: @warning_color;
+  font-size: initial;
+  border-bottom: 2px dashed @warning_color;
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 #window {
   border-radius: 10px;
-  margin-left: 20px;
+  margin-left: 10px;
   margin-right: 20px;
 }
 
@@ -129,46 +127,45 @@ tooltip label{
   margin-right: 5px;
 }
 #tray > .passive {
-	border-bottom: none;
+  border-bottom: none;
 }
 #tray > .active {
-	border-bottom: 3px solid white;
+  border-bottom: 2px solid white;
 }
 #tray > .needs-attention {
-	border-bottom: 3px solid @warning_color;
+  border-bottom: 2px solid @warning_color;
 }
 #tray > widget {
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 #tray > widget:hover {
-	background: @bg_hover;
+  background: @bg_hover;
 }
 
-#pulseaudio {
-	font-family: "JetBrainsMono Nerd Font";
-	padding-left: 3px;
-  padding-right: 3px;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-#pulseaudio:hover {
- 	background: @bg_hover;
-}
 
-#network {
-	padding-left: 3px;
-  padding-right: 3px;
-}
-
-#language {
+#pulseaudio,
+#network, 
+#cpu, 
+#memory, 
+#custom-toggle-keyboard,
+#battery,
+#clock {
+  margin-left: 1px;
+  margin-right: 1px;
   padding-left: 5px;
   padding-right: 5px;
+
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  /* border-bottom: 2px solid @border_main; */
 }
 
-#clock {
-  padding-right: 7px;
-  padding-left: 5px;
-	transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+#custom-toggle-keyboard,
+#clock,
+#pulseaudio{
 }
-#clock:hover {
-	background: @bg_hover;
+#clock:hover,
+#custom-toggle-keyboard:hover,
+#pulseaudio:hover{
+  background: @bg_hover;
 }

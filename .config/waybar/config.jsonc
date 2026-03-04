@@ -1,56 +1,55 @@
 {
     "layer": "bottom",
-    "position": "bottom",
+    "position": "top",
     "mod": "dock",
     "exclusive": true,
     "gtk-layer-shell": true,
     "margin-bottom": -1,
     "passthrough": false,
-    "height": 41,
+    "height": 18,
     "modules-left": [
-        "custom/os_button",
         "sway/workspaces",
-        "wlr/taskbar"
+        "wlr/taskbar",
+        "custom/toggle-keyboard"
     ],
     "modules-center": [],
     "modules-right": [
+        "tray",
         "cpu",
         "temperature",
         "memory",
-        "disk",
-        "tray",
         "pulseaudio",
         "network",
         "battery",
         "clock"
     ],
+    "custom/toggle-keyboard":{
+      // "exec": "toggle-keyboard.sh",
+      "format": "KEYB",
+      //"exec-on-event": "on-click", 
+      "on-click": "toggle-keyboard.sh"
+    },
     "sway/workspaces": {
-        "icon-size": 32,
-        "spacing": 16
+        "icon-size": 10,
+        // "spacing": 10,
+        // "persistent-workspaces": [ 2, 3]
+
     },
     "cpu": {
         "interval": 5,
-        "format": "   {usage}%",
+        "format": "CPU {usage}% ",
         "max-length": 10
-    },
-    "disk": {
-        "interval": 30,
-        "format": "󰋊  {percentage_used}%",
-        "path": "/",
-        "tooltip": true,
-        "unit": "GB",
-        "tooltip-format":  "Available {free} of {total}"
     },
     "memory": {
         "interval": 10,
-        "format": "  {percentage}%",
+        "format": "Mem {percentage}% ",
         "max-length": 10,
         "tooltip": true,
         "tooltip-format": "RAM - {used:0.1f}GiB used"
     },
     "wlr/taskbar": {
-        "format": "{icon} {title:.30}",
-        "icon-size": 28,
+        "format": "{icon} {title:.10}",
+        "icon-size": 16,
         "spacing": 3,
         "on-click-middle": "close",
         "tooltip-format": "{title}",
@@ -58,11 +57,12 @@
         "on-click": "activate"
     },
     "tray": {
-        "icon-size": 18,
+        "icon-size": 14,
         "spacing": 3
     },
     "clock": {
-        "format": "      {:%R\n %d.%m.%Y}",
+        // "format": "      {:%R %d.%m.%Y}",
+        "format": "{:%R}",
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
             "mode": "year",
@@ -87,7 +87,7 @@
         }
     },
     "network": {
-        "format-wifi": " {icon}",
+        "format-wifi": "{ipaddr} {icon}",
         "format-ethernet": "  ",
         "format-disconnected": "󰌙",
         "format-icons": [
@@ -104,9 +104,9 @@
             "warning": 30,
             "critical": 20
         },
-        "format": "{icon} {capacity}%",
-        "format-charging": " {capacity}%",
-        "format-plugged": " {capacity}%",
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
         "format-icons": [
             "󰂎",
@@ -125,9 +125,9 @@
     "pulseaudio": {
         "max-volume": 150,
         "scroll-step": 10,
-        "format": "{icon}",
+        "format": "{volume}% {icon}",
         "tooltip-format": "{volume}%",
-        "format-muted": " ",
+        "format-muted": "MUT",
         "format-icons": {
             "default": [
                 " ",
