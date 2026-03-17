@@ -1,23 +1,12 @@
 ;;; post-init.el --- DESCRIPTION -*- no-byte-compile: t; lexical-binding: t; -*-
 ;;; -- My Emacs Config
 (setq default-directory "~/notes/")
+(setq auto-save-visited-file-name t)
+
 ;;; --- Elisp
 (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
 (use-package elisp-autofmt :defer t)
-;;; --- Appearance
-(mapc #'disable-theme custom-enabled-themes) ; Disable all active themes
-(load-theme 'modus-vivendi t)
-(setq modus-themes-variable-pitch-ui t)
-;;; --- Font Faces
-(set-face-attribute 'default nil
-                    :height 120
-                    :weight 'normal
-                    :family "Input Mono Narrow")
-(set-face-attribute 'variable-pitch nil
-                    :height 120
-                    :weight 'normal
-                    :family "Input Sans Compressed")
-;;; --- Native Compilation
+;;;; --- Native Compilation
 (use-package
  compile-angel
  :diminish compile-angel-on-load-mode
@@ -46,6 +35,31 @@
  ;; the mode `compile-angel-on-load-mode' was activated.
  (compile-angel-on-load-mode 1))
 
+
+;;; --- Appearance
+(mapc #'disable-theme custom-enabled-themes)
+(use-package tomorrow-night-deepblue-theme
+  :config
+  (let ((inhibit-redisplay t))
+    ;; Disable all active themes
+    (mapc #'disable-theme custom-enabled-themes)
+    ;; Load the tomorrow-night-deepblue theme
+    (load-theme 'tomorrow-night-deepblue t)))
+;;;; ---- Font Faces
+(defvar my/default-font "Input Sans"
+  "Default fixed width font to use")
+(defvar my/default-font-mono "Input Mono"
+  "Default monospace font to use")
+;; (setq my/default-font-mono "Input Mono")
+(set-face-attribute 'default nil
+                    :height 120
+                    :weight 'normal
+                    :width 'ultra-condensed
+                    :family my/default-font-mono)
+(set-face-attribute 'variable-pitch nil
+                    :height 120
+                    :weight 'normal
+                    :family my/default-font)
 
 ;;; --- Consult
 ;; Vertico provides a vertical completion interface, making it easier to
@@ -265,15 +279,20 @@
                      :height 1.8)
  (set-face-attribute 'org-document-title nil :height 1.1)
  (set-face-attribute 'org-todo nil :family "Input Mono" :weight 'bold)
- (set-face-attribute 'org-scheduled-today nil
-                     :family "Input Sans"
-                     :weight 'bold
-                     :height 1.0
-                     :foreground "#FFEE8C")
- (set-face-attribute 'org-agenda-structure nil
-                     :family "Input Mono"
-                     :weight 'bold
-                     :height 1.3)
+ ;; (set-face-attribute 'org-scheduled-today nil
+ ;;                     :family "Input Sans Compressed"
+ ;;                     ;; :weight 'bold
+ ;;                     :height 1.0
+ ;;                     ;; :foreground "#FFEE8C"
+ ;;                     )
+ ;; (set-face-attribute 'org-agenda-structure nil
+ ;;                     :family "Input Sans Compressed"
+ ;;                     ;; :weight 'bold
+ ;;                     :height 1.3)
+ ;;  (set-face-attribute 'org-agenda-done nil
+ ;;                     :family "Input Sans Compressed"
+ ;;                     ;; :weight 'bold
+ ;;                     :height 1.0)
  ;; https://sophiebos.io/posts/beautifying-emacs-org-mode/
  (dolist (face
           '((org-level-1 . 1.35)
@@ -294,7 +313,7 @@
  (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
  ;; Disable variable pitch for some things
  (set-face-attribute 'org-block nil
-                     :foreground nil
+                     ;;                     :foreground nil
                      :inherit 'fixed-pitch
                      :height 0.85)
  (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch) :height 0.85)
@@ -315,7 +334,12 @@
   org-hide-emphasis-markers t
   org-pretty-entities t
   org-ellipsis "  ·")
- (use-package olivetti :hook (org-mode . olivetti-mode) :defer t)
+ (use-package
+  olivetti
+  :hook
+  (org-mode . olivetti-mode)
+  (markdown-mode . olivetti-mode)
+  :defer t)
  (setq org-indent-indentation-per-level 1)
  (setq org-pretty-entities t)
  (setq org-hide-emphasis-markers t)
@@ -340,32 +364,23 @@
   'org-babel-load-languages
   (append org-babel-load-languages '((shell . t) (shell . t))))
 
- ;;;; Latex
+ ;;;; Org Latex
  (setq org-startup-with-latex-preview t)
  (setq org-latex-preview-mode-display-live t)
+ (setq org-latex-preview-cache 'temp)
+
  (setq org-preview-latex-image-directory
        (expand-file-name "ltximg/" user-emacs-directory))
- (setq org-format-latex-options (plist-put org-format-latex-options :zoom 1.5))
  (setq org-preview-latex-default-process 'dvisvgm)
  (setq org-latex-preview-mode-generate 'live)
- (setq org-latex-default-packages-alist
-       '((#1= "" "amsmath" t ("lualatex" "xetex"))
-         (#1# "fontspec" nil ("lualatex" "xetex"))
-         ("AUTO" "inputenc" t ("pdflatex"))
-         ("T1" "fontenc" nil ("pdflatex"))
-         (#1# "amsmath" t ("pdflatex"))
-         (#1# "amssymb" t ("pdflatex"))
-         (#1# "capt-of" nil)
-         (#1# "hyperref" nil)))
- (setq org-latex-classes '(("article" "
-\\documentclass[11pt]{article}
-\\usepackage{fontspec}
-\\setmainfont{Input Sans}
-\\pagestyle{empty}
-[DEFAULT-PACKAGES]
-[PACKAGES]
-[EXTRA]
-")))
+ (setq org-latex-preview-appearance-options
+       '(:foreground
+         auto
+         :background auto
+         :scale 1.0
+         :zoom 1.0
+         :page-width 0.5
+         :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
 
  ;;;; Hide drawers by default
 
@@ -430,11 +445,8 @@ This is for promping for refile targets when doing captures."
        "~/notes/journal.org"))
 (setq org-stuck-projects '("TODO=\"PROJ\"" ("NEXT") ("stalled" "someday") ""))
 (setq org-agenda-sorting-strategy '((todo priority-down effort-up)))
-
 (setq org-agenda-skip-scheduled-if-done t)
-(setq org-agenda-sticky t)
-
-
+;; (setq org-agenda-sticky t)
 ;;;; Agenda style
 (setq
  org-agenda-tags-column 0
@@ -446,7 +458,8 @@ This is for promping for refile targets when doing captures."
    "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
  org-agenda-current-time-string "⭠ now ─────────────────────────────────────────────────")
 (setq org-agenda-overriding-header "")
-(setq org-agenda-prefix-format '((todo . "  %-6e ") (agenda . " %i %?-12t% s")))
+(setq org-agenda-prefix-format
+      '((tags . " %-6c %-6e ") (agenda . " %i %?-12t% s")))
 (setq org-agenda-remove-tags t)
 (setq org-agenda-todo-keyword-format "")
 (setq org-agenda-block-separator nil)
@@ -507,7 +520,8 @@ This is for promping for refile targets when doing captures."
              (org-agenda-todo-ignore-deadlines 'future)
              (org-super-agenda-groups
               '((:name "Waiting:" :tag "waiting" :order 3)
-                (:name "Accomplish today" :tag "today" :order 1)
+                (:name "Work" :tag "work" :tag "school" :order 1)
+                (:name "Personal" :tag "personal" :tag "hobby" :order 2)
                 (:anything t :discard t))))))))))
 
 ;;;; Org Node
@@ -526,15 +540,22 @@ This is for promping for refile targets when doing captures."
    (keymap-set org-mode-map "M-p" org-node-org-prefix-map))
  :config (org-node-cache-mode))
 ;;;; Org Inline Anki
-(setq inline-anki-use-math-jax t)
+
 (use-package
- inline-anki
+  inline-anki
+  :init (setq inline-anki-use-math-jax t)
  :vc (:url "https://github.com/meedstrom/inline-anki")
- :config (setq inline-anki-note-type "Cloze"))
+ ;; :config (setq inline-anki-note-type "Cloze")
+ :defer t
+ )
 (with-eval-after-load 'org
   (add-to-list 'org-structure-template-alist '("f" . "flashcard")))
-(defface my-cloze '((t . (:box "pink" :background "#220135")))
+
+;;;;; Inline Anki Cloze Face
+
+(defface my-cloze '((t . :background "red"))
   "Cloze face for Inline-Anki")
+
 (setq org-emphasis-alist
       '(("*" bold)
         ("/" italic)
@@ -554,8 +575,16 @@ This is for promping for refile targets when doing captures."
  :vc (:url "https://github.com/lepisma/org-krita")
  :hook (org-mode . org-krita-mode))
 (use-package ink :vc (:url "https://github.com/jdakaev/ink.git"))
-;;; --- Markdown mode
-(use-package markdown-mode :hook (markdown-mode . visual-line-mode) :defer t)
+;;; --- Markdown
+
+(use-package
+ markdown-mode
+ :defer t
+ :hook (markdown-mode . visual-line-mode)
+ :config
+ ;; Define keybindings for moving list items with Alt+Up and Alt+Down (Meta+Up/Down).
+ (define-key markdown-mode-map (kbd "M-<up>") #'markdown-move-list-item-up)
+ (define-key markdown-mode-map (kbd "M-<down>") #'markdown-move-list-item-down))
 ;;; --- Telegram
 (use-package
  telega
@@ -569,6 +598,7 @@ This is for promping for refile targets when doing captures."
  :hook
  (telega-root-mode . visual-line-mode)
  (telega-chat-mode . company-mode)
+ ;; (load "~/.emacs.d/telega.el")
  ;; (telega-chat-mode . telega-squash-message-mode)
  :defer t)
 ;;; --- Company
@@ -581,19 +611,48 @@ This is for promping for refile targets when doing captures."
  gptel
  :hook (gptel-post-stream-hook . gptel-auto-scroll)
  :bind
- ("C-c g m" . gptel-menu)
- ("C-c g r" . gptel-rewrite)
- ("C-c g s" . gptel-send)
- :defer t)
-(setq
- gptel-model 'test
- gptel-backend
- (gptel-make-openai
-  "llama-cpp"
-  :stream t
-  :protocol "http"
-  :host "10.0.0.64:1234"
-  :models '("qwen3.5-9b")))
+ ("C-c C-g m" . gptel-menu)
+ ("C-c C-g r" . gptel-rewrite)
+ ("C-c C-g s" . gptel-send)
+ ("C-c C-g p" . gptel-beginning-of-response)
+ ("C-c C-g n" . gptel-end-of-response)
+ :config
+ (setq
+  gptel-model 'gpt-5-mini
+  gptel-backend (gptel-make-gh-copilot "Copilot"))
+
+ (gptel-make-preset
+  'explain
+  :system "Explain what this concept means to a learner.")
+
+ (gptel-make-preset
+  'Flashcard
+  :system ""
+  :rewrite-default-action 'accept
+  :rewrite-message "Rewrite this text into a flashcard format"
+  :context '("/home/mking/notes/prompts/flashcards.md")
+  :use-context 'system)
+ (gptel-make-preset
+  'diagram
+  :system "Create a diagram based on the following material"
+  :context '("/home/mking/notes/prompts/diagram.md")
+  :use-context 'system)
+  (gptel-make-preset
+  'diagram-rewrite
+  :system "Create a diagram based on the following material"
+  :rewrite-default-action 'accept
+  :context '("/home/mking/notes/prompts/diagram-rewrite.md")
+  :rewrite-message "Fix the following issues in this diagram:"
+  :use-context 'system))
+;; (setq
+;;  gptel-model 'test
+;;  gptel-backend
+;;  (gptel-make-openai
+;;   "llama-cpp"
+;;   :stream t
+;;   :protocol "http"
+;;   :host "10.0.0.64:1234"
+;;   :models '("qwen3.5-9b")))
 ;;; --- Navigation
 (repeat-mode)
 (keymap-global-set "M-o" 'other-window)
@@ -606,31 +665,30 @@ This is for promping for refile targets when doing captures."
 ;;; --- Snippets
 (use-package
  yasnippet
- :config (setq yas/root-directory (list "~/.my-emacs/snippets/"))
+ :config (setq yas/root-directory (list "~/.emacs.d/snippets/"))
  :defer t)
 ;;; --- Org Capture Maximized Window
 ;; https://fuco1.github.io/2017-09-02-Maximize-the-org-capture-buffer.html
-(defvar my-org-capture-before-config nil
-  "Window configuration before `org-capture'.")
-
-(defadvice org-capture (before save-config activate)
-  "Save the window configuration before `org-capture'."
-  (setq my-org-capture-before-config (current-window-configuration)))
-
-(add-hook 'org-capture-mode-hook 'delete-other-windows)
-(defun my-org-capture-cleanup ()
-  "Clean up the frame created while capturing via org-protocol."
-  ;; In case we run capture from emacs itself and not an external app,
-  ;; we want to restore the old window config
-  (when my-org-capture-before-config
-    (set-window-configuration my-org-capture-before-config))
-  (-when-let
-   ((&alist 'name name) (frame-parameters))
-   (when (equal name "org-protocol-capture")
-     (delete-frame))))
-
-(add-hook 'org-capture-after-finalize-hook 'my-org-capture-cleanup)
-
+;; (defvar my-org-capture-before-config nil
+;;   "Window configuration before `org-capture'.")
+;; 
+;; (defadvice org-capture (before save-config activate)
+;;   "Save the window configuration before `org-capture'."
+;;   (setq my-org-capture-before-config (current-window-configuration)))
+;; 
+;; (add-hook 'org-capture-mode-hook 'delete-other-windows)
+;; (defun my-org-capture-cleanup ()
+;;   "Clean up the frame created while capturing via org-protocol."
+;;   ;; In case we run capture from emacs itself and not an external app,
+;;   ;; we want to restore the old window config
+;;   (when my-org-capture-before-config
+;;     (set-window-configuration my-org-capture-before-config))
+;;   (-when-let
+;;    ((&alist 'name name) (frame-parameters))
+;;    (when (equal name "org-protocol-capture")
+;;      (delete-frame))))
+;; 
+;; (add-hook 'org-capture-after-finalize-hook 'my-org-capture-cleanup)
 ;;; --- Outline Mode
 (add-hook
  'outline-minor-mode-hook
@@ -654,43 +712,3 @@ This is for promping for refile targets when doing captures."
    (setq-local outline-minor-mode-use-buttons 'in-margins)
    (setq-local outline-minor-mode-highlight 'append)
    (setq-local outline-minor-mode-cycle t)))
-;;; --- Auto Dark Mode
-;; I stole this from
-;; https://github.com/LionyxML/auto-dark-emacs/blob/master/auto-dark.el
-(setq my/themes '(modus-operandi modus-vivendi))
-(defun my/set-auto-theme (value)
-  "Set the theme according to the D-Bus theme argument"
-  (pcase value
-    (2 (load-theme (car my/themes))) ;; Light theme
-    (1 (load-theme (cadr my/themes))) ;; Dark theme
-    ))
-
-(defun my/get-current-system-theme ()
-  "Use Emacs built-in D-Bus function to determine if dark theme is enabled."
-  (caar
-   (dbus-ignore-errors
-    (dbus-call-method
-     :session
-     "org.freedesktop.portal.Desktop"
-     "/org/freedesktop/portal/desktop"
-     "org.freedesktop.portal.Settings"
-     "Read"
-     "org.freedesktop.appearance"
-     "color-scheme"))))
-(my/set-auto-theme (my/get-current-system-theme))
-(defun auto-dark--register-dbus-listener ()
-  "Register a callback function with D-Bus.
-Ask D-Bus to send us a signal on theme change and add a callback
-to change the theme."
-  (dbus-register-signal
-   :session
-   "org.freedesktop.portal.Desktop"
-   "/org/freedesktop/portal/desktop"
-   "org.freedesktop.portal.Settings"
-   "SettingChanged"
-   (lambda (path var val)
-     (when (and (string= path "org.freedesktop.appearance")
-                (string= var "color-scheme"))
-       (message "System theme changed")
-       (my/set-auto-theme (caar val))))))
-(auto-dark--register-dbus-listener)
