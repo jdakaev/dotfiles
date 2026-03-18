@@ -1,5 +1,6 @@
 ;;; post-init.el --- DESCRIPTION -*- no-byte-compile: t; lexical-binding: t; -*-
 ;;; -- My Emacs Config
+(load "~/.emacs.d/org-mode-init.el")
 (setq default-directory "~/notes/")
 (setq auto-save-visited-file-name t)
 
@@ -37,7 +38,8 @@
 
 
 ;;; --- Appearance
-;; (mapc #'disable-theme custom-enabled-themes)
+(mapc #'disable-theme custom-enabled-themes)
+(load-theme 'modus-operandi t)
 ;; (use-package tomorrow-night-deepblue-theme
 ;;   :config
 ;;   (let ((inhibit-redisplay t))
@@ -45,15 +47,15 @@
 ;;     (mapc #'disable-theme custom-enabled-themes)
 ;;     ;; Load the tomorrow-night-deepblue theme
 ;;     (load-theme 'tomorrow-night-deepblue t)))
-(use-package doric-themes
-  :config
-  (let ((inhibit-redisplay t))
-    ;; Disable all active themes
-    (mapc #'disable-theme custom-enabled-themes)
-    ;; Load the tomorrow-night-deepblue theme
-    (doric-themes-load-random)))
+;; (use-package doric-themes
+;;   :config
+;;   (let ((inhibit-redisplay t))
+;;     ;; Disable all active themes
+;;     (mapc #'disable-theme custom-enabled-themes)
+;;     ;; Load the tomorrow-night-deepblue theme
+;;     (doric-themes-load-random)))
 ;;;; ---- Font Faces
-(defvar my/default-font "Input Sans"
+(defvar my/default-font "Input Sans Narrow"
   "Default mixed width font to use")
 (defvar my/default-font-mono "Input Mono"
   "Default monospace font to use")
@@ -66,6 +68,7 @@
 (set-face-attribute 'variable-pitch nil
                     :height 120
                     :weight 'normal
+                    ;; :width 'ultra-condensed
                     :family my/default-font)
 
 ;;; --- Consult
@@ -553,13 +556,13 @@ This is for promping for refile targets when doing captures."
 
 
 ;;;; Org Krita & Inkscape
-(use-package
- org-krita
- ;; :defer
- :ensure t
- :vc (:url "https://github.com/lepisma/org-krita")
- :hook (org-mode . org-krita-mode))
-(use-package ink :vc (:url "https://github.com/jdakaev/ink.git"))
+;; (use-package
+;;  org-krita
+;;  ;; :defer
+;;  :ensure t
+;;  :vc (:url "https://github.com/lepisma/org-krita")
+;;  :hook (org-mode . org-krita-mode))
+;; (use-package ink :vc (:url "https://github.com/jdakaev/ink.git"))
 ;;; --- Markdown
 
 (use-package
@@ -698,10 +701,11 @@ This is for promping for refile targets when doing captures."
    (setq-local outline-minor-mode-highlight 'append)
    (setq-local outline-minor-mode-cycle t)))
 ;;;; Org Inline Anki
-
+(setq inline-anki-use-math-jax t)
+(setq inline-anki-note-type "Cloze")
 (use-package
   inline-anki
-  :init (setq inline-anki-use-math-jax t)
+  ;; :init
  :vc (:url "https://github.com/meedstrom/inline-anki")
  ;; :config (setq inline-anki-note-type "Cloze")
  :defer t

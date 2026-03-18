@@ -9,7 +9,6 @@
     hack-font
     open-sans
     input-fonts
-    ubuntu
     #nerd-fonts.iosevka-term
     aporetic
   ];

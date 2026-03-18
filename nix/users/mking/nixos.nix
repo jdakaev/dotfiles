@@ -7,6 +7,7 @@
 {
   security.polkit.enable = true;
   programs.thunar.enable = true;
+  programs.dconf.enable = true;
   users.users.${username} = {
     shell = pkgs.zsh;
     isNormalUser = true;
@@ -38,7 +39,6 @@
       emacs-pgtk
 
       pwvucontrol
-      vesktop
 
       #koreader
       yt-dlp
@@ -50,7 +50,6 @@
       python3
 
       mpv
-      socat
 
       nomacs
 

@@ -24,5 +24,6 @@
     ./modules/gtk.nix
     ./modules/fuzzel.nix
     ./modules/emacs.nix
+    ./modules/alacritty.nix
   ];
 }

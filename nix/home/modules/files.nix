@@ -10,8 +10,5 @@
     ".config/waybar" = {
       source = config.lib.file.mkOutOfStoreSymlink /${config.home.homeDirectory}/dotfiles/.config/waybar;
     };
-    ".config/alacritty" = {
-      source = config.lib.file.mkOutOfStoreSymlink /${config.home.homeDirectory}/dotfiles/.config/alacritty;
-    };
   };
 }

@@ -6,13 +6,13 @@
 }:
 {
   environment.systemPackages = with pkgs; [
+    opencode
     ripgrep
     neovim
     fzf
     tmux
-    opencode
     lsof
-      jq
-      tree-sitter
+    jq
+    tree-sitter
   ];
 }

@@ -145,11 +145,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1773646010,
-        "narHash": "sha256-iYrs97hS7p5u4lQzuNWzuALGIOdkPXvjz7bviiBjUu8=",
+        "lastModified": 1773734432,
+        "narHash": "sha256-IF5ppUWh6gHGHYDbtVUyhwy/i7D261P7fWD1bPefOsw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "5b2c2d84341b2afb5647081c1386a80d7a8d8605",
+        "rev": "cda48547b432e8d3b18b4180ba07473762ec8558",
         "type": "github"
       },
       "original": {
@@ -173,6 +173,41 @@
         "ref": "nixos-25.11",
         "repo": "nixpkgs",
         "type": "github"
+      }
+    },
+    "org-mode-flake": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "org-mode-src": "org-mode-src"
+      },
+      "locked": {
+        "lastModified": 1773837322,
+        "narHash": "sha256-+0LCog5f6v8gVCeo8jPuCBJDFVb3qam8dcPBQwn4cAo=",
+        "path": "/home/mking/dotfiles/nix/flakes/org-mode",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/mking/dotfiles/nix/flakes/org-mode",
+        "type": "path"
+      }
+    },
+    "org-mode-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768407528,
+        "narHash": "sha256-kPVFT2fgoOO5aCCAifzlSwDhMR2RqhhT1akOKfRyalw=",
+        "ref": "dev",
+        "rev": "1ef59f0aa02e3cff40bae68b756a29bc2001739e",
+        "revCount": 28749,
+        "type": "git",
+        "url": "https://code.tecosaur.net/tec/org-mode.git"
+      },
+      "original": {
+        "ref": "dev",
+        "type": "git",
+        "url": "https://code.tecosaur.net/tec/org-mode.git"
       }
     },
     "pre-commit": {
@@ -205,7 +240,8 @@
         "minimal-emacs": "minimal-emacs",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "org-mode-flake": "org-mode-flake"
       }
     },
     "rust-overlay": {

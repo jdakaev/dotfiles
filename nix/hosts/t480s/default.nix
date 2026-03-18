@@ -26,11 +26,7 @@
 
   environment.systemPackages = with pkgs; [
     picard
-    ddcutil
-    libxcvt
   ];
-  services.udev.packages = [ pkgs.ns-usbloader ];
-  # boot.kernelParams = [ "drm.edid_firmware=DP-4:edid/DP-4-75hz.bin" ];
   networking.hostName = "thiccpad";
   system.stateVersion = "25.05";
 }

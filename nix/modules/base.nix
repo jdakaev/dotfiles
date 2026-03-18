@@ -16,7 +16,7 @@
     ./laptop.nix
     ./latex.nix
     ./location.nix
-    ./neovim.nix
+    ./code.nix
     #./nfs.nix
     ./print.nix
     ./secureboot.nix

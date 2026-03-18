@@ -9,6 +9,7 @@
 {
   imports = [
     ../../home/modules.nix
+    ../../hosts/${host}/home.nix
   ];
 
   home.username = "mking";

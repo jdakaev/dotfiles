@@ -1,0 +1,45 @@
+{
+  "nodes": {
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1773705440,
+        "narHash": "sha256-xB30bbAp0e7ogSEYyc126mAJMt4FRFh8wtm6ADE1xuM=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "48652e9d5aea46e555b3df87354280d4f29cd3a3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-25.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "org-mode-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768407528,
+        "narHash": "sha256-kPVFT2fgoOO5aCCAifzlSwDhMR2RqhhT1akOKfRyalw=",
+        "ref": "dev",
+        "rev": "1ef59f0aa02e3cff40bae68b756a29bc2001739e",
+        "revCount": 28749,
+        "type": "git",
+        "url": "https://code.tecosaur.net/tec/org-mode.git"
+      },
+      "original": {
+        "ref": "dev",
+        "type": "git",
+        "url": "https://code.tecosaur.net/tec/org-mode.git"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "org-mode-src": "org-mode-src"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

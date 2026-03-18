@@ -12,6 +12,10 @@
       url = "github:jamescherti/minimal-emacs.d";
       flake = false;
     };
+    org-mode-flake = {
+      url = "path:/home/mking/dotfiles/nix/flakes/org-mode";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -23,6 +27,7 @@
       lanzaboote,
       nixpkgs-unstable,
       minimal-emacs,
+      org-mode-flake,
       ...
     }@inputs:
     let
@@ -50,7 +55,7 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = inputs // specialArgs // { inherit unstable minimal-emacs; };
+              home-manager.extraSpecialArgs = inputs // specialArgs // { inherit unstable minimal-emacs host org-mode-flake; };
               home-manager.users.${username} = import ./users/${username}/home.nix;
             }
           ]
