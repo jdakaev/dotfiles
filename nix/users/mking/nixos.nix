@@ -58,6 +58,8 @@
       rar
 
       senpai
+
+      anki
     ];
   };
 }

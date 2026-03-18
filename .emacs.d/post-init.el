@@ -37,18 +37,25 @@
 
 
 ;;; --- Appearance
-(mapc #'disable-theme custom-enabled-themes)
-(use-package tomorrow-night-deepblue-theme
+;; (mapc #'disable-theme custom-enabled-themes)
+;; (use-package tomorrow-night-deepblue-theme
+;;   :config
+;;   (let ((inhibit-redisplay t))
+;;     ;; Disable all active themes
+;;     (mapc #'disable-theme custom-enabled-themes)
+;;     ;; Load the tomorrow-night-deepblue theme
+;;     (load-theme 'tomorrow-night-deepblue t)))
+(use-package doric-themes
   :config
   (let ((inhibit-redisplay t))
     ;; Disable all active themes
     (mapc #'disable-theme custom-enabled-themes)
     ;; Load the tomorrow-night-deepblue theme
-    (load-theme 'tomorrow-night-deepblue t)))
+    (doric-themes-load-random)))
 ;;;; ---- Font Faces
-(defvar my/default-font "Aporetic Serif"
-  "Default fixed width font to use")
-(defvar my/default-font-mono "Aporetic Serif Mono"
+(defvar my/default-font "Input Sans"
+  "Default mixed width font to use")
+(defvar my/default-font-mono "Input Mono"
   "Default monospace font to use")
 ;; (setq my/default-font-mono "Input Mono")
 (set-face-attribute 'default nil
@@ -480,6 +487,9 @@ This is for promping for refile targets when doing captures."
 ;; Hide duplicate items
 (setq org-agenda-show-future-repeats nil)
 (setq org-agenda-start-with-log-mode '(state clock))
+
+
+(setq debug-on-message nil)
 ;;;; super-agenda
 (use-package
  org-super-agenda
@@ -539,32 +549,7 @@ This is for promping for refile targets when doing captures."
  (with-eval-after-load 'org
    (keymap-set org-mode-map "M-p" org-node-org-prefix-map))
  :config (org-node-cache-mode))
-;;;; Org Inline Anki
 
-(use-package
-  inline-anki
-  :init (setq inline-anki-use-math-jax t)
- :vc (:url "https://github.com/meedstrom/inline-anki")
- ;; :config (setq inline-anki-note-type "Cloze")
- :defer t
- )
-(with-eval-after-load 'org
-  (add-to-list 'org-structure-template-alist '("f" . "flashcard")))
-
-;;;;; Inline Anki Cloze Face
-
-(defface my-cloze '((t :background "red"))
-  "Cloze face for Inline-Anki")
-
-(setq org-emphasis-alist
-      '(("*" bold)
-        ("/" italic)
-        ("_" my-cloze) ;; new
-        ("=" org-verbatim verbatim)
-        ("~" org-code verbatim)
-        ("+" (:strike-through t))))
-
-(setq debug-on-message nil)
 
 
 ;;;; Org Krita & Inkscape
@@ -712,3 +697,26 @@ This is for promping for refile targets when doing captures."
    (setq-local outline-minor-mode-use-buttons 'in-margins)
    (setq-local outline-minor-mode-highlight 'append)
    (setq-local outline-minor-mode-cycle t)))
+;;;; Org Inline Anki
+
+(use-package
+  inline-anki
+  :init (setq inline-anki-use-math-jax t)
+ :vc (:url "https://github.com/meedstrom/inline-anki")
+ ;; :config (setq inline-anki-note-type "Cloze")
+ :defer t
+ )
+(with-eval-after-load 'org
+  (add-to-list 'org-structure-template-alist '("f" . "flashcard")))
+(defface my-cloze
+  '((t (:box t)))
+  "Face for inline-anki clozes.")
+  
+(provide 'my-cloze)
+(setq org-emphasis-alist
+      '(("*" bold)
+        ("/" italic)
+        ("_" my-cloze) ;; new
+        ("=" org-verbatim verbatim)
+        ("~" org-code verbatim)
+        ("+" (:strike-through t))))
