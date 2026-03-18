@@ -37,16 +37,16 @@
 
             nativeBuildInputs = with pkgs; [
               gnumake
+              emacs
             ];
 
             buildInputs = with pkgs; [
-              emacs
             ];
 
             buildPhase = ''
               cd lisp
-              make
-              cd ..
+                make
+                cd ..
             '';
 
             installPhase = ''

@@ -56,7 +56,7 @@
       xarchiver
       rar
 
-      senpai
+      halloy
 
       anki
     ];
