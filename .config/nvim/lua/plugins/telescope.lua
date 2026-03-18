@@ -15,15 +15,6 @@ return {
       require('telescope').setup {
         defaults = { path_display = { "shorten" },
           layout_strategy = "horizontal",
-          layout_config = {
-            horizontal = {
-              height = 0.95,
-              preview_cutoff = 120,
-              prompt_position = "bottom",
-              width = 0.99,
-              preview_width = 0.65
-            },
-          },
         },
 
         extensions = {

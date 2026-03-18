@@ -46,9 +46,9 @@
     ;; Load the tomorrow-night-deepblue theme
     (load-theme 'tomorrow-night-deepblue t)))
 ;;;; ---- Font Faces
-(defvar my/default-font "Input Sans"
+(defvar my/default-font "Aporetic Serif"
   "Default fixed width font to use")
-(defvar my/default-font-mono "Input Mono"
+(defvar my/default-font-mono "Aporetic Serif Mono"
   "Default monospace font to use")
 ;; (setq my/default-font-mono "Input Mono")
 (set-face-attribute 'default nil
@@ -553,7 +553,7 @@ This is for promping for refile targets when doing captures."
 
 ;;;;; Inline Anki Cloze Face
 
-(defface my-cloze '((t . :background "red"))
+(defface my-cloze '((t :background "red"))
   "Cloze face for Inline-Anki")
 
 (setq org-emphasis-alist
