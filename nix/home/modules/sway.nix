@@ -39,8 +39,8 @@ in
   services.swayidle.timeouts = [
     {
       timeout = 150;
-      command = "${pkgs.sway}/bin/swaymsg 'output * dpms off'";
-      resumeCommand = "${pkgs.sway}/bin/swaymsg 'output * dpms on'";
+      command = "${sway}/bin/swaymsg 'output * dpms off'";
+      resumeCommand = "${sway}/bin/swaymsg 'output * dpms on'";
     }
   ];
   home.packages = with pkgs; [
