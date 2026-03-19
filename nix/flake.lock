@@ -183,8 +183,8 @@
         "org-mode-src": "org-mode-src"
       },
       "locked": {
-        "lastModified": 1773860848,
-        "narHash": "sha256-nmWQw+7Y5hMHeEVW1qbgOZcsQLGi3hz6Tg/2eGsdv+4=",
+        "lastModified": 1773864362,
+        "narHash": "sha256-HL5ffjjCRrt519MhX+xSZCQMQU/ep76OonTAtAIXwsk=",
         "path": "/home/mking/dotfiles/nix/flakes/org-mode",
         "type": "path"
       },

@@ -38,21 +38,20 @@
             nativeBuildInputs = with pkgs; [
               gnumake
               emacs
-            ];
-
-            buildInputs = with pkgs; [
+              texinfo
             ];
 
             buildPhase = ''
-              cd lisp
-                make
-                cd ..
+              make
             '';
 
             installPhase = ''
               mkdir -p $out/share/emacs/site-lisp
               cp -r lisp/*.el $out/share/emacs/site-lisp/
-              cp -r lisp/*.elc $out/share/emacs/site-lisp/ 2>/dev/null
+              cp -r lisp/*.elc $out/share/emacs/site-lisp/ 2>/dev/null || true
+
+              mkdir -p $out/share/info
+              cp -r doc/*.info* $out/share/info/ 2>/dev/null || true
             '';
 
             meta = with pkgs.lib; {
@@ -68,12 +67,10 @@
       );
 
       homeManagerModules.default =
-        {
-          config,
-          pkgs,
-          self,
-          ...
-        }:
+        { config, pkgs, ... }@args:
+        let
+          self = args.self or { };
+        in
         {
           home.packages = [
             self.packages.${pkgs.system}.org-mode

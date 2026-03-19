@@ -88,7 +88,7 @@ in
       gaps.inner = 4;
 
       startup = [
-        { command = "alacritty"; }
+        { command = "${alacritty}/bin/alacritty"; }
         # { command = "bg.sh"; }
       ];
 
