@@ -79,6 +79,9 @@
  ;; (Note: It is recommended to also enable the savehist package.)
  :ensure t
  :config (vertico-mode))
+(use-package
+  vertico-posframe
+  :config (vertico-posframe-mode 1))
 
 ;; Vertico leverages Orderless' flexible matching capabilities, allowing users
 ;; to input multiple patterns separated by spaces, which Orderless then
@@ -454,7 +457,7 @@ This is for promping for refile targets when doing captures."
        "~/notes/schodo.org"
        "~/notes/journal.org"))
 (setq org-stuck-projects '("TODO=\"PROJ\"" ("NEXT") ("stalled" "someday") ""))
-(setq org-agenda-sorting-strategy '((todo priority-down effort-up)))
+(setq org-agenda-sorting-strategy '((tags priority-down effort-up)))
 (setq org-agenda-skip-scheduled-if-done t)
 ;; (setq org-agenda-sticky t)
 ;;;; Agenda style
@@ -724,3 +727,25 @@ This is for promping for refile targets when doing captures."
         ("=" org-verbatim verbatim)
         ("~" org-code verbatim)
         ("+" (:strike-through t))))
+;;; --- Custom Functions
+(defun my/delete-current-buffer-file ()
+  "Delete the file visited by the current buffer and kill the buffer."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (unless filename (user-error "Buffer %s is not visiting a file" (buffer-name)))
+    (if (not (file-exists-p filename))
+        (when (yes-or-no-p (format "File %s does not exist. Kill buffer anyway? " filename))
+          (kill-this-buffer)
+          (message "Killed buffer %s" (buffer-name)))
+      (when (yes-or-no-p (format "Really delete file %s? " filename))
+        (condition-case err
+            (progn
+              (delete-file filename)
+              (kill-this-buffer)
+              (message "Deleted file %s and killed buffer" filename))
+          (error (user-error "Failed to delete %s: %s" filename (error-message-string err))))))))
+
+(global-set-key (kbd "C-c d") #'my/delete-current-buffer-file)
+(global-display-line-numbers-mode)
+;; (use-package org-timeline)
+;; (add-hook 'org-agenda-finalize-hook 'org-timeline-insert-timeline :append)

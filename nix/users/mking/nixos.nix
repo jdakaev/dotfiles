@@ -59,6 +59,7 @@
       halloy
 
       anki
+      vesktop
     ];
   };
 }
