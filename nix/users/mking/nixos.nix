@@ -21,7 +21,6 @@
     ];
 
     packages = with pkgs; [
-
       # is there a way to do this better
       libreoffice-still
       thunderbird
@@ -60,6 +59,7 @@
 
       anki
       vesktop
+      ffmpeg
     ];
   };
 }

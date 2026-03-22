@@ -25,5 +25,6 @@
     ./modules/fuzzel.nix
     ./modules/emacs.nix
     ./modules/alacritty.nix
+    ./modules/cliamp.nix
   ];
 }
