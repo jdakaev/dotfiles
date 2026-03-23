@@ -252,7 +252,8 @@
  org
  :load-path "~/.emacs.d/var/elpa/org-mode/lisp/"
  :config (setq org-special-ctrl-a/e t)
-
+ (setq org-use-speed-commands t)
+ (setq org-cite-default-processor 'csl)
  (setq org-archive-location "~/notes/archive.org::")
  ;;;; Footnotes
  (setq org-footnote-section nil)
@@ -287,25 +288,12 @@
  ;;;; Org Mode Faces
  (add-hook 'org-mode-hook 'variable-pitch-mode)
  (set-face-attribute 'org-document-title nil
-                     :font "Input Sans"
+                     :font my/default-font
                      :weight 'bold
                      :height 1.8)
  (set-face-attribute 'org-document-title nil :height 1.1)
- (set-face-attribute 'org-todo nil :family "Input Mono" :weight 'bold)
- ;; (set-face-attribute 'org-scheduled-today nil
- ;;                     :family "Input Sans Compressed"
- ;;                     ;; :weight 'bold
- ;;                     :height 1.0
- ;;                     ;; :foreground "#FFEE8C"
- ;;                     )
- ;; (set-face-attribute 'org-agenda-structure nil
- ;;                     :family "Input Sans Compressed"
- ;;                     ;; :weight 'bold
- ;;                     :height 1.3)
- ;;  (set-face-attribute 'org-agenda-done nil
- ;;                     :family "Input Sans Compressed"
- ;;                     ;; :weight 'bold
- ;;                     :height 1.0)
+ (set-face-attribute 'org-todo nil :family my/default-font-mono :weight 'bold)
+
  ;; https://sophiebos.io/posts/beautifying-emacs-org-mode/
  (dolist (face
           '((org-level-1 . 1.35)
@@ -317,7 +305,7 @@
             (org-level-7 . 1.1)
             (org-level-8 . 1.1)))
    (set-face-attribute (car face) nil
-                       :font "Input Sans"
+                       :font my/default-font
                        :weight 'bold
                        :height (cdr face)))
 
@@ -378,6 +366,10 @@
   (append org-babel-load-languages '((shell . t) (shell . t))))
 
  ;;;; Org Latex
+ ;; Change to XeLaTeX
+ (setq org-latex-compiler "xelatex")
+
+ 
  (setq org-startup-with-latex-preview t)
  (setq org-latex-preview-mode-display-live t)
  (setq org-latex-preview-cache 'temp)
@@ -746,6 +738,9 @@ This is for promping for refile targets when doing captures."
           (error (user-error "Failed to delete %s: %s" filename (error-message-string err))))))))
 
 (global-set-key (kbd "C-c d") #'my/delete-current-buffer-file)
-(global-display-line-numbers-mode)
 ;; (use-package org-timeline)
 ;; (add-hook 'org-agenda-finalize-hook 'org-timeline-insert-timeline :append)
+
+(use-package doom-modeline
+  :config
+  (doom-modeline-mode 1))
