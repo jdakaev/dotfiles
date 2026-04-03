@@ -51,6 +51,7 @@
     btop
     nmap
     python3
+    unzip
   ];
 
   security.rtkit.enable = true;

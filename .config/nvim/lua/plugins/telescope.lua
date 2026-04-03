@@ -13,9 +13,9 @@ return {
 
     config = function()
       require('telescope').setup {
-        defaults = { path_display = { "shorten" },
-          layout_strategy = "horizontal",
-        },
+        -- defaults = { path_display = { "shorten" },
+        --   layout_strategy = "horizontal",
+        -- },
 
         extensions = {
           ["ui-select"] = {

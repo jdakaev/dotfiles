@@ -1,79 +1,3 @@
-;;; post-init.el --- DESCRIPTION -*- no-byte-compile: t; lexical-binding: t; -*-
-;;; -- My Emacs Config
-(load "~/.emacs.d/org-mode-init.el")
-(setq default-directory "~/notes/")
-(setq auto-save-visited-file-name t)
-
-;;; --- Elisp
-(add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
-(use-package elisp-autofmt :defer t)
-;;;; --- Native Compilation
-(use-package
- compile-angel
- :diminish compile-angel-on-load-mode
- :ensure t
- :custom (compile-angel-verbose t)
- :config
- ;; The following directive prevents compile-angel from compiling your init
- ;; files. If you choose to remove this push to `compile-angel-excluded-files'
- ;; and compile your pre/post-init files, ensure you understand the
- ;; implications and thoroughly test your code. For example, if you're using
- ;; the `use-package' macro, you'll need to explicitly add:
- ;; (eval-when-compile (require 'use-package))
- ;; at the top of your init file.
- (push "/init.el" compile-angel-excluded-files)
- (push "/early-init.el" compile-angel-excluded-files)
- (push "/pre-init.el" compile-angel-excluded-files)
- (push "/post-init.el" compile-angel-excluded-files)
- (push "/pre-early-init.el" compile-angel-excluded-files)
- (push "/post-early-init.el" compile-angel-excluded-files)
-
- ;; A local mode that compiles .el files whenever the user saves them.
- ;; (add-hook 'emacs-lisp-mode-hook #'compile-angel-on-save-local-mode)
-
- ;; A global mode that compiles .el files prior to loading them via `load' or
- ;; `require'. Additionally, it compiles all packages that were loaded before
- ;; the mode `compile-angel-on-load-mode' was activated.
- (compile-angel-on-load-mode 1))
-
-
-;;; --- Appearance
-(mapc #'disable-theme custom-enabled-themes)
-(load-theme 'modus-operandi t)
-;; (use-package tomorrow-night-deepblue-theme
-;;   :config
-;;   (let ((inhibit-redisplay t))
-;;     ;; Disable all active themes
-;;     (mapc #'disable-theme custom-enabled-themes)
-;;     ;; Load the tomorrow-night-deepblue theme
-;;     (load-theme 'tomorrow-night-deepblue t)))
-;; (use-package doric-themes
-;;   :config
-;;   (let ((inhibit-redisplay t))
-;;     ;; Disable all active themes
-;;     (mapc #'disable-theme custom-enabled-themes)
-;;     ;; Load the tomorrow-night-deepblue theme
-;;     (doric-themes-load-random)))
-;;;; ---- Font Faces
-(defvar my/default-font "Input Sans Narrow"
-  "Default mixed width font to use")
-(defvar my/default-font-mono "Input Mono"
-  "Default monospace font to use")
-;; (setq my/default-font-mono "Input Mono")
-(set-face-attribute 'default nil
-                    :height 120
-                    :weight 'normal
-                    :width 'ultra-condensed
-                    :family my/default-font-mono)
-(set-face-attribute 'variable-pitch nil
-                    :height 120
-                    :weight 'normal
-                    ;; :width 'ultra-condensed
-                    :family my/default-font)
-
-;;; --- Consult
-;; Vertico provides a vertical completion interface, making it easier to
-;; navigate and select from completion candidates (e.g., when `M-x` is pressed).
 (use-package
  vertico
  ;; (Note: It is recommended to also enable the savehist package.)
@@ -247,292 +171,356 @@
   ;; :preview-key "M-."
   :preview-key '(:debounce 0.4 any))
  (setq consult-narrow-key "<"))
-;;; --- Org
+
+(use-package
+compile-angel
+:ensure t
+:custom (compile-angel-verbose t)
+:config
+(compile-angel-on-load-mode 1))
+
+(add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
+(use-package elisp-autofmt :defer t)
+
+(mapc #'disable-theme custom-enabled-themes)
+(load-theme 'modus-operandi t)
+
+(defvar my/default-font "JetBrains Mono"
+  "Default mixed width font to use")
+(defvar my/default-font-mono "JetBrains Mono"
+  "Default monospace font to use")
+
+(set-face-attribute 'default nil
+                    :height 120
+                    :weight 'normal
+                    :family my/default-font-mono)
+(set-face-attribute 'variable-pitch nil
+                    :height 120
+                    :weight 'normal
+                    :family my/default-font)
+
+(use-package doom-modeline
+:config
+(doom-modeline-mode 1))
+
+(use-package autorevert
+  :ensure nil
+  :commands (auto-revert-mode global-auto-revert-mode)
+  :hook
+  (after-init . global-auto-revert-mode)
+  :init
+  ;; (setq auto-revert-verbose t)
+  (setq auto-revert-interval 3)
+  (setq auto-revert-remote-files nil)
+  (setq auto-revert-use-notify t)
+  (setq auto-revert-avoid-polling nil))
+
+(use-package recentf
+  :ensure nil
+  :commands (recentf-mode recentf-cleanup)
+  :hook
+  (after-init . recentf-mode)
+
+  :init
+  (setq recentf-auto-cleanup (if (daemonp) 300 'never))
+  (setq recentf-exclude
+        (list "\\.tar$" "\\.tbz2$" "\\.tbz$" "\\.tgz$" "\\.bz2$"
+              "\\.bz$" "\\.gz$" "\\.gzip$" "\\.xz$" "\\.zip$"
+              "\\.7z$" "\\.rar$"
+              "COMMIT_EDITMSG\\'"
+              "\\.\\(?:gz\\|gif\\|svg\\|png\\|jpe?g\\|bmp\\|xpm\\)$"
+              "-autoloads\\.el$" "autoload\\.el$"))
+
+  :config
+  ;; A cleanup depth of -90 ensures that `recentf-cleanup' runs before
+  ;; `recentf-save-list', allowing stale entries to be removed before the list
+  ;; is saved by `recentf-save-list', which is automatically added to
+  ;; `kill-emacs-hook' by `recentf-mode'.
+  (add-hook 'kill-emacs-hook #'recentf-cleanup -90))
+
+;; Enable `auto-save-mode' to prevent data loss. Use `recover-file' or
+;; `recover-session' to restore unsaved changes.
+(setq auto-save-default t)
+
+;; Trigger an auto-save after 300 keystrokes
+(setq auto-save-interval 300)
+
+;; Trigger an auto-save 30 seconds of idle time.
+(setq auto-save-timeout 30)
+
+(use-package savehist
+  :ensure nil
+  :commands (savehist-mode savehist-save)
+  :hook
+  (after-init . savehist-mode)
+  :init
+  (setq history-length 300)
+  (setq savehist-autosave-interval 600))
+;; save-place-mode enables Emacs to remember the last location within a file
+;; upon reopening. This feature is particularly beneficial for resuming work at
+;; the precise point where you previously left off.
+(use-package saveplace
+  :ensure nil
+  :commands (save-place-mode save-place-local-mode)
+  :hook
+  (after-init . save-place-mode)
+  :init
+  (setq save-place-limit 400))
+
+(repeat-mode)
+(keymap-global-set "M-o" 'other-window)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ (append org-babel-load-languages '((shell . t) (shell . t))))
+
+(load "~/.emacs.d/org-mode-init.el")
+
 (use-package
  org
- :load-path "~/.emacs.d/var/elpa/org-mode/lisp/"
- :config (setq org-special-ctrl-a/e t)
- (setq org-use-speed-commands t)
- (setq org-cite-default-processor 'csl)
- (setq org-archive-location "~/notes/archive.org::")
- ;;;; Footnotes
- (setq org-footnote-section nil)
- ;;;; Telega links
- ;; Requires the load path
- ;; (load "ol-telega.el")
- ;;;; External Apps Filetypes
- (setq org-file-apps
-       '((auto-mode . emacs)
-         ;; ("\\.x?html?\\'" . "firefox %s")
-         ("\\.pdf\\'" . "zathura \"%s\"")))
- ;;;; My/Jump to after drawers
- (defun my/org-jump-skipping-drawer ()
-   (interactive)
-   (org-fold-show-entry)
-   (org-end-of-meta-data t)
-   (if (org-at-heading-p)
-       (progn
-         (insert "\n")
-         (move-point-visually -1))))
- (keymap-set org-mode-map "C-c n" 'my/org-jump-skipping-drawer)
- ;;;; Auto cleanup whitespace
- (defun my/org-cleanup-whitespace ()
-   (interactive)
-   (if (equal major-mode 'org-mode)
-       (whitespace-cleanup)))
- (add-hook 'before-save-hook 'my/org-cleanup-whitespace)
- ;;;; Disable fringes
- ; Source - https://stackoverflow.com/a/22320638
- ; Posted by Lindydancer
- (add-hook 'org-mode-hook (lambda () (set-fringe-style 0)))
- ;;;; Org Mode Faces
- (add-hook 'org-mode-hook 'variable-pitch-mode)
- (set-face-attribute 'org-document-title nil
-                     :font my/default-font
-                     :weight 'bold
-                     :height 1.8)
- (set-face-attribute 'org-document-title nil :height 1.1)
- (set-face-attribute 'org-todo nil :family my/default-font-mono :weight 'bold)
+ :config
 
- ;; https://sophiebos.io/posts/beautifying-emacs-org-mode/
- (dolist (face
-          '((org-level-1 . 1.35)
-            (org-level-2 . 1.3)
-            (org-level-3 . 1.2)
-            (org-level-4 . 1.1)
-            (org-level-5 . 1.1)
-            (org-level-6 . 1.1)
-            (org-level-7 . 1.1)
-            (org-level-8 . 1.1)))
-   (set-face-attribute (car face) nil
-                       :font my/default-font
-                       :weight 'bold
-                       :height (cdr face)))
+(setq org-special-ctrl-a/e t
+      org-use-speed-commands t)
+;;
 
- ;; Org indent tweak
- (require 'org-indent)
- (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
- ;; Disable variable pitch for some things
- (set-face-attribute 'org-block nil
-                     ;;                     :foreground nil
-                     :inherit 'fixed-pitch
-                     :height 0.85)
- (set-face-attribute 'org-code nil :inherit '(shadow fixed-pitch) :height 0.85)
- (set-face-attribute 'org-indent nil
-                     :inherit '(org-hide fixed-pitch)
-                     :height 0.85)
- (set-face-attribute 'org-verbatim nil
-                     :inherit '(shadow fixed-pitch)
-                     :height 0.85)
- (set-face-attribute 'org-special-keyword nil
-                     :inherit '(font-lock-comment-face fixed-pitch))
- (set-face-attribute 'org-meta-line nil
-                     :inherit '(font-lock-comment-face fixed-pitch))
- (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
- (setq
-  org-adapt-indentation t
-  org-hide-leading-stars t
-  org-hide-emphasis-markers t
-  org-pretty-entities t
-  org-ellipsis "  ·")
- (use-package
-  olivetti
-  :hook
-  (org-mode . olivetti-mode)
-  (markdown-mode . olivetti-mode)
-  :defer t)
- (setq org-indent-indentation-per-level 1)
- (setq org-pretty-entities t)
- (setq org-hide-emphasis-markers t)
- (setq org-insert-heading-respect-content t)
- ;;;; Images
- (setq org-image-actual-width 'nil) ;; (/ (display-pixel-width) 10))
- (setq org-startup-with-inline-images t)
+;; (use-package org-gtd
+;; :ensure t
+;; :after org
+;; :demand t
+;; :init
+;; ;; Suppress upgrade warnings (must be set before package loads)
+;; (setq org-gtd-update-ack "4.0.0")
+;; ;; Where org-gtd will keep its files (defaults to ~/gtd/)
+;; ;; (setq org-gtd-directory "~/my-gtd/")
+;;
+;; :custom
+;; ;; Configure TODO keyword states (options like "TODO(t)" or "DONE(d!)" are fine)
+;; (org-todo-keywords '((sequence "TODO" "NEXT" "WAIT" "|" "DONE" "CNCL")))
+;;
+;; ;; Map GTD semantic states to your keywords
+;; (org-gtd-keyword-mapping '((todo . "TODO")
+;;                            (next . "NEXT")
+;;                            (wait . "WAIT")
+;;                            (canceled . "CNCL")))
+;;
+;; :config
+;; ;; REQUIRED: Enable org-edna for project dependencies
+;; (org-edna-mode 1)
+;;
+;; ;; Add org-gtd files to your agenda (must be in :config so org-gtd-directory is defined)
+;; (setq org-agenda-files (list org-gtd-directory))
+;;
+;; :bind
+;; ;; Global keybindings (work anywhere in Emacs)
+;; (("C-c d c" . org-gtd-capture)
+;;  ("C-c d e" . org-gtd-engage)
+;;  ("C-c d p" . org-gtd-process-inbox)
+;;  ("C-c d n" . org-gtd-show-all-next)
+;;  ("C-c d s" . org-gtd-reflect-stuck-projects)
+;;
+;;  ;; Keybinding for organizing items (only works in clarify buffers)
+;;  :map org-gtd-clarify-mode-map
+;;  ("C-c c" . org-gtd-organize)
+;;
+;;  ;; Quick actions on tasks in agenda views (optional but recommended)
+;;  ;; :map org-agenda-mode-mapc
+;;  ;; ("C-c ." . org-gtd-agenda-transient)
+;;  ))
 
- ;;;; Org Modern
- (use-package
-  org-modern
-  :hook (org-mode . global-org-modern-mode)
-  :config
-  (setq
-   org-modern-tag nil
-   org-modern-priority nil
-   org-modern-todo nil
-   org-modern-table nil))
+(setq
+ org-id-link-to-org-use-id
+ 'create-if-interactive ;; Dont create IDs when capturing
+ org-datetree-add-timestamp nil
+ org-capture-bookmark nil)
 
- ;;;; Babel
- (org-babel-do-load-languages
-  'org-babel-load-languages
-  (append org-babel-load-languages '((shell . t) (shell . t))))
+(setq org-capture-templates
+      '(("t"
+         "Todo"
+         entry
+         (file+headline "~/notes/todo.org" "Inbox")
+         "* TODO %?\n  \n ")
+        ("s"
+         "School todo"
+         entry
+         (file+headline "~/notes/schodo.org" "Inbox")
+         "* TODO %?\n  %i\n ")
+        ("j"
+         "Journal"
+         entry
+         (file+datetree "~/notes/journal.org")
+         "* %?"
+         :tree-type week)
+        ("c" "Current clocking task notes" entry (clock) "* %i")))
 
- ;;;; Org Latex
- ;; Change to XeLaTeX
- (setq org-latex-compiler "xelatex")
+(setq org-latex-compiler "xelatex")
 
- 
- (setq org-startup-with-latex-preview t)
- (setq org-latex-preview-mode-display-live t)
- (setq org-latex-preview-cache 'temp)
+;; Enable LaTeX preview
+(setq org-startup-with-latex-preview t)
+(setq org-latex-preview-mode-display-live t)
+(plist-put org-latex-preview-appearance-options :zoom 1.4)
+(setq org-cite-default-processor 'biblatex)
+(use-package cdlatex :defer t)
+(use-package auctex :defer t)
 
- (setq org-preview-latex-image-directory
-       (expand-file-name "ltximg/" user-emacs-directory))
- (setq org-preview-latex-default-process 'dvisvgm)
- (setq org-latex-preview-mode-generate 'live)
- (setq org-latex-preview-appearance-options
-       '(:foreground
-         auto
-         :background auto
-         :scale 1.0
-         :zoom 1.0
-         :page-width 0.5
-         :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
+(setq org-latex-packages-alist '(("" "amsmath" t) ("" "amssymb" t)))
+(setq org-latex-preview-preamble
+      "\\documentclass{article}
+ [DEFAULT-PACKAGES]
+ [PACKAGES]
+ \\usepackage{fontspec}
+ \\setmainfont{Liberation Serif}
+ \\usepackage{xcolor}")
 
- ;;;; Hide drawers by default
+(setq org-cycle-hide-drawer-startup nil)
 
- (setq org-cycle-hide-drawer-startup nil)
+(defun my/org-jump-skipping-drawer ()
+  (interactive)
+  (org-fold-show-entry)
+  (org-end-of-meta-data t)
+  (if (org-at-heading-p)
+      (progn
+        (insert "\n")
+        (move-point-visually -1))))
+(keymap-set org-mode-map "C-c n" 'my/org-jump-skipping-drawer)
 
- ;;;; Capture
- (defun my/org-choose-heading (&optional prompt)
-   "Prompt for a location in an org file and jump to it.
-This is for promping for refile targets when doing captures."
-   (let ()
-     (org-refile t nil nil prompt)))
- ;; Stop org-capture from creating IDs when doing a capture
- (setq org-id-link-to-org-use-id 'create-if-interactive)
+(defun my/org-cleanup-whitespace ()
+  (interactive)
+  (if (equal major-mode 'org-mode)
+      (whitespace-cleanup)))
+(add-hook 'before-save-hook 'my/org-cleanup-whitespace)
 
- (setq org-datetree-add-timestamp nil)
- (setq org-capture-bookmark nil)
+(setq
+       org-adapt-indentation t
+       org-hide-leading-stars t
+       org-hide-emphasis-markers t
+       org-pretty-entities t
+       org-ellipsis "  ·")
+      (setq org-indent-indentation-per-level 1)
+      (setq org-pretty-entities t)
+      (setq org-hide-emphasis-markers t)
+      (setq org-insert-heading-respect-content t)
+       (use-package
+org-modern
+:hook (org-mode . global-org-modern-mode)
+:config
+(setq
+ org-modern-tag nil
+ org-modern-priority nil
+ org-modern-todo nil
+ org-modern-table nil))
 
- (setq org-capture-templates
-       '(("t" "Todo" entry (file "~/notes/inbox.org") "* TODO %?\n  \n ")
-         ("s"
-          "School todo"
-          entry
-          (file+function "~/notes/schodo.org" my/org-choose-heading)
-          "* TODO %?\n  %i\n ")
-         ("j"
-          "Journal"
-          entry
-          (file+datetree "~/notes/journal.org")
-          "* %?"
-          :tree-type week)
-         ("c" "Current clocking task notes" entry (clock) "* %i")))
- ;;;; Hooks
- :hook
- (org-mode . org-indent-mode)
- (org-mode . yas-minor-mode)
- (org-mode . auto-revert-mode)
- (org-mode . visual-line-mode)
- (org-mode . org-latex-preview-mode)
- (org-mode . org-cdlatex-mode)
- (org-mode . (lambda () (setq-local tab-width 8)))
- ;;;; Keybinds
- :bind
- ("C-c a" . org-agenda)
- ("C-c 1" . org-cycle-list-bullet)
- ("C-c p" . org-capture)
- ("C-c c" . org-clock-goto)
- ("C-c s" . org-store-link)
- ("C-c l" . org-insert-last-stored-link))
-;;;; Org-yt
+    (set-face-attribute 'org-document-title nil
+                        :font my/default-font
+                        :weight 'bold
+                        :height 1.8)
+                        (set-face-attribute 'org-todo nil :family my/default-font-mono :weight 'bold)
+
 (use-package
- org-yt
- ;; :defer
- :vc (:url "https://github.com/TobiasZawada/org-yt"))
-;;;; Agenda
+  org-super-agenda
+  :config (org-super-agenda-mode 1)
+  (setq org-agenda-custom-commands
+        '(("p" "Planning"
+           ((stuck ())
+            (todo
+             "NEXT"
+             ((org-super-agenda-groups
+               '((:name "Scheduled" :scheduled t :order 48)
+                 (:name "Weekly focus" :tag "weekly" :order 1)
+                 (:name "Monthly Focus" :tag "monthly" :order 2)
+                 (:name "discard" :discard t :tag "stalled")
+                 (:name "Waiting" :tag "waiting" :order 10)
+                 (:name "Untagged" :anything t :order 2)))
+              ))
+            (agenda
+             ""
+             ((org-agenda-span 14)
+              (org-agenda-start-with-log-mode nil)
+              (org-agenda-include-deadlines t)))))
+          ("w" "Day view"
+           ((todo
+             "NEXT"
+             ((org-agenda-todo-ignore-scheduled 'all)
+              (org-agenda-todo-ignore-deadlines 'all)
+              (org-super-agenda-groups
+               '((:name "Waiting:" :tag "waiting" :order 3)
+                 (:name "Deep" :order 1 :tag "deep")
+                 (:name "Light" :order 2 :tag "light")
+                 (:anything t :discard t)))))
+
+            (agenda
+             ""
+             (
+              ;; (org-agenda-todo-ignore-scheduled 'future)
+              ;; (org-agenda-tags-todo-honor-ignore-options t)
+              ;; (org-agenda-include-deadlines nil)
+              )))))))
 (setq org-todo-keywords
       '((type "PROJ(p)" "TODO(t)" "NEXT(n)" "|" "DONE(d!)" "CANC(c%)")))
 (setq org-agenda-files
       (list
        "~/notes/todo.org"
-       "~/notes/daily.org"
        "~/notes/schodo.org"
-       "~/notes/journal.org"))
+       ))
 (setq org-stuck-projects '("TODO=\"PROJ\"" ("NEXT") ("stalled" "someday") ""))
 (setq org-agenda-sorting-strategy '((tags priority-down effort-up)))
 (setq org-agenda-skip-scheduled-if-done t)
 ;; (setq org-agenda-sticky t)
-;;;; Agenda style
+
 (setq
  org-agenda-tags-column 0
  org-agenda-block-separator ?─
  org-agenda-time-grid
  '((daily today require-timed)
-   (530 700 800 900 1000 1100 1200 1300 1400 1500 1600 1700 1800 2000)
+   (0530 2100)
    " ┄┄┄┄┄ "
    "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
  org-agenda-current-time-string "⭠ now ─────────────────────────────────────────────────")
 (setq org-agenda-overriding-header "")
 (setq org-agenda-prefix-format
-      '((tags . " %-6c %-6e ") (agenda . " %i %?-12t% s")))
+      '((todo . " %-8c  %-3e %-8T") (agenda . " %i %?-12t% s")))
 (setq org-agenda-remove-tags t)
 (setq org-agenda-todo-keyword-format "")
-(setq org-agenda-block-separator nil)
 (setq org-agenda-span 'day)
 (setq org-agenda-window-setup 'current-window)
-;; Org log
+
 (setq org-log-done 'time)
 (setq org-log-into-drawer t)
 (setq org-agenda-show-all-dates nil)
-;;;; Org Clock Settings
+(setq org-clock-persist-file "~/notes/clock.el")
 (org-clock-persistence-insinuate)
 (setq org-clock-history-length 20)
 (setq org-clock-in-resume t)
 (setq org-clock-out-remove-zero-time-clocks t)
 (setq org-clock-persist t)
-
-
-;; Hide duplicate items
 (setq org-agenda-show-future-repeats nil)
-(setq org-agenda-start-with-log-mode '(state clock))
+;; (setq org-agenda-start-with-log-mode '(state clock))
+(require 'org-indent)
 
+(setq org-startup-with-inline-images t)
+(setq org-image-actual-width 'nil) ;; (/ (display-pixel-width) 10))
 
-(setq debug-on-message nil)
-;;;; super-agenda
-(use-package
- org-super-agenda
- :config (org-super-agenda-mode 1)
- ;;;;; Agenda definition
- (setq org-agenda-custom-commands
-       '(("p" "Planning"
-          ((stuck ())
-           (todo
-            "NEXT"
-            ((org-super-agenda-groups
-              '((:name "Scheduled" :scheduled t :order 48)
-                (:name "Pinned" :tag "today" :order 1)
-                (:name "" :discard t :tag "stalled")
-                (:name "Waiting" :tag "waiting" :order 10)
-                (:name "" :auto-tags t :order 3)
-                (:name "Untagged" :anything t :order 2)))
-             ;; (org-agenda-todo-ignore-scheduled 'all)
-             ;; (org-agenda-todo-ignore-deadlines 'all)
-             ))
-           (agenda
-            ""
-            ((org-agenda-span 14)
-             (org-agenda-start-with-log-mode nil)
-             (org-agenda-include-deadlines t)))))
-         ("w" "Day view"
-          ((agenda
-            ""
-            (
-             ;; (org-agenda-todo-ignore-scheduled 'future)
-             ;; (org-agenda-tags-todo-honor-ignore-options t)
-             ;; (org-agenda-include-deadlines nil)
-             ))
+(setq org-archive-location "~/notes/archive.org::")
 
-           (tags-todo
-            "today/NEXT"
-            ((org-agenda-todo-ignore-scheduled 'future)
-             (org-agenda-todo-ignore-deadlines 'future)
-             (org-super-agenda-groups
-              '((:name "Waiting:" :tag "waiting" :order 3)
-                (:name "Work" :tag "work" :tag "school" :order 1)
-                (:name "Personal" :tag "personal" :tag "hobby" :order 2)
-                (:anything t :discard t))))))))))
+(setq org-footnote-section nil)
 
-;;;; Org Node
+:hook
+(org-mode . org-indent-mode)
+(org-mode . yas-minor-mode)
+(org-mode . auto-revert-mode)
+(org-mode . visual-line-mode)
+(org-mode . org-latex-preview-mode)
+(org-mode . org-cdlatex-mode)
+(org-mode . (lambda () (setq-local tab-width 8)))
+
+:bind
+("C-c a" . org-agenda)
+("C-c 1" . org-cycle-list-bullet)
+("C-c p" . org-capture)
+("C-c c" . org-clock-goto)
+("C-c s" . org-store-link)
+("C-c l" . org-insert-last-stored-link))     ;; Closes the org-mode use-package bracket
+
 (use-package
  org-mem
  :defer
@@ -548,154 +536,6 @@ This is for promping for refile targets when doing captures."
    (keymap-set org-mode-map "M-p" org-node-org-prefix-map))
  :config (org-node-cache-mode))
 
-
-
-;;;; Org Krita & Inkscape
-;; (use-package
-;;  org-krita
-;;  ;; :defer
-;;  :ensure t
-;;  :vc (:url "https://github.com/lepisma/org-krita")
-;;  :hook (org-mode . org-krita-mode))
-;; (use-package ink :vc (:url "https://github.com/jdakaev/ink.git"))
-;;; --- Markdown
-
-(use-package
- markdown-mode
- :defer t
- :hook (markdown-mode . visual-line-mode)
- :config
- ;; Define keybindings for moving list items with Alt+Up and Alt+Down (Meta+Up/Down).
- (define-key markdown-mode-map (kbd "M-<up>") #'markdown-move-list-item-up)
- (define-key markdown-mode-map (kbd "M-<down>") #'markdown-move-list-item-down))
-;;; --- Telegram
-(use-package
- telega
- :config
- (setq telega-server-libs-prefix "/usr")
- (setq telega-emoji-use-images nil)
- (setq telega-file-open-function 'org-open-file)
- ;; (setq org-id-link-to-org-use-id t)
- (setq telega-chat-show-deleted-messages-for '(return t))
- :bind-keymap ("C-c t" . telega-prefix-map)
- :hook
- (telega-root-mode . visual-line-mode)
- (telega-chat-mode . company-mode)
- ;; (load "~/.emacs.d/telega.el")
- ;; (telega-chat-mode . telega-squash-message-mode)
- :defer t)
-;;; --- Company
-(use-package company :defer t)
-;;; --- Latex
-(use-package cdlatex :defer t)
-(use-package auctex :defer t)
-;;; --- GPTel
-(use-package
- gptel
- :hook (gptel-post-stream-hook . gptel-auto-scroll)
- :bind
- ("C-c C-g m" . gptel-menu)
- ("C-c C-g r" . gptel-rewrite)
- ("C-c C-g s" . gptel-send)
- ("C-c C-g p" . gptel-beginning-of-response)
- ("C-c C-g n" . gptel-end-of-response)
- :config
- (setq
-  gptel-model 'gpt-5-mini
-  gptel-backend (gptel-make-gh-copilot "Copilot"))
-
- (gptel-make-preset
-  'explain
-  :system "Explain what this concept means to a learner.")
-
- (gptel-make-preset
-  'Flashcard
-  :system ""
-  :rewrite-default-action 'accept
-  :rewrite-message "Rewrite this text into a flashcard format"
-  :context '("/home/mking/notes/prompts/flashcards.md")
-  :use-context 'system)
- (gptel-make-preset
-  'diagram
-  :system "Create a diagram based on the following material"
-  :context '("/home/mking/notes/prompts/diagram.md")
-  :use-context 'system)
-  (gptel-make-preset
-  'diagram-rewrite
-  :system "Create a diagram based on the following material"
-  :rewrite-default-action 'accept
-  :context '("/home/mking/notes/prompts/diagram-rewrite.md")
-  :rewrite-message "Fix the following issues in this diagram:"
-  :use-context 'system))
-;; (setq
-;;  gptel-model 'test
-;;  gptel-backend
-;;  (gptel-make-openai
-;;   "llama-cpp"
-;;   :stream t
-;;   :protocol "http"
-;;   :host "10.0.0.64:1234"
-;;   :models '("qwen3.5-9b")))
-;;; --- Navigation
-(repeat-mode)
-(keymap-global-set "M-o" 'other-window)
-;;; --- Recentf
-(require 'recentf)
-(recentf-mode 1)
-(setq recentf-max-menu-items 25)
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
-
-;;; --- Snippets
-(use-package
- yasnippet
- :config (setq yas/root-directory (list "~/.emacs.d/snippets/"))
- :defer t)
-;;; --- Org Capture Maximized Window
-;; https://fuco1.github.io/2017-09-02-Maximize-the-org-capture-buffer.html
-;; (defvar my-org-capture-before-config nil
-;;   "Window configuration before `org-capture'.")
-;; 
-;; (defadvice org-capture (before save-config activate)
-;;   "Save the window configuration before `org-capture'."
-;;   (setq my-org-capture-before-config (current-window-configuration)))
-;; 
-;; (add-hook 'org-capture-mode-hook 'delete-other-windows)
-;; (defun my-org-capture-cleanup ()
-;;   "Clean up the frame created while capturing via org-protocol."
-;;   ;; In case we run capture from emacs itself and not an external app,
-;;   ;; we want to restore the old window config
-;;   (when my-org-capture-before-config
-;;     (set-window-configuration my-org-capture-before-config))
-;;   (-when-let
-;;    ((&alist 'name name) (frame-parameters))
-;;    (when (equal name "org-protocol-capture")
-;;      (delete-frame))))
-;; 
-;; (add-hook 'org-capture-after-finalize-hook 'my-org-capture-cleanup)
-;;; --- Outline Mode
-(add-hook
- 'outline-minor-mode-hook
- (lambda ()
-   (define-key outline-minor-mode-map [backtab] 'outline-cycle-buffer)
-   (define-key
-    outline-minor-mode-map (kbd "C-c C-n") 'outline-next-visible-heading)
-   (define-key
-    outline-minor-mode-map (kbd "C-c C-p") 'outline-previous-visible-heading)
-   (define-key
-    outline-minor-mode-map (kbd "C-c C-f") 'outline-forward-same-level)
-   (define-key
-    outline-minor-mode-map (kbd "C-c C-b") 'outline-backward-same-level)
-   (define-key outline-minor-mode-map (kbd "C-c C-u") 'outline-up-heading)
-   (define-key outline-minor-mode-map (kbd "C-c C-a") 'outline-show-all)
-   (define-key
-    outline-minor-mode-map (kbd "C-c ?") 'bh/outline-show-heading-path)
-   (define-key outline-minor-mode-map (kbd "C-c C-c C-a") 'outline-show-all)
-   (define-key outline-minor-mode-map (kbd "<f1>") 'outline-toggle-children)
-
-   (setq-local outline-minor-mode-use-buttons 'in-margins)
-   (setq-local outline-minor-mode-highlight 'append)
-   (setq-local outline-minor-mode-cycle t)))
-;;;; Org Inline Anki
 (setq inline-anki-use-math-jax t)
 (setq inline-anki-note-type "Cloze")
 (use-package
@@ -710,7 +550,7 @@ This is for promping for refile targets when doing captures."
 (defface my-cloze
   '((t (:box t)))
   "Face for inline-anki clozes.")
-  
+
 (provide 'my-cloze)
 (setq org-emphasis-alist
       '(("*" bold)
@@ -719,28 +559,68 @@ This is for promping for refile targets when doing captures."
         ("=" org-verbatim verbatim)
         ("~" org-code verbatim)
         ("+" (:strike-through t))))
-;;; --- Custom Functions
-(defun my/delete-current-buffer-file ()
-  "Delete the file visited by the current buffer and kill the buffer."
-  (interactive)
-  (let ((filename (buffer-file-name)))
-    (unless filename (user-error "Buffer %s is not visiting a file" (buffer-name)))
-    (if (not (file-exists-p filename))
-        (when (yes-or-no-p (format "File %s does not exist. Kill buffer anyway? " filename))
-          (kill-this-buffer)
-          (message "Killed buffer %s" (buffer-name)))
-      (when (yes-or-no-p (format "Really delete file %s? " filename))
-        (condition-case err
-            (progn
-              (delete-file filename)
-              (kill-this-buffer)
-              (message "Deleted file %s and killed buffer" filename))
-          (error (user-error "Failed to delete %s: %s" filename (error-message-string err))))))))
 
-(global-set-key (kbd "C-c d") #'my/delete-current-buffer-file)
-;; (use-package org-timeline)
-;; (add-hook 'org-agenda-finalize-hook 'org-timeline-insert-timeline :append)
+(use-package
+ markdown-mode
+ :defer t
+ :hook (markdown-mode . visual-line-mode)
+ :config
+ ;; Define keybindings for moving list items with Alt+Up and Alt+Down (Meta+Up/Down).
+ (define-key markdown-mode-map (kbd "M-<up>") #'markdown-move-list-item-up)
+ (define-key markdown-mode-map (kbd "M-<down>") #'markdown-move-list-item-down))
 
-(use-package doom-modeline
+(use-package
+  telega
   :config
-  (doom-modeline-mode 1))
+  (setq telega-server-libs-prefix "/usr")
+  (setq telega-emoji-use-images nil)
+  (setq telega-file-open-function 'org-open-file)
+  ;; (setq org-id-link-to-org-use-id t)
+  (setq telega-chat-show-deleted-messages-for '(return t))
+  :bind-keymap ("C-c t" . telega-prefix-map)
+  :hook
+  (telega-root-mode . visual-line-mode)
+  (telega-chat-mode . company-mode)
+  ;; (load "~/.emacs.d/telega.el")
+  ;; (telega-chat-mode . telega-squash-message-mode)
+  :defer t)
+  (use-package company :defer t)
+;;; --- Latex
+
+(use-package
+gptel
+:hook (gptel-post-stream-hook . gptel-auto-scroll)
+:bind
+("C-c C-g m" . gptel-menu)
+("C-c C-g r" . gptel-rewrite)
+("C-c C-g s" . gptel-send)
+("C-c C-g p" . gptel-beginning-of-response)
+("C-c C-g n" . gptel-end-of-response)
+:config
+(setq
+ gptel-model 'gpt-5-mini
+ gptel-backend (gptel-make-gh-copilot "Copilot"))
+
+(gptel-make-preset
+ 'explain
+ :system "Explain what this concept means to a learner.")
+
+(gptel-make-preset
+ 'Flashcard
+ :system ""
+ :rewrite-default-action 'accept
+ :rewrite-message "Rewrite this text into a flashcard format"
+ :context '("/home/mking/notes/prompts/flashcards.md")
+ :use-context 'system)
+(gptel-make-preset
+ 'diagram
+ :system "Create a diagram based on the following material"
+ :context '("/home/mking/notes/prompts/diagram.md")
+ :use-context 'system)
+ (gptel-make-preset
+ 'diagram-rewrite
+ :system "Create a diagram based on the following material"
+ :rewrite-default-action 'accept
+ :context '("/home/mking/notes/prompts/diagram-rewrite.md")
+ :rewrite-message "Fix the following issues in this diagram:"
+ :use-context 'system))
