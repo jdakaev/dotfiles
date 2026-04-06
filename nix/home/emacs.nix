@@ -13,6 +13,8 @@
     pkgs.pkg-config
     pkgs.gcc
     org-mode-flake.packages.${pkgs.system}.org-mode
+    pkgs.cmake
+    pkgs.libtool
   ];
   home.file = {
     ".emacs.d" = {
@@ -46,4 +48,3 @@
     };
   };
 }
-

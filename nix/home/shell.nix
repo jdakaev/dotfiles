@@ -27,15 +27,22 @@
       alias ll='ls -la'
       alias sudo='doas'
 
+      alias gs='git status'
+      alias gl='git log --state'
+      alias ga='git add'
+      alias gaa='git add --all'
+
       function run-tmux-sessionizer { tmux-sessionizer.sh; zle redisplay; }
       zle -N run-tmux-sessionizer
       bindkey '^f' run-tmux-sessionizer
       [ -z "$TMUX"  ] && { tmux attach || exec tmux new-session && exit;}
 
       source <(fzf --zsh)
-    '';
 
-    history.size = 10000;
+      
+     '';
+
+     history.size = 10000;
   };
   programs.direnv.enable = true;
 }

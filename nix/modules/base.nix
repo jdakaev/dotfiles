@@ -69,4 +69,6 @@
   };
   services.rpcbind.enable = true;
   services.gnome.gnome-keyring.enable = true;
+  #xdg.portal.configPackages = [ pkgs.xdg-desktop-portal-wlr ];
+  xdg.portal.wlr.enable = true;
 }

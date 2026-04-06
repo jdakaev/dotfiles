@@ -16,6 +16,7 @@
   networking.firewall = {
     enable = false;
   };
+  my.alarm.enable = true;
   services.undervolt = {
     enable = true;
     coreOffset = -100;

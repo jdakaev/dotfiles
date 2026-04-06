@@ -12,5 +12,6 @@
     #nerd-fonts.iosevka-term
     aporetic
     liberation_ttf
+    jetbrains-mono
   ];
 }
