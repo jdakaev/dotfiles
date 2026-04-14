@@ -6,7 +6,6 @@
 @define-color warning_color rgb(255, 222, 26);
 @define-color bg_warning_color rgba(255, 222, 26, 0.3);
 
-
 /*base background color of selections */
 @define-color bg_hover rgba(200, 200, 200, 0.3);
 /*base background color of active elements */
@@ -15,26 +14,24 @@
 /*base border color*/
 @define-color border_main rgba(255, 255, 255, 0.2);
 
-/*text color for entries, views and content in general */
-@define-color content_main white;
-/*text color for entries that are unselected */
-@define-color content_inactive rgba(255, 255, 255, 0.25);
+@define-color fg_main white;
+@define-color fg_inactive rgba(255, 255, 255, 0.25);
 
 * {
   text-shadow: none;
   box-shadow: none;
   border: none;
   border-radius: 0;
-  /*font-family: "Segoe UI", "Ubuntu";*/
-  font-family: "Aporetic Sans";
+  font-family: "JetBrains Mono";
   font-weight: 500;
-  font-size: 13.7px;
+  font-size: 11px;
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
 }
 
 window#waybar {
   background:  @bg_main;
-  /* border-bottom: 2px solid @border_main; */
-  color: @content_main;
+  color: @fg_main;
 }
 
 tooltip {
@@ -45,7 +42,7 @@ tooltip {
   border-color: @border_main;
 }
 tooltip label{
-  color: @content_main;
+  color: @fg_main;
 }
 
 #workspaces {
@@ -53,31 +50,28 @@ tooltip label{
   color: transparent;
 }
 #workspaces button {
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  /* border-bottom: 2px solid rgba(255, 255, 255, 0.3); */
   /* padding: 3px;*/
-  color: @content_inactive;
+  color: @fg_inactive;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-  margin-right: 0.5px;
-  margin-left: 0.5px;
-  padding-left: 0px;
-  padding-right: 0px;
 }
 #workspaces button.active {
-  color: @content_main;
+  color: @fg_main;
 }
 #workspaces button.focused {
-  border-bottom: 2px solid white;
-  color: @content_main;
+  /* border-bottom: 2px solid white; */
+  background-color: @bg_hover;
+  color: @fg_main;
 }
 #workspaces button.urgent {
   background:  rgba(255, 200, 0, 0.35);
-  border-bottom: 2px dashed @warning_color;
+  /* border-bottom: 2px dashed @warning_color; */
   color: @warning_color;
 }
 #workspaces button:hover {
-  border-bottom: 2px solid white;
+  /* border-bottom: 2px solid white; */
   background: @bg_hover;
-  color: @content_main;
+  color: @fg_main;
 }
 
 #taskbar {
@@ -85,7 +79,7 @@ tooltip label{
 
 #taskbar button {
   min-width: 30px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  /* border-bottom: 2px solid rgba(255, 255, 255, 0.3); */
   margin-left: 1px;
   margin-right: 1px;
   padding-left: 4px;
@@ -95,14 +89,14 @@ tooltip label{
 }
 
 #taskbar button.active {
-  border-bottom: 2px solid white;
+  /* border-bottom: 2px solid white; */
   background: @bg_active;
 }
 
 #taskbar button:hover {
-  border-bottom: 2px solid white;
+  /* border-bottom: 2px solid white; */
   background: @bg_hover;
-  color: @content_main;
+  color: @fg_main;
 }
 
 #temperature {
@@ -132,15 +126,6 @@ tooltip label{
   margin-left: 5px;
   margin-right: 5px;
 }
-#tray > .passive {
-  border-bottom: none;
-}
-#tray > .active {
-  border-bottom: 2px solid white;
-}
-#tray > .needs-attention {
-  border-bottom: 2px solid @warning_color;
-}
 #tray > widget {
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
@@ -153,25 +138,21 @@ tooltip label{
 #network, 
 #cpu, 
 #memory, 
-#custom-toggle-keyboard,
 #battery,
 #clock {
-  margin-left: 2px;
   margin-right: 2px;
-  padding-left: 5px;
-  padding-right: 5px;
+  margin-left: 2px;
+  /* margin-left: 2px; */
+  /* margin-right: 2px; */
+  /* padding-left: 5px; */
+  /* padding-right: 5px; */
 
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
   /*border-bottom: 2px solid rgba(255, 255, 255, 0.3);*/
   /* border-bottom: 2px solid @border_main; */
 }
 
-#custom-toggle-keyboard,
-#clock,
-#pulseaudio{
-}
 #clock:hover,
-#custom-toggle-keyboard:hover,
 #pulseaudio:hover{
   background: @bg_hover;
 }

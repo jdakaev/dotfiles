@@ -183,7 +183,8 @@ compile-angel
 (use-package elisp-autofmt :defer t)
 
 (mapc #'disable-theme custom-enabled-themes)
-(load-theme 'modus-operandi t)
+(load-theme 'modus-operandi-tinted t)
+(global-set-key (kbd "C-c b t") #'modus-themes-toggle)
 
 (defvar my/default-font "JetBrains Mono"
   "Default mixed width font to use")
@@ -355,22 +356,43 @@ compile-angel
 
 (setq org-latex-compiler "xelatex")
 
-;; Enable LaTeX preview
-(setq org-startup-with-latex-preview t)
-(setq org-latex-preview-mode-display-live t)
-(plist-put org-latex-preview-appearance-options :zoom 1.4)
-(setq org-cite-default-processor 'biblatex)
-(use-package cdlatex :defer t)
-(use-package auctex :defer t)
+ ;; Enable LaTeX preview
+ (setq org-startup-with-latex-preview t)
+ (setq org-latex-preview-mode-display-live t)
+ (plist-put org-latex-preview-appearance-options :zoom 1.4)
+ (setq org-cite-default-processor 'biblatex)
+ (use-package cdlatex :defer t)
+ (use-package auctex :defer t)
 
-(setq org-latex-packages-alist '(("" "amsmath" t) ("" "amssymb" t)))
-(setq org-latex-preview-preamble
-      "\\documentclass{article}
- [DEFAULT-PACKAGES]
- [PACKAGES]
- \\usepackage{fontspec}
- \\setmainfont{Liberation Serif}
- \\usepackage{xcolor}")
+ (setq org-latex-packages-alist
+       '(("" "amsmath" t)
+         ("" "amssymb" t)
+         ("" "fontspec" t ("xelatex" "lualatex"))))
+ (setq org-latex-preview-preamble
+       "\\documentclass{article}
+     [DEFAULT-PACKAGES]
+     [PACKAGES]
+     \\usepackage{fontspec}
+     \\setmainfont{Liberation Serif}
+     \\usepackage{xcolor}")
+
+(setq org-latex-classes
+      '(("article"
+         "\\documentclass[11pt, a4paper]{article}
+         \\usepackage[margin=1in]{geometry}
+  [DEFAULT-PACKAGES]
+  [PACKAGES]
+  [EXTRA]
+  \\setmainfont{Liberation Serif}
+  \\setsansfont{Liberation Sans}
+  \\setmonofont{Liberation Mono}"
+         ("\\section{%s}" . "\\section*{%s}")
+         ("\\subsection{%s}" . "\\subsection*{%s}")
+         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+         ("\\paragraph{%s}" . "\\paragraph*{%s}")
+         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+        ;; You can repeat this for "report" or "book" if you use them
+        ))
 
 (setq org-cycle-hide-drawer-startup nil)
 
@@ -498,7 +520,9 @@ org-modern
 (require 'org-indent)
 
 (setq org-startup-with-inline-images t)
-(setq org-image-actual-width 'nil) ;; (/ (display-pixel-width) 10))
+     (setq org-image-actual-width (/ (display-pixel-width) 10))
+;;     (setq org-image-max-width 'fill-column)
+     ;; (setq org-image-actual-width (list 300))
 
 (setq org-archive-location "~/notes/archive.org::")
 
@@ -522,19 +546,26 @@ org-modern
 ("C-c l" . org-insert-last-stored-link))     ;; Closes the org-mode use-package bracket
 
 (use-package
- org-mem
- :defer
- :config (setq org-mem-do-sync-with-org-id t)
- (setq org-mem-watch-dirs
-       (list "~/notes")) ;; Configure me
- (org-mem-updater-mode))
+  org-mem
+  :defer
+  :config (setq org-mem-do-sync-with-org-id t)
+  (setq org-mem-watch-dirs
+        (list "~/notes")) ;; Configure me
+  (org-mem-updater-mode))
 
 (use-package
- org-node
- :init (keymap-global-set "M-p" org-node-global-prefix-map)
- (with-eval-after-load 'org
-   (keymap-set org-mode-map "M-p" org-node-org-prefix-map))
- :config (org-node-cache-mode))
+  org-node
+  :init (keymap-global-set "M-p" org-node-global-prefix-map)
+  (with-eval-after-load 'org
+    (keymap-set org-mode-map "M-p" org-node-org-prefix-map))
+  :config (org-node-cache-mode))
+
+(defun my-org-node-find-custom-width (orig-fun &rest args)
+  "Set a custom width for vertico-posframe during org-node-find."
+  (let ((vertico-posframe-height 15) (vertico-posframe-width 40)) ; Change 70 to your preferred width
+    (apply orig-fun args)))
+
+(advice-add 'org-node-find :around #'my-org-node-find-custom-width)
 
 (setq inline-anki-use-math-jax t)
 (setq inline-anki-note-type "Cloze")
@@ -559,6 +590,12 @@ org-modern
         ("=" org-verbatim verbatim)
         ("~" org-code verbatim)
         ("+" (:strike-through t))))
+
+(setq org-file-apps
+    '((auto-mode . emacs)
+      ("\\.mm\\'" . default)
+      ("\\.x?html?\\'" . default)
+      ("\\.pdf\\'" . "zathura %s")))
 
 (use-package
  markdown-mode
@@ -624,3 +661,6 @@ gptel
  :context '("/home/mking/notes/prompts/diagram-rewrite.md")
  :rewrite-message "Fix the following issues in this diagram:"
  :use-context 'system))
+
+;; (use-package vterm
+;;     :ensure t)
