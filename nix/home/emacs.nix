@@ -46,5 +46,12 @@
         (require 'org)
       '';
     };
+    ".emacs.d/nix-vars.el" = {
+      text = ''
+        (setq my/font-size ${builtins.toString config.my.font-size}0)
+        (setq my/default-font "${config.my.font}")
+        (setq my/default-font-mono "${config.my.font-mono}")
+      '';
+    };
   };
 }

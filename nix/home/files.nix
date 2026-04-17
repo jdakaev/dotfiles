@@ -7,8 +7,8 @@
     ".config/nvim" = {
       source = config.lib.file.mkOutOfStoreSymlink /${config.home.homeDirectory}/dotfiles/.config/nvim;
     };
-    ".config/waybar" = {
-      source = config.lib.file.mkOutOfStoreSymlink /${config.home.homeDirectory}/dotfiles/.config/waybar;
+    ".config/waybar/config.jsonc" = {
+      source = config.lib.file.mkOutOfStoreSymlink /${config.home.homeDirectory}/dotfiles/.config/waybar/config.jsonc;
     };
   };
 }

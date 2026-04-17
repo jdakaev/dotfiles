@@ -2,11 +2,12 @@
   pkgs,
   lib,
   config,
+  unstable,
   ...
 }:
 {
   environment.systemPackages = with pkgs; [
-    opencode
+    unstable.opencode
     ripgrep
     neovim
     fzf

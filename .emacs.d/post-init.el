@@ -186,17 +186,19 @@ compile-angel
 (load-theme 'modus-operandi-tinted t)
 (global-set-key (kbd "C-c b t") #'modus-themes-toggle)
 
+(defvar my/font-size 140
+  "Default font size")
 (defvar my/default-font "JetBrains Mono"
   "Default mixed width font to use")
 (defvar my/default-font-mono "JetBrains Mono"
   "Default monospace font to use")
-
+(load "~/.emacs.d/nix-vars.el")
 (set-face-attribute 'default nil
-                    :height 120
+                    :height my/font-size
                     :weight 'normal
                     :family my/default-font-mono)
 (set-face-attribute 'variable-pitch nil
-                    :height 120
+                    :height my/font-size
                     :weight 'normal
                     :family my/default-font)
 
@@ -539,6 +541,7 @@ org-modern
 
 :bind
 ("C-c a" . org-agenda)
+("C-c f" . consult-org-heading)
 ("C-c 1" . org-cycle-list-bullet)
 ("C-c p" . org-capture)
 ("C-c c" . org-clock-goto)

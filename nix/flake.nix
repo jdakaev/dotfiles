@@ -55,7 +55,17 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = inputs // specialArgs // { inherit unstable minimal-emacs host org-mode-flake; };
+              home-manager.extraSpecialArgs =
+                inputs
+                // specialArgs
+                // {
+                  inherit
+                    unstable
+                    minimal-emacs
+                    host
+                    org-mode-flake
+                    ;
+                };
               home-manager.users.${username} = import ./users/${username}/home.nix;
             }
           ]

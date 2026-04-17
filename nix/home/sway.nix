@@ -80,7 +80,7 @@ in
         }
       ];
       focus.forceWrapping = false;
-      focus.followMouse = false;
+      focus.followMouse = true;
 
       fonts.names = [ config.my.font ];
       fonts.size = toString config.my.font-size;
@@ -207,6 +207,7 @@ in
 
         "${mod4}+Shift+Return" = "exec ${alacritty}/bin/alacritty";
         "${mod4}+Ctrl+e" = "exec emacsclient --alternate-editor=\"\" --create-frame ";
+        "${mod4}+w" = "layout tabbed";
 
         "Print" = "mode printscreen";
         "Shift+Delete" = "mode session";
@@ -260,37 +261,47 @@ in
         "XF86MonBrightnessDown" = "exec ${brightnessctl}/bin/brightnessctl s 10%-";
       };
 
-      # colors.background = placeholder;
-      #
-      # colors.focused.border = placeholder;
-      # colors.focused.background = placeholder;
-      # colors.focused.text = placeholder;
-      # colors.focused.indicator = placeholder;
-      # colors.focused.childBorder = placeholder;
-      #
-      # colors.focusedInactive.border = placeholder;
-      # colors.focusedInactive.background = placeholder;
-      # colors.focusedInactive.text = placeholder;
-      # colors.focusedInactive.indicator = placeholder;
-      # colors.focusedInactive.childBorder = placeholder;
-      #
-      # colors.unfocused.border = placeholder;
-      # colors.unfocused.background = placeholder;
-      # colors.unfocused.text = placeholder;
-      # colors.unfocused.indicator = placeholder;
-      # colors.unfocused.childBorder = placeholder;
-      #
-      # colors.urgent.border = placeholder;
-      # colors.urgent.background = placeholder;
-      # colors.urgent.text = placeholder;
-      # colors.urgent.indicator = placeholder;
-      # colors.urgent.childBorder = placeholder;
-      #
-      # colors.placeholder.border = placeholder;
-      # colors.placeholder.background = placeholder;
-      # colors.placeholder.text = placeholder;
-      # colors.placeholder.indicator = placeholder;
-      # colors.placeholder.childBorder = placeholder;
+      colors.background = config.my.theme.colors.background;
+
+      colors.focused = {
+        border = config.my.theme.colors.blue;
+        background = config.my.theme.colors.background;
+        text = config.my.theme.colors.foreground;
+        indicator = config.my.theme.colors.blue;
+        childBorder = config.my.theme.colors.blue;
+      };
+
+      colors.focusedInactive = {
+        border = config.my.theme.colors.brightBlack;
+        background = config.my.theme.colors.background;
+        text = config.my.theme.colors.foreground;
+        indicator = config.my.theme.colors.brightBlack;
+        childBorder = config.my.theme.colors.brightBlack;
+      };
+
+      colors.unfocused = {
+        border = config.my.theme.colors.black;
+        background = config.my.theme.colors.background;
+        text = config.my.theme.colors.foreground;
+        indicator = config.my.theme.colors.black;
+        childBorder = config.my.theme.colors.black;
+      };
+
+      colors.urgent = {
+        border = config.my.theme.colors.red;
+        background = config.my.theme.colors.background;
+        text = config.my.theme.colors.foreground;
+        indicator = config.my.theme.colors.red;
+        childBorder = config.my.theme.colors.red;
+      };
+
+      colors.placeholder = {
+        border = config.my.theme.colors.brightBlack;
+        background = config.my.theme.colors.background;
+        text = config.my.theme.colors.foreground;
+        indicator = config.my.theme.colors.brightBlack;
+        childBorder = config.my.theme.colors.brightBlack;
+      };
 
       modes.resize = {
         Escape = "mode default";

@@ -5,13 +5,40 @@
   ...
 }:
 let
-  font = "Input Sans";
-  font-mono = "Input Mono";
+  font = "JetBrains Mono";
+  font-mono = "JetBrains Mono";
   font-size = 10;
-  font-package = pkgs.input-fonts;
+  font-package = pkgs.jetbrains-mono;
 
   theme-name = "TraditionalGreen";
   theme-package = pkgs.mate.mate-themes;
+
+  colors = {
+    background = "#000000";
+    foreground = "#ffffff";
+    selectionBackground = "#5a5a5a";
+    selectionForeground = "#ffffff";
+    cursor = "#ffffff";
+    cursorText = "#000000";
+
+    black = "#1e1e1e";
+    red = "#ff5f59";
+    green = "#44bc44";
+    yellow = "#d0bc00";
+    blue = "#2fafff";
+    magenta = "#feacd0";
+    cyan = "#00d3d0";
+    white = "#ffffff";
+
+    brightBlack = "#535353";
+    brightRed = "#ff7f9f";
+    brightGreen = "#00c06f";
+    brightYellow = "#dfaf7a";
+    brightBlue = "#00bcff";
+    brightMagenta = "#b6a0ff";
+    brightCyan = "#6ae4b9";
+    brightWhite = "#989898";
+  };
 in
 {
   options = {
@@ -35,13 +62,19 @@ in
       default = font-package;
       description = "Font package to use for the fonts";
     };
+
+    my.theme.colors = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      default = colors;
+      description = "Shared UI color palette";
+    };
   };
 
   config = {
     gtk = {
       enable = true;
 
-      iconTheme.name = "Menta";
+      iconTheme.name = "menta";
       iconTheme.package = pkgs.mate.mate-icon-theme;
 
       theme.name = theme-name;

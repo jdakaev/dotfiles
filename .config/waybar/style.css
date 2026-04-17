@@ -22,9 +22,7 @@
   box-shadow: none;
   border: none;
   border-radius: 0;
-  font-family: "JetBrains Mono";
   font-weight: 500;
-  font-size: 11px;
   padding: 0 0 0 0;
   margin: 0 0 0 0;
 }
@@ -140,16 +138,9 @@ tooltip label{
 #memory, 
 #battery,
 #clock {
-  margin-right: 2px;
-  margin-left: 2px;
-  /* margin-left: 2px; */
-  /* margin-right: 2px; */
-  /* padding-left: 5px; */
-  /* padding-right: 5px; */
-
+  margin-right: 4px;
+  margin-left: 4px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-  /*border-bottom: 2px solid rgba(255, 255, 255, 0.3);*/
-  /* border-bottom: 2px solid @border_main; */
 }
 
 #clock:hover,
