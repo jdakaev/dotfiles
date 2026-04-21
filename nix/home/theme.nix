@@ -66,7 +66,7 @@ in
     my.theme.colors = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
       default = colors;
-      description = "Shared UI color palette";
+      description = "Color palette";
     };
   };
 

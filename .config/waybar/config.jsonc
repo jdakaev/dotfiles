@@ -1,4 +1,4 @@
-{
+[{
     "layer": "bottom",
     "position": "bottom",
     "mod": "dock",
@@ -101,4 +101,109 @@
         "tooltip-format": "{volume}%",
         "on-click": "pwvucontrol"
     }
+},
+{
+    "layer": "bottom",
+    "position": "top",
+    "mod": "dock",
+    "exclusive": true,
+    "gtk-layer-shell": true,
+    "margin-bottom": -1,
+    "passthrough": false,
+    "height": 18,
+    "modules-left": [
+        "sway/workspaces",
+        "wlr/taskbar"
+    ],
+    "modules-center": [],
+    "modules-right": [
+        "tray",
+        "cpu",
+        "temperature",
+        "memory",
+        "pulseaudio",
+        "network",
+        "battery",
+        "clock"
+    ],
+    "sway/workspaces": {
+        "icon-size": 10
+    },
+    "cpu": {
+        "interval": 5,
+        "format": "{usage}% cpu",
+        "max-length": 10,
+        "states": {
+            "good": 0,
+            "warning": 50,
+            "critical": 80
+        }
+    },
+    "memory": {
+        "interval": 10,
+        "format": "{percentage}% mem",
+        "max-length": 10,
+        "tooltip": true,
+        "tooltip-format": "RAM - {used:0.1f}GiB used"
+    },
+    "wlr/taskbar": {
+        "format": "{icon} {title:.10}",
+        "icon-size": 16,
+        "spacing": 3,
+        "on-click-middle": "close",
+        "tooltip-format": "{title}",
+        "ignore-list": [],
+        "on-click": "activate"
+    },
+    "tray": {
+        "icon-size": 14,
+        "spacing": 3
+    },
+    "clock": {
+        "format": "{:%R}"
+    },
+    "network": {
+        "format-wifi": "{ipaddr} {icon}",
+        "format-ethernet": "  ",
+        "format-disconnected": "󰌙",
+        "format-icons": [
+            "󰤯",
+            "󰤟",
+            "󰤢",
+            "󰤢",
+            "󰤨"
+        ]
+    },
+    "battery": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 20
+        },
+        "format": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        "format-icons": [
+            "󰂎",
+            "󰁺",
+            "󰁻",
+            "󰁼",
+            "󰁽",
+            "󰁾",
+            "󰁿",
+            "󰂀",
+            "󰂁",
+            "󰂂",
+            "󰁹"
+        ]
+    },
+    "pulseaudio": {
+        "max-volume": 150,
+        "scroll-step": 10,
+        "format": "{volume}% vol",
+        "tooltip-format": "{volume}%",
+        "on-click": "pwvucontrol"
+    }
 }
+]

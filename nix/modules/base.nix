@@ -17,7 +17,7 @@
     ./latex.nix
     ./location.nix
     ./code.nix
-    #./nfs.nix
+    ./nfs.nix
     ./print.nix
     ./secureboot.nix
     ./ssh.nix

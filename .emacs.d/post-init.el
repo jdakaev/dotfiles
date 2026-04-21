@@ -343,11 +343,11 @@ compile-angel
          entry
          (file+headline "~/notes/todo.org" "Inbox")
          "* TODO %?\n  \n ")
-        ("s"
-         "School todo"
-         entry
-         (file+headline "~/notes/schodo.org" "Inbox")
-         "* TODO %?\n  %i\n ")
+        ;; ("s"
+        ;;  "School todo"
+        ;;  entry
+        ;;  (file+headline "~/notes/schodo.org" "Inbox")
+        ;;  "* TODO %?\n  %i\n ")
         ("j"
          "Journal"
          entry
@@ -484,7 +484,6 @@ org-modern
 (setq org-agenda-files
       (list
        "~/notes/todo.org"
-       "~/notes/schodo.org"
        ))
 (setq org-stuck-projects '("TODO=\"PROJ\"" ("NEXT") ("stalled" "someday") ""))
 (setq org-agenda-sorting-strategy '((tags priority-down effort-up)))

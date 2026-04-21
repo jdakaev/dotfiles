@@ -60,6 +60,8 @@
       anki
       vesktop
       ffmpeg
+
+      feishin
     ];
   };
 }
