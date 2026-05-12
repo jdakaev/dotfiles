@@ -8,6 +8,7 @@
 {
   imports = [
     ./alarm.nix
+    ./clight.nix
     #./android-dev.nix
     ./autologin.nix
     ./bluetooth.nix

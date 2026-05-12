@@ -45,6 +45,7 @@ in
   ];
   home.packages = with pkgs; [
     swaybg
+    mako
   ];
   wayland.windowManager.sway = {
     enable = true;

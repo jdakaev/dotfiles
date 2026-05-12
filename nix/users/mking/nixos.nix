@@ -5,6 +5,7 @@
   ...
 }:
 {
+  services.playerctld.enable = true;
   security.polkit.enable = true;
   programs.thunar.enable = true;
   programs.dconf.enable = true;
@@ -48,6 +49,7 @@
       wev
       python3
 
+      jellyfin-mpv-shim
       mpv
 
       nomacs
@@ -58,10 +60,13 @@
       halloy
 
       anki
+
       vesktop
+      senpai
+
       ffmpeg
 
-      feishin
+      #feishin
     ];
   };
 }

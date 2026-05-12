@@ -1,3 +1,8 @@
+* {
+  font-family: "JetBrains Mono";
+  font-size: 21.000000px;
+}
+
 /* https://github.com/TheFrankyDoll/win10-style-waybar */
 /*base background color*/
 @define-color bg_main rgba(25, 25, 25, 0.65);
@@ -48,8 +53,6 @@ tooltip label{
   color: transparent;
 }
 #workspaces button {
-  /* border-bottom: 2px solid rgba(255, 255, 255, 0.3); */
-  /* padding: 3px;*/
   color: @fg_inactive;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
@@ -72,40 +75,15 @@ tooltip label{
   color: @fg_main;
 }
 
-#taskbar {
-}
-
-#taskbar button {
-  min-width: 30px;
-  /* border-bottom: 2px solid rgba(255, 255, 255, 0.3); */
-  margin-left: 1px;
-  margin-right: 1px;
-  padding-left: 4px;
-  padding-right: 4px;
-  color: white;
-  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-#taskbar button.active {
-  /* border-bottom: 2px solid white; */
-  background: @bg_active;
-}
-
-#taskbar button:hover {
-  /* border-bottom: 2px solid white; */
-  background: @bg_hover;
-  color: @fg_main;
-}
-
 #temperature {
   color: transparent;
   font-size: 0px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+
 #temperature.critical,
 #battery.warning,
 #cpu.warning {
-  padding-right: 2px;
   /*background-color: @bg_warning_color;*/
   background-color: transparent;
   color: @warning_color;
@@ -137,13 +115,19 @@ tooltip label{
 #cpu, 
 #memory, 
 #battery,
-#clock {
-  margin-right: 4px;
-  margin-left: 4px;
+#custom-org-clock {
+  /* background: @bg_active; */
+
+  margin-right: 8px;
+  margin-left: 8px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+#mpris.paused {
+  color: @fg_inactive;
 }
 
 #clock:hover,
 #pulseaudio:hover{
   background: @bg_hover;
 }
+

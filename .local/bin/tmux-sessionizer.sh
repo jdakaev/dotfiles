@@ -2,11 +2,10 @@
 DIRS=(
     "$HOME/Documents"
     "$HOME/.local/bin"
+    "$HOME/dotfiles/.config"
     "$HOME/dotfiles"
     #"$HOME/.local/bin"
     "$HOME/notes/"
-    "$HOME/.config/nvim"
-    "$HOME/.config/sway"
     #"$HOME/.config/"
 )
 
