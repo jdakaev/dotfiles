@@ -90,6 +90,7 @@ in
 
       startup = [
         { command = "${alacritty}/bin/alacritty"; }
+        { command = "~/.local/bin/bg.sh"; }
         # { command = "bg.sh"; }
       ];
 

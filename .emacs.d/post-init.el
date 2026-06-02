@@ -354,7 +354,20 @@ compile-angel
          (file+datetree "~/notes/journal.org")
          "* %?"
          :tree-type week)
-        ("c" "Current clocking task notes" entry (clock) "* %i")))
+        ("c" "Current clocking task notes" entry (clock) "* %i")
+        ("i" "Interstitial Journal" entry
+         (file+olp+datetree "~/notes/journal.org")
+         "* %U %?\n  - Finished: \n  - Thoughts: \n  - Next Action: ")
+
+        ;; 2. The "Quick Note" (Low Energy)
+        ("n" "Quick Note" entry
+         (file+olp+datetree "~/notes/journal.org")
+         "* %U %^{Note}")
+
+        ;; 3. The "Task Link" (What the blog post did)
+        ("t" "Work Log" entry
+         (file+olp+datetree "~/notes/journal.org")
+         "* %U Working on: %a\n  %?")))
 
 (setq org-latex-compiler "xelatex")
 
@@ -544,6 +557,7 @@ org-modern
 ("C-c 1" . org-cycle-list-bullet)
 ("C-c p" . org-capture)
 ("C-c c" . org-clock-goto)
+("C-c r" . org-cycle-agenda-files)
 ("C-c s" . org-store-link)
 ("C-c l" . org-insert-last-stored-link))     ;; Closes the org-mode use-package bracket
 

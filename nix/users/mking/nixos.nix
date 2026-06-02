@@ -18,6 +18,7 @@
     group = "users";
     extraGroups = [
       "networkmanager"
+      "dialout"
       "disk"
     ];
 
