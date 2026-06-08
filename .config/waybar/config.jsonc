@@ -22,7 +22,7 @@
         "spacing": 3
     },
     "clock": {
-        "format": "{:%R}"
+        "format": "{:%a %d %R}"
     },
     "network": {
         "format-wifi": "{ipaddr} {icon}",
