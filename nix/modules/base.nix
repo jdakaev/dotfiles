@@ -71,5 +71,16 @@
   services.rpcbind.enable = true;
   services.gnome.gnome-keyring.enable = true;
   #xdg.portal.configPackages = [ pkgs.xdg-desktop-portal-wlr ];
-  xdg.portal.wlr.enable = true;
+  xdg.portal = {
+    config = {
+      common = {
+        default = [
+          "wlr"
+          "gtk"
+        ];
+      };
+    };
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    wlr.enable = true;
+  };
 }

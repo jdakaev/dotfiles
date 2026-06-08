@@ -1,7 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 {
   programs.home-manager.enable = true;
   programs.firefox.enable = true;
+  programs.firefox.configPath = "${config.xdg.configHome}/mozilla/firefox";
   programs.chromium.enable = true;
   #programs.imv.enable = true;
 

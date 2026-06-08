@@ -11,7 +11,7 @@ let
   font-package = pkgs.jetbrains-mono;
 
   theme-name = "TraditionalGreen";
-  theme-package = pkgs.mate.mate-themes;
+  theme-package = pkgs.mate-themes;
 
   colors = {
     background = "#000000";
@@ -75,7 +75,7 @@ in
       enable = true;
 
       iconTheme.name = "menta";
-      iconTheme.package = pkgs.mate.mate-icon-theme;
+      iconTheme.package = pkgs.mate-icon-theme;
 
       theme.name = theme-name;
       theme.package = theme-package;

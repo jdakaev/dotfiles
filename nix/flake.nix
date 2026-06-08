@@ -32,22 +32,36 @@
     }@inputs:
     let
       username = "mking";
+
+      # common nixpkgs config options for stable/unstable
+      nixpkgsConfig = {
+        allowUnfree = true;
+      };
+      #system = "x86_64-linux";
+
       unstable = import nixpkgs-unstable {
         system = "x86_64-linux";
-        config.allowUnfree = true; # if needed
+        config = nixpkgsConfig;
       };
 
       mkHost =
-        host: extraModules: specialArgs:
-        nixpkgs.lib.nixosSystem {
-          specialArgs = {
+        host: extraModules: extraArgs:
+        let
+          specialArgs = extraArgs // {
             inherit username;
             inherit host;
             inherit unstable;
-          }
-          // specialArgs;
-          system = "x86_64-linux";
+          };
+        in
+        nixpkgs.lib.nixosSystem {
+          inherit specialArgs;
           modules = [
+            {
+              nixpkgs = {
+                system = "x86_64-linux";
+                config = nixpkgsConfig;
+              };
+            }
             lanzaboote.nixosModules.lanzaboote
             ./hosts/${host}
             ./users/${username}/nixos.nix
@@ -55,17 +69,10 @@
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs =
-                inputs
-                // specialArgs
-                // {
-                  inherit
-                    unstable
-                    minimal-emacs
-                    host
-                    org-mode-flake
-                    ;
-                };
+              home-manager.extraSpecialArgs = specialArgs // {
+                inherit org-mode-flake;
+                inherit minimal-emacs;
+              };
               home-manager.users.${username} = import ./users/${username}/home.nix;
             }
           ]

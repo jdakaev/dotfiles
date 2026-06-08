@@ -62,6 +62,9 @@
             };
           };
 
+          # TODO: I wrote this code with AI. What does default mean in this context (
+          # ... flake definition)
+          # Current guess is that it just adds it to the default package list if you have this flake enabled?
           default = self.packages.${system}.org-mode;
         }
       );
@@ -73,11 +76,11 @@
         in
         {
           home.packages = [
-            self.packages.${pkgs.system}.org-mode
+            self.packages.${pkgs.stdenv.hostPlatform.system}.org-mode
           ];
 
           home.file.".emacs.d/site-lisp-org" = {
-            source = "${self.packages.${pkgs.system}.org-mode}/share/emacs/site-lisp";
+            source = "${self.packages.${pkgs.stdenv.hostPlatform.system}.org-mode}/share/emacs/site-lisp";
             recursive = true;
           };
         };

@@ -23,4 +23,5 @@
   boot.tmp.useTmpfs = true;
 
   networking.hostName = host;
+  system.stateVersion = "25.05";
 }

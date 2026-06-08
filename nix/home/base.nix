@@ -21,7 +21,6 @@
     ./waybar.nix
     ./gpg.nix
     ./files.nix
-    ./gtk.nix
     ./fuzzel.nix
     ./emacs.nix
     ./alacritty.nix

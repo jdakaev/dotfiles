@@ -12,7 +12,7 @@
     pkgs.gnumake
     pkgs.pkg-config
     pkgs.gcc
-    org-mode-flake.packages.${pkgs.system}.org-mode
+    org-mode-flake.packages.${pkgs.stdenv.hostPlatform.system}.org-mode
     pkgs.cmake
     pkgs.libtool
   ];
@@ -42,7 +42,9 @@
       text = ''
         ;;; org-mode-init.el --- Load custom org-mode from Nix flake
         ;; Add the custom org-mode to load path before anything tries to require org
-        (add-to-list 'load-path "${org-mode-flake.packages.${pkgs.system}.org-mode}/share/emacs/site-lisp")
+        (add-to-list 'load-path "${
+          org-mode-flake.packages.${pkgs.stdenv.hostPlatform.system}.org-mode
+        }/share/emacs/site-lisp")
         (require 'org)
       '';
     };
