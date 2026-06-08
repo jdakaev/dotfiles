@@ -39,7 +39,7 @@
     "battery": {
         "states": {
             "good": 95,
-            "warning": 30,
+            "warning": 40,
             "critical": 20
         },
         "format": "{capacity}% {icon}",
@@ -75,7 +75,6 @@
     ],
     "modules-right": [
         "cpu",
-        "temperature",
         "memory",
         "pulseaudio"
     ],

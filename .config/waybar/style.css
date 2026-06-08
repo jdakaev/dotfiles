@@ -1,26 +1,20 @@
-* {
-  font-family: "JetBrains Mono";
-  font-size: 21.000000px;
-}
-
 /* https://github.com/TheFrankyDoll/win10-style-waybar */
-/*base background color*/
 @define-color bg_main rgba(25, 25, 25, 0.65);
-@define-color bg_main_tooltip rgba(0, 0, 0, 0.7);
-
-@define-color warning_color rgb(255, 222, 26);
-@define-color bg_warning_color rgba(255, 222, 26, 0.3);
-
-/*base background color of selections */
-@define-color bg_hover rgba(200, 200, 200, 0.3);
-/*base background color of active elements */
-@define-color bg_active rgba(100, 100, 100, 0.5);
-
-/*base border color*/
-@define-color border_main rgba(255, 255, 255, 0.2);
-
 @define-color fg_main white;
+
 @define-color fg_inactive rgba(255, 255, 255, 0.25);
+
+@define-color bg_hover rgba(200, 200, 200, 0.3);
+
+@define-color fg_warning rgb(255, 222, 26);
+@define-color bg_warning rgba(255, 200, 0, 0.35);
+
+@define-color fg_critical rgb(245, 24, 32);
+@define-color bg_critical rgba(245, 24, 32, 0.35);
+
+@define-color border_tooltip rgba(255, 255, 255, 0.2);
+@define-color bg_tooltip rgba(0, 0, 0, 0.7);
+
 
 * {
   text-shadow: none;
@@ -37,97 +31,58 @@ window#waybar {
   color: @fg_main;
 }
 
-tooltip {
-  background: @bg_main_tooltip;
-  border-radius: 2px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: @border_main;
-}
-tooltip label{
-  color: @fg_main;
-}
-
-#workspaces {
-  padding-right: 5px;
-  color: transparent;
-}
-#workspaces button {
-  color: @fg_inactive;
-  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-#workspaces button.active {
-  color: @fg_main;
-}
-#workspaces button.focused {
-  /* border-bottom: 2px solid white; */
-  background-color: @bg_hover;
-  color: @fg_main;
-}
-#workspaces button.urgent {
-  background:  rgba(255, 200, 0, 0.35);
-  /* border-bottom: 2px dashed @warning_color; */
-  color: @warning_color;
-}
-#workspaces button:hover {
-  /* border-bottom: 2px solid white; */
-  background: @bg_hover;
-  color: @fg_main;
-}
-
-#temperature {
-  color: transparent;
-  font-size: 0px;
-  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-#temperature.critical,
-#battery.warning,
-#cpu.warning {
-  /*background-color: @bg_warning_color;*/
-  background-color: transparent;
-  color: @warning_color;
-  font-size: initial;
-  /*border-bottom: 2px dashed @warning_color;*/
-  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
 #window {
   border-radius: 10px;
   margin-left: 10px;
   margin-right: 20px;
 }
 
-#tray{
-  margin-left: 5px;
-  margin-right: 5px;
+tooltip {
+  background: @bg_tooltip;
+  border-radius: 2px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: @border_tooltip;
 }
-#tray > widget {
-  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-#tray > widget:hover {
-  background: @bg_hover;
+tooltip label{
+  color: @fg_main;
 }
 
+#workspaces button,
+#mpris.paused {
+  color: @fg_inactive;
+}
+
+#tray > widget:hover,
+#clock:hover,
+#pulseaudio:hover,
+#workspaces button.focused,
+#workspaces button:hover {
+  background: @bg_hover;
+  color: @fg_main;
+}
+
+#workspaces button.urgent,
+#battery.warning,
+#cpu.warning {
+  background:  @bg_warning;
+  color: @fg_warning;
+}
+
+#memory.critical,
+#cpu.critical,
+#battery.critical {
+  background:  @bg_critical;
+  color: @fg_critical;
+}
 
 #pulseaudio,
 #network, 
 #cpu, 
 #memory, 
 #battery,
-#custom-org-clock {
-  /* background: @bg_active; */
-
+#custom-org-clock,
+#tray {
   margin-right: 8px;
   margin-left: 8px;
-  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
-#mpris.paused {
-  color: @fg_inactive;
-}
-
-#clock:hover,
-#pulseaudio:hover{
-  background: @bg_hover;
-}
-
