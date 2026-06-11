@@ -37,7 +37,6 @@
       wl-clipboard
 
       waybar
-      emacs-pgtk
 
       pwvucontrol
 
@@ -57,8 +56,6 @@
 
       xarchiver
       rar
-
-      halloy
 
       anki
 

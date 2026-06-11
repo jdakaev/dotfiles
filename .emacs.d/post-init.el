@@ -1,8 +1,8 @@
 (use-package
- vertico
- ;; (Note: It is recommended to also enable the savehist package.)
- :ensure t
- :config (vertico-mode))
+  vertico
+  ;; (Note: It is recommended to also enable the savehist package.)
+  :ensure t
+  :config (vertico-mode))
 (use-package
   vertico-posframe
   :config (vertico-posframe-mode 1))
@@ -285,7 +285,6 @@ compile-angel
 
 (setq org-special-ctrl-a/e t
       org-use-speed-commands t)
-;;
 
 ;; (use-package org-gtd
 ;; :ensure t
@@ -330,6 +329,11 @@ compile-angel
 ;;  ;; :map org-agenda-mode-mapc
 ;;  ;; ("C-c ." . org-gtd-agenda-transient)
 ;;  ))
+
+(use-package
+ jinx
+ :hook (org-mode . jinx-mode)
+ :bind (("C-M-$" . jinx-languages) ("M-$" . jinx-correct)))
 
 (setq
  org-id-link-to-org-use-id
@@ -575,13 +579,6 @@ org-modern
   (with-eval-after-load 'org
     (keymap-set org-mode-map "M-p" org-node-org-prefix-map))
   :config (org-node-cache-mode))
-
-(defun my-org-node-find-custom-width (orig-fun &rest args)
-  "Set a custom width for vertico-posframe during org-node-find."
-  (let ((vertico-posframe-height 15) (vertico-posframe-width 40)) ; Change 70 to your preferred width
-    (apply orig-fun args)))
-
-(advice-add 'org-node-find :around #'my-org-node-find-custom-width)
 
 (setq inline-anki-use-math-jax t)
 (setq inline-anki-note-type "Cloze")

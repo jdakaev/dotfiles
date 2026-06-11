@@ -7,7 +7,7 @@
   ...
 }:
 {
-  home.packages = [
+  home.packages = with pkgs; [
     unstable.tdlib
     pkgs.gnumake
     pkgs.pkg-config
@@ -15,6 +15,11 @@
     org-mode-flake.packages.${pkgs.stdenv.hostPlatform.system}.org-mode
     pkgs.cmake
     pkgs.libtool
+    #emacs-pgtk # replace with emacs-gtk, or a version provided by the community overlay if desired.
+    ((emacsPackagesFor emacs-pgtk).emacsWithPackages (epkgs: [ epkgs.jinx ]))
+    enchant
+    hunspell
+    hunspellDicts.en_US-large
   ];
   home.file = {
     ".emacs.d" = {
