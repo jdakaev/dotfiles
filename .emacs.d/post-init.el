@@ -286,50 +286,6 @@ compile-angel
 (setq org-special-ctrl-a/e t
       org-use-speed-commands t)
 
-;; (use-package org-gtd
-;; :ensure t
-;; :after org
-;; :demand t
-;; :init
-;; ;; Suppress upgrade warnings (must be set before package loads)
-;; (setq org-gtd-update-ack "4.0.0")
-;; ;; Where org-gtd will keep its files (defaults to ~/gtd/)
-;; ;; (setq org-gtd-directory "~/my-gtd/")
-;;
-;; :custom
-;; ;; Configure TODO keyword states (options like "TODO(t)" or "DONE(d!)" are fine)
-;; (org-todo-keywords '((sequence "TODO" "NEXT" "WAIT" "|" "DONE" "CNCL")))
-;;
-;; ;; Map GTD semantic states to your keywords
-;; (org-gtd-keyword-mapping '((todo . "TODO")
-;;                            (next . "NEXT")
-;;                            (wait . "WAIT")
-;;                            (canceled . "CNCL")))
-;;
-;; :config
-;; ;; REQUIRED: Enable org-edna for project dependencies
-;; (org-edna-mode 1)
-;;
-;; ;; Add org-gtd files to your agenda (must be in :config so org-gtd-directory is defined)
-;; (setq org-agenda-files (list org-gtd-directory))
-;;
-;; :bind
-;; ;; Global keybindings (work anywhere in Emacs)
-;; (("C-c d c" . org-gtd-capture)
-;;  ("C-c d e" . org-gtd-engage)
-;;  ("C-c d p" . org-gtd-process-inbox)
-;;  ("C-c d n" . org-gtd-show-all-next)
-;;  ("C-c d s" . org-gtd-reflect-stuck-projects)
-;;
-;;  ;; Keybinding for organizing items (only works in clarify buffers)
-;;  :map org-gtd-clarify-mode-map
-;;  ("C-c c" . org-gtd-organize)
-;;
-;;  ;; Quick actions on tasks in agenda views (optional but recommended)
-;;  ;; :map org-agenda-mode-mapc
-;;  ;; ("C-c ." . org-gtd-agenda-transient)
-;;  ))
-
 (use-package
  jinx
  :hook (org-mode . jinx-mode)
@@ -538,9 +494,9 @@ org-modern
 (require 'org-indent)
 
 (setq org-startup-with-inline-images t)
-     (setq org-image-actual-width (/ (display-pixel-width) 10))
+(setq org-image-actual-width (/ (display-pixel-width) 10))
 ;;     (setq org-image-max-width 'fill-column)
-     ;; (setq org-image-actual-width (list 300))
+;; (setq org-image-actual-width (list 300))
 
 (setq org-archive-location "~/notes/archive.org::")
 
@@ -622,9 +578,11 @@ org-modern
 (use-package
   telega
   :config
+
   (setq telega-server-libs-prefix "/usr")
   (setq telega-emoji-use-images nil)
   (setq telega-file-open-function 'org-open-file)
+  (setq telega-filter-default telega-unread-chat-temex)
   ;; (setq org-id-link-to-org-use-id t)
   (setq telega-chat-show-deleted-messages-for '(return t))
   :bind-keymap ("C-c t" . telega-prefix-map)

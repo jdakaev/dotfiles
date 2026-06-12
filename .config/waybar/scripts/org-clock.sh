@@ -25,7 +25,7 @@ OUTPUT="${OUTPUT%\"}"
 OUTPUT="${OUTPUT#\"}"
 
 if [ -n "$OUTPUT" ]; then
-    echo "$OUTPUT"
+    echo "${OUTPUT:0:35}"
 else
     echo ""
 fi
